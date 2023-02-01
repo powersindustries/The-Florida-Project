@@ -1,4 +1,4 @@
-![alt text](src/Assets/Textures/FloridaProjectLogo.PNG "MarkTwo")
+![alt text](src/Assets/Textures/FloridaProjectLogo.png "MarkTwo")
 
 ## How to Play
 The Florida Project is a survival crafting game where the goal is to survive as many days as possible. The game operates on a day/night cycle. During the day, the player is free to move around the map safely. At night, enemies swarm and try to eat the player. 
