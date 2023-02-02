@@ -28,3 +28,5 @@ ESC - Open Pause Menu
 
 ## Disclaimer
 The Florida Project is an open-source project under the MIT license. This project is not meant as a commercial product, but as an educational learning exercise. The 2D assets were made in Photoshop. The sound assets were made in Audacity. The font assets were taken from the Google fonts.
+
+Click the link [here](https://www.lukaspowers.com/post/the-florida-project) to learn more about The Florida Project.
