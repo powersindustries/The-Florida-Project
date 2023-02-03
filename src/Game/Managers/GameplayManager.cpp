@@ -40,11 +40,11 @@ void GameplayManager::InitializeGameManager()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void GameplayManager::Update(float* deltaTime)
+void GameplayManager::Update(float deltaTime)
 {
-    if (*deltaTime > (m_fMeleeTimeStamp + m_fMeleeTimer))
+    if (deltaTime > (m_fMeleeTimeStamp + m_fMeleeTimer))
     {
-        m_fMeleeTimeStamp = *deltaTime;
+        m_fMeleeTimeStamp = deltaTime;
 
         m_TimeData.m_uiMinutes += TIME_INCREASE;
 

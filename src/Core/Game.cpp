@@ -147,7 +147,7 @@ void Game::Update()
     m_fDeltaTime = sdlTicks / 1000.0f;
     m_uiTicksLastFrame = sdlTicks;
 
-    g_GameManager.Update(&m_fDeltaTime);
+    g_GameManager.Update(m_fDeltaTime);
 
 }
 

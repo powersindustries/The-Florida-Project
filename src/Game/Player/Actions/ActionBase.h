@@ -14,7 +14,7 @@ public:
     ActionBase();
     ~ActionBase();
 
-    virtual void Update(float* deltaTime) = 0;
+    virtual void Update(float deltaTime) = 0;
     virtual void Draw(SDL_Renderer* renderer) = 0;
 
     virtual void SetPosition(int x, int y) = 0;

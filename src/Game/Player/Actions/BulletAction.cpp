@@ -34,7 +34,7 @@ BulletAction::~BulletAction()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void BulletAction::Update(float* deltaTime)
+void BulletAction::Update(float deltaTime)
 {
     const uint8_t uiActiveEnemiesSize = static_cast<uint8_t>(g_EnemyManager.m_ActiveEnemies.size());
     for (uint8_t x = 0; x < uiActiveEnemiesSize; ++x)
@@ -53,11 +53,11 @@ void BulletAction::Update(float* deltaTime)
 
     if (m_Direction == Direction::eUp || m_Direction == Direction::eDown)
     {
-        m_SpriteVertical->Update(*deltaTime, m_BaseRectangle);
+        m_SpriteVertical->Update(deltaTime, m_BaseRectangle);
     }
     else
     {
-        m_SpriteHorizontal->Update(*deltaTime, m_BaseRectangle);
+        m_SpriteHorizontal->Update(deltaTime, m_BaseRectangle);
     }
 
     // Remove bullet if out of screen bounds.

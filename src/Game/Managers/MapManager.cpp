@@ -252,7 +252,7 @@ void MapManager::LoadMapData(std::string sMapPath)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void MapManager::Update(float* deltaTime)
+void MapManager::Update(float deltaTime)
 {
     if (!m_ActiveMap)
     {
@@ -288,7 +288,7 @@ void MapManager::Update(float* deltaTime)
         PickupData* currPickup = m_ActiveMap->m_PickupVector[x];
         if (currPickup->m_bActive)
         {
-            currPickup->m_Sprite->Update(*deltaTime, currPickup->m_Rectangle);
+            currPickup->m_Sprite->Update(deltaTime, currPickup->m_Rectangle);
         }
     }
 
@@ -299,7 +299,7 @@ void MapManager::Update(float* deltaTime)
             CoreMath::CommonMath::CollisionBetweenTwoRectanglesWithPadding(currPickup->m_Rectangle, g_Player.GetPlayerRectangle(), currPickup->m_uiPadding) &&
             g_Player.GetInteractState().m_bHeld)
         {
-            uint16_t uiCountdown = currPickup->m_uiPickupTime - static_cast<uint16_t>(*deltaTime - g_Player.GetInteractState().m_fTime);
+            uint16_t uiCountdown = currPickup->m_uiPickupTime - static_cast<uint16_t>(deltaTime - g_Player.GetInteractState().m_fTime);
 
             g_UIManager.UpdatePickupUI(
                 true,
@@ -308,7 +308,7 @@ void MapManager::Update(float* deltaTime)
                 currPickup->m_Rectangle.y - currPickup->m_Rectangle.h
             );
 
-            if (*deltaTime >= (g_Player.GetInteractState().m_fTime + currPickup->m_uiPickupTime))
+            if (deltaTime >= (g_Player.GetInteractState().m_fTime + currPickup->m_uiPickupTime))
             {
                 g_Player.AddItemToInventory(currPickup->m_uiItem, currPickup->m_uiAmount);
                 m_ActiveMap->m_PickupVector[x]->m_bActive = false;
@@ -330,10 +330,10 @@ void MapManager::Update(float* deltaTime)
         if (!currRefresh->m_bActive)
         {
             const uint8_t uiRefreshTime = static_cast<uint8_t>(currRefresh->m_fGatheredTimestamp) + currRefresh->m_uiRefreshTime;
-            const uint8_t uiCooldownTime = static_cast<uint8_t>((currRefresh->m_fGatheredTimestamp + currRefresh->m_uiRefreshTime) - *deltaTime);
+            const uint8_t uiCooldownTime = static_cast<uint8_t>((currRefresh->m_fGatheredTimestamp + currRefresh->m_uiRefreshTime) - deltaTime);
             g_UIManager.UpdateRefreshUI(true, x, uiCooldownTime);
 
-            if (*deltaTime >= uiRefreshTime)
+            if (deltaTime >= uiRefreshTime)
             {
                 currRefresh->m_bActive = true;
                 break;
@@ -343,7 +343,7 @@ void MapManager::Update(float* deltaTime)
         {
             g_UIManager.UpdateRefreshUI(false, x, 0);
 
-            currRefresh->m_Sprite->Update(*deltaTime, currRefresh->m_Rectangle);
+            currRefresh->m_Sprite->Update(deltaTime, currRefresh->m_Rectangle);
         }
 
 
@@ -352,7 +352,7 @@ void MapManager::Update(float* deltaTime)
             g_Player.AddItemToInventory(currRefresh->m_uiItem, currRefresh->m_uiAmount);
             m_ActiveMap->m_RefreshVector[x]->m_bActive = false;
 
-            currRefresh->m_fGatheredTimestamp = *deltaTime;
+            currRefresh->m_fGatheredTimestamp = deltaTime;
         }
     }
 

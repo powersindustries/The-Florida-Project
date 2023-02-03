@@ -46,7 +46,7 @@ void EnemyManager::InitializeEnemyManager()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void EnemyManager::Update(float* deltaTime)
+void EnemyManager::Update(float deltaTime)
 {
     if (g_GameplayManager.GetDayNightValue() == DayNightValues::eDay)
     {
@@ -54,9 +54,9 @@ void EnemyManager::Update(float* deltaTime)
     }
 
 
-    if (*deltaTime > (m_fSpawnerTimeStamp + m_fSpawnTimer))
+    if (deltaTime > (m_fSpawnerTimeStamp + m_fSpawnTimer))
     {
-        m_fSpawnerTimeStamp = *deltaTime;
+        m_fSpawnerTimeStamp = deltaTime;
 
         SpawnNewEnemy();
     }

@@ -130,7 +130,7 @@ public:
     ~MapManager();
 
     void InitialLoad();
-    void Update(float* deltaTime);
+    void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 
     void LoadMapByID(uint32_t uiMapIDHash);

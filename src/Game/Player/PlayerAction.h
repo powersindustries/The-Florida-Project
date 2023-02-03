@@ -24,7 +24,7 @@ public:
     PlayerAction();
     ~PlayerAction();
 
-    void Update(float* deltaTime);
+    void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 
     void InitializeActions();
@@ -35,7 +35,7 @@ public:
 private:
 
     void CreateNewBullet(SDL_Rect& currRect);
-    void CreateNewMelee(SDL_Rect& currRect, float* deltaTime);
+    void CreateNewMelee(SDL_Rect& currRect, float deltaTime);
 
     void UpdateAimIndicator();
 

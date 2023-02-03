@@ -27,7 +27,7 @@ public:
     ~GameManager();
 
     void InitializeGameManager(SDL_Renderer* renderer);
-    void Update(float* deltaTime);
+    void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 
     const inline bool ApplicationIsRunning() { return m_GameStateData.m_bApplicationRunning; }

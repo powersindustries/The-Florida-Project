@@ -25,7 +25,7 @@ PlayerMovement::~PlayerMovement()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void PlayerMovement::Update(float* deltaTime)
+void PlayerMovement::Update(float deltaTime)
 {
     switch (m_State)
     {

@@ -15,13 +15,13 @@ public:
     MeleeAction();
     ~MeleeAction();
 
-    void Update(float* deltaTime);
+    void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 
     void SetPosition(int x, int y) {};
     void SetDirection(Direction direction);
 
-    void SetInitialTime(float* initialTime);
+    void SetInitialTime(float fInitialTime);
 
 
 private:

@@ -36,7 +36,7 @@ public:
 
     void InitializeUIScreens();
 
-    void Update(float* deltaTime);
+    void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 
     void ActivatePauseMenu();

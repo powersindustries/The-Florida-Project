@@ -33,7 +33,7 @@ public:
 
     void InitializeGameManager();
 
-    void Update(float* deltaTime);
+    void Update(float deltaTime);
 
     const std::string GetDisplayTime();
     const std::string GetDisplayDayNight();

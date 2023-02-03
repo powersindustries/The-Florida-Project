@@ -50,7 +50,7 @@ void UIManager::InitializeUIScreens()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void UIManager::Update(float* deltaTime)
+void UIManager::Update(float deltaTime)
 {
     switch (m_ActiveScreen)
     {

@@ -21,7 +21,7 @@ public:
     ~PlayerStatistics();
 
     void InitializePlayerStatistics();
-    void Update(float* deltaTime);
+    void Update(float deltaTime);
 
     void TakeDamage(uint8_t uiAmount);
     void Heal(uint8_t uiAmount);
@@ -33,7 +33,7 @@ public:
 
 private:
 
-    void UpdateStamina(float* deltaTime);
+    void UpdateStamina(float deltaTime);
 
     void OnStaminaPotionUsed();
 

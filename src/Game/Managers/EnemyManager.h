@@ -25,7 +25,7 @@ public:
     ~EnemyManager();
 
     void InitializeEnemyManager();
-    void Update(float* deltaTime);
+    void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 
     void SetupEnemySpawning(std::vector<uint32_t>& SpawnersVector);

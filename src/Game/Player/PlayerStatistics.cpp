@@ -34,11 +34,11 @@ void PlayerStatistics::InitializePlayerStatistics()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void PlayerStatistics::Update(float* deltaTime)
+void PlayerStatistics::Update(float deltaTime)
 {
-    if (*deltaTime >= (m_fTempTimestamp + m_fFramesToWait))
+    if (deltaTime >= (m_fTempTimestamp + m_fFramesToWait))
     {
-        m_fTempTimestamp = *deltaTime;
+        m_fTempTimestamp = deltaTime;
 
         UpdateStamina(deltaTime);
     }
@@ -107,10 +107,10 @@ void PlayerStatistics::ResetPlayerStatistics()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void PlayerStatistics::UpdateStamina(float* deltaTime)
+void PlayerStatistics::UpdateStamina(float deltaTime)
 {
     // Check Burnout timer
-    if (m_StaminaStatus == EStaminaStatus::eBurnout && *deltaTime <= (m_fTempBurnoutTimestamp + m_fStaminaBurnoutTime))
+    if (m_StaminaStatus == EStaminaStatus::eBurnout && deltaTime <= (m_fTempBurnoutTimestamp + m_fStaminaBurnoutTime))
     {
         m_StaminaStatus = EStaminaStatus::eBurnout;
         return;
@@ -162,7 +162,7 @@ void PlayerStatistics::UpdateStamina(float* deltaTime)
     case Florida::EStaminaStatus::eBurnout:
     {
         m_iCurrStamina = 0;
-        m_fTempBurnoutTimestamp = *deltaTime;
+        m_fTempBurnoutTimestamp = deltaTime;
         break;
     }
     default:

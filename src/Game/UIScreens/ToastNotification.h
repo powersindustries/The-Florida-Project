@@ -18,7 +18,7 @@ public:
     ~ToastNotification();
 
     void Update();
-    void Update(float* deltaTime);
+    void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
     void Initialize();
     void OnShow();

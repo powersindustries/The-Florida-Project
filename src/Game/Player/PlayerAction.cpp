@@ -36,7 +36,7 @@ PlayerAction::~PlayerAction()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void PlayerAction::Update(float* deltaTime)
+void PlayerAction::Update(float deltaTime)
 {
     UpdateAimIndicator();
 
@@ -52,12 +52,12 @@ void PlayerAction::Update(float* deltaTime)
     }
 
     // Check for new actions.
-    if (*deltaTime > (m_fBulletTimeStamp + m_fBulletTimer) && 
+    if (deltaTime > (m_fBulletTimeStamp + m_fBulletTimer) && 
         CoreManagers::g_InputManager.GetActionPressed(CoreManagers::InputMappings::eAction) &&
         !g_GameManager.GameIsPaused() && 
         !CoreManagers::g_InputManager.GetMouseClickObsorbedByUI())
     {
-        m_fBulletTimeStamp = *deltaTime;
+        m_fBulletTimeStamp = deltaTime;
 
         uint32_t equippedItemID = g_Player.GetPrimaryEquippedItemID();
         uint32_t equippedItemIndex = g_ItemManager.m_ItemDataMap[equippedItemID];
@@ -134,7 +134,7 @@ void PlayerAction::CreateNewBullet(SDL_Rect& currRect)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void PlayerAction::CreateNewMelee(SDL_Rect& currRect, float* deltaTime)
+void PlayerAction::CreateNewMelee(SDL_Rect& currRect, float deltaTime)
 {
     MeleeAction* newMelee = new MeleeAction;
     newMelee->SetInitialTime(deltaTime);

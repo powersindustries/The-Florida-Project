@@ -62,7 +62,7 @@ void GameManager::InitializeGameManager(SDL_Renderer* renderer)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void GameManager::Update(float* deltaTime)
+void GameManager::Update(float deltaTime)
 {
     if (m_GameStateData.m_bGameOver)
     {

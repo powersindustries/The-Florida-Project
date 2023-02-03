@@ -63,20 +63,20 @@ void Player::InitializePlayer()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void Player::Update(float* deltaTime)
+void Player::Update(float deltaTime)
 {
     m_PlayerStatistics.Update(deltaTime);
     m_PlayerMovement.Update(deltaTime);
     m_PlayerAction.Update(deltaTime);
 
-    m_PlayerSprite->Update(*deltaTime, m_PlayerRectangle);
+    m_PlayerSprite->Update(deltaTime, m_PlayerRectangle);
 
     if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eInteract))
     {
         // Reset held timer.
         if (m_InteractState.m_fTime == 0.0f)
         {
-            m_InteractState.m_fTime = *deltaTime;
+            m_InteractState.m_fTime = deltaTime;
         }
 
         m_InteractState.m_bHeld = true;

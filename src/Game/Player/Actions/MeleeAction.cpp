@@ -37,10 +37,10 @@ MeleeAction::~MeleeAction()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void MeleeAction::Update(float* deltaTime)
+void MeleeAction::Update(float deltaTime)
 {
-    m_SpriteHorizontal->Update(*deltaTime, m_BaseRectangle);
-    m_SpriteVertical->Update(*deltaTime, m_BaseRectangle);
+    m_SpriteHorizontal->Update(deltaTime, m_BaseRectangle);
+    m_SpriteVertical->Update(deltaTime, m_BaseRectangle);
 
     const uint8_t uiActiveEnemiesSize = static_cast<uint8_t>(g_EnemyManager.m_ActiveEnemies.size());
     for (uint8_t x = 0; x < uiActiveEnemiesSize; ++x)
@@ -52,7 +52,7 @@ void MeleeAction::Update(float* deltaTime)
         }
     }
 
-    if (*deltaTime > (m_fMeleeTimeStamp + m_fMeleeTimer))
+    if (deltaTime > (m_fMeleeTimeStamp + m_fMeleeTimer))
     {
         m_bActive = false;
         g_Player.SetHaultMovement(false);
@@ -152,9 +152,9 @@ void MeleeAction::SetDirection(Direction direction)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void MeleeAction::SetInitialTime(float* initialTime)
+void MeleeAction::SetInitialTime(float fInitialTime)
 {
-    m_fMeleeTimeStamp = *initialTime;
+    m_fMeleeTimeStamp = fInitialTime;
 }
 
 }

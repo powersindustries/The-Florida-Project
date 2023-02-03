@@ -26,7 +26,7 @@ public:
     CreepEnemy();
     ~CreepEnemy();
 
-    void Update(float* deltaTime);
+    void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 
     void SetPosition(int x, int y);

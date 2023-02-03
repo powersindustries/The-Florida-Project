@@ -24,7 +24,7 @@ public:
     PlayerMovement();
     ~PlayerMovement();
 
-    void Update(float* deltaTime);
+    void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 
     void SetHaultMovement(bool bHault);

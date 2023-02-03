@@ -36,16 +36,16 @@ void ToastNotification::Update()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void ToastNotification::Update(float* deltaTime)
+void ToastNotification::Update(float deltaTime)
 {
     // Notification was just turned on. Needs initial timestamp.
     if (m_bShowNotification && m_fTimeStamp == RESET_TIMESTAMP)
     {
-        m_fTimeStamp = *deltaTime;
+        m_fTimeStamp = deltaTime;
     }
 
     // Turn off the notification after m_fTimer amount of time.
-    if (*deltaTime > (m_fTimeStamp + m_fTimer))
+    if (deltaTime > (m_fTimeStamp + m_fTimer))
     {
         m_bShowNotification = false;
         m_fTimeStamp = RESET_TIMESTAMP;

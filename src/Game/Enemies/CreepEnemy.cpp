@@ -72,12 +72,12 @@ CreepEnemy::~CreepEnemy()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void CreepEnemy::Update(float* deltaTime)
+void CreepEnemy::Update(float deltaTime)
 {
     // Update Creep state every 3rd frame. No need to run this logic every frame.
-    if (*deltaTime > (m_fUpdateTimeStamp + m_fUpdateTimer))
+    if (deltaTime > (m_fUpdateTimeStamp + m_fUpdateTimer))
     {
-        m_fUpdateTimeStamp = *deltaTime;
+        m_fUpdateTimeStamp = deltaTime;
 
         SDL_Rect& playerRect = g_Player.GetPlayerRectangle();
 
@@ -123,14 +123,14 @@ void CreepEnemy::Update(float* deltaTime)
             if (iDistance <= m_iAttackRange)
             {
                 m_State = CreepState::ePreAttack;
-                m_fPreAttackTimeStamp = *deltaTime;
+                m_fPreAttackTimeStamp = deltaTime;
             }
 
             break;
         }
         case CreepState::ePreAttack:
         {
-            if (*deltaTime > (m_fPreAttackTimeStamp + m_fPreAttackTimer))
+            if (deltaTime > (m_fPreAttackTimeStamp + m_fPreAttackTimer))
             {
                 m_State = CreepState::eAttack;
             }
@@ -146,12 +146,12 @@ void CreepEnemy::Update(float* deltaTime)
             }
 
             m_State = CreepState::ePostAttack;
-            m_fPostAttackTimeStamp = *deltaTime;
+            m_fPostAttackTimeStamp = deltaTime;
             break;
         }
         case CreepState::ePostAttack:
         {
-            if (*deltaTime > (m_fPostAttackTimeStamp + m_fPostAttackTimer))
+            if (deltaTime > (m_fPostAttackTimeStamp + m_fPostAttackTimer))
             {
                 m_State = CreepState::eMoving;
             }
@@ -166,7 +166,7 @@ void CreepEnemy::Update(float* deltaTime)
 
     }
 
-    m_Sprite->Update(*deltaTime, m_BaseRectangle);
+    m_Sprite->Update(deltaTime, m_BaseRectangle);
 }
 
 
