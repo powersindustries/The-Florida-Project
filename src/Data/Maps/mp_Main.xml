@@ -94,56 +94,6 @@
 
   <Interactions>
 
-    <!--Pickup-->
-    <!--<Interaction
-        Type="pickup"
- 
-        x="1200"
-        y="905"
-        w="25"
-        h="25"
-        Padding="5"
-
-        PickupTime="3"
-
-        Texture="txt_WoodIcon"
-
-        Item="itm_Wood"
-        Amount="1"
-            />-->
-
-    <!--Refresh-->
-
-    <!--<Interaction
-        Type="refresh"
-        
-        x="750"
-        y="905"
-        w="25"
-        h="25"
-        Padding="5"
-
-        PickupTime="5"
-        RefreshTime="60"
-
-        Texture="txt_ScrapAnimation"
-
-        Item="itm_Scrap"
-        Amount="1"
-            />-->
-
-    <!--Story-->
-    <!--<Interaction
-        Type="story"
-
-        x="960"
-        y="540"
-        w="25"
-        h="25"
-        Padding="5"
-
-            />-->
-
   </Interactions>
 
 </Map>
