@@ -165,7 +165,7 @@ void AssetManager::LoadSoundAssets()
         }
     }
 
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Fonts Load Complete!");
+    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Sounds Load Complete!");
 }
 
 
@@ -202,7 +202,7 @@ void AssetManager::LoadMusicAssets()
         }
     }
 
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Fonts Load Complete!");
+    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Music Load Complete!");
 }
 
 }

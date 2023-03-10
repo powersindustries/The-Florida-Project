@@ -105,18 +105,16 @@ void ToastNotification::ResetToastNotification()
 // -------------------------------------------------------
 void ToastNotification::OnInventoryChangedEvent()
 {
-    const InventoryItemData& prevAddedInventoryItemData = g_Player.GetLastAddedInventoryItemData();
-    uint32_t currItemIndex = g_ItemManager.m_ItemDataMap[prevAddedInventoryItemData.m_uiID];
-    ItemData& currItem = g_ItemManager.m_ItemData[currItemIndex];
+    const ItemData& lastAddedItem = g_ItemManager.GetLastAddedItemData();
 
-    if (currItem.m_Type == ItemType::eResource)
+    if (lastAddedItem.m_Type == ItemType::eResource)
     {
         m_bShowNotification = true;
 
         std::string notificationText;
-        notificationText.append(std::to_string(prevAddedInventoryItemData.m_uiAmount));
+        notificationText.append(std::to_string(lastAddedItem.m_uiAmount));
         notificationText.append(" ");
-        notificationText.append(currItem.m_sName);
+        notificationText.append(lastAddedItem.m_sName);
         notificationText.append(" added to inventory.");
 
         m_NotificationText.SetText(notificationText);

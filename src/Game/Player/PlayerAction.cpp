@@ -59,9 +59,8 @@ void PlayerAction::Update(float deltaTime)
     {
         m_fBulletTimeStamp = deltaTime;
 
-        uint32_t equippedItemID = g_Player.GetPrimaryEquippedItemID();
-        uint32_t equippedItemIndex = g_ItemManager.m_ItemDataMap[equippedItemID];
-        ItemData& currItemData = g_ItemManager.m_ItemData[equippedItemIndex];
+        uint32_t equippedItemID = g_ItemManager.GetPrimaryWeaponID();
+        const ItemData& currItemData = g_ItemManager.GetItemDataByID(equippedItemID);
 
         if (currItemData.m_ActionType == ActionType::eBullet)
         {
@@ -116,7 +115,7 @@ void PlayerAction::ResetPlayerActions()
 void PlayerAction::CreateNewBullet(SDL_Rect& currRect)
 {
     uint32_t uiAmmoID = CoreSystems::StringToHash32(std::string("itm_Ammo"));
-    InventoryItemData& ammoInventoryItem = g_Player.GetPlayerInventoryDataByID(uiAmmoID);
+    const ItemData& ammoInventoryItem = g_ItemManager.GetItemDataByID(uiAmmoID);
     if (ammoInventoryItem.m_uiAmount > 0)
     {
         g_Player.ShootAmmo();

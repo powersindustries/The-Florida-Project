@@ -2,6 +2,7 @@
 #include "../Player/Player.h"
 #include "Core/Systems/Hash.h"
 #include "Core/Systems/Logging.h"
+#include "ItemManager.h"
 
 namespace Florida
 {
@@ -87,7 +88,7 @@ void CraftingManager::CraftItemByIndex(uint32_t uiRecipeIndex)
     for (uint8_t x=0; x< uiIngredientVectorSize; ++x)
     {
         IngredientData& currIngredient = ingredientVector[x];
-        InventoryItemData& playerIventoryData = g_Player.GetPlayerInventoryDataByID(currIngredient.m_uiItemID);
+        const ItemData& playerIventoryData = g_ItemManager.GetItemDataByID(currIngredient.m_uiItemID);
 
         if (playerIventoryData.m_uiAmount < currIngredient.m_uiAmount)
         {
@@ -99,10 +100,10 @@ void CraftingManager::CraftItemByIndex(uint32_t uiRecipeIndex)
     for (uint8_t x = 0; x < uiIngredientVectorSize; ++x)
     {
         IngredientData& currIngredient = ingredientVector[x];
-        g_Player.RemoveItemFromInventory(currIngredient.m_uiItemID, currIngredient.m_uiAmount);
+        g_ItemManager.RemoveItem(currIngredient.m_uiItemID, currIngredient.m_uiAmount);
     }
 
-    g_Player.AddItemToInventory(craftRecipe.m_Reward.m_uiItemID, craftRecipe.m_Reward.m_uiAmount);
+    g_ItemManager.AddItem(craftRecipe.m_Reward.m_uiItemID, craftRecipe.m_Reward.m_uiAmount);
 }
 
 
@@ -118,7 +119,7 @@ bool CraftingManager::HasEnoughResourcesToCraft(uint32_t uiRecipeID)
     for (uint8_t x=0; x< uiIngredientVectorSize; ++x)
     {
         IngredientData& currIngredient = ingredientVector[x];
-        InventoryItemData& playerIventoryData = g_Player.GetPlayerInventoryDataByID(currIngredient.m_uiItemID);
+        const ItemData& playerIventoryData = g_ItemManager.GetItemDataByID(currIngredient.m_uiItemID);
 
         if (playerIventoryData.m_uiAmount < currIngredient.m_uiAmount)
         {

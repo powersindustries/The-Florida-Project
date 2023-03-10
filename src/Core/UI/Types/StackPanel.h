@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "../UICoreTypes.h"
-#include "Core/Math/VectorMethods.h"
 
 namespace CoreUI
 {

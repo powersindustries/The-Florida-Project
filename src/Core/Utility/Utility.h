@@ -3,12 +3,13 @@
 #include <SDL_ttf.h> // SDL Fonts or Text
 #include <SDL_image.h> // SDL Image
 #include "GameGlobals.h"
+#include <string>
 
-namespace CoreMath
+namespace CoreUtility
 {
 
 
-class CommonMath
+class Utility
 {
 public:
 
@@ -18,9 +19,10 @@ public:
     static bool CollisionBetweenTwoRectangles(const SDL_Rect& rect1, const SDL_Rect& rect2);
     static bool CollisionBetweenTwoRectanglesWithPadding(const SDL_Rect& rect1, const SDL_Rect& rect2, const int iPadding);
 
-
     static double ATan2InDegrees(const int iY, const int iX);
     static double ATan2InRadians(const int iY, const int iX);
+
+    static bool StringToBool(const std::string Text);
 
 };
 }

@@ -1,13 +1,13 @@
 #include "DebugScreen.h"
 #include "GameGlobals.h"
 #include "Core/Systems/Systems.h"
-#include "../Player/PlayerInventory.h"
 #include "../Player/Player.h"
 #include "../Managers/EventManager.h"
 #include "Core/Systems/Hash.h"
 #include "Core/Managers/SettingsManager.h"
 #include "Core/Managers/InputManager.h"
 #include "../Managers/GameplayManager.h"
+#include "../Managers/ItemManager.h"
 
 namespace Florida
 {
@@ -152,7 +152,7 @@ void DebugScreen::OnHealButton()
 // -------------------------------------------------------
 void DebugScreen::OnIncreaseScrapButton()
 {
-    g_Player.AddItemToInventory(CoreSystems::StringToHash32(std::string("itm_Scrap")), 1);
+    g_ItemManager.AddItem(CoreSystems::StringToHash32(std::string("itm_Scrap")), 1);
 }
 
 
@@ -160,7 +160,7 @@ void DebugScreen::OnIncreaseScrapButton()
 // -------------------------------------------------------
 void DebugScreen::OnIncreaseWoodButton()
 {
-    g_Player.AddItemToInventory(CoreSystems::StringToHash32(std::string("itm_Wood")), 1);
+    g_ItemManager.AddItem(CoreSystems::StringToHash32(std::string("itm_Wood")), 1);
 }
 
 
@@ -168,7 +168,7 @@ void DebugScreen::OnIncreaseWoodButton()
 // -------------------------------------------------------
 void DebugScreen::OnIncreaseWaterButton()
 {
-    g_Player.AddItemToInventory(CoreSystems::StringToHash32(std::string("itm_Water")), 1);
+    g_ItemManager.AddItem(CoreSystems::StringToHash32(std::string("itm_Water")), 1);
 }
 
 

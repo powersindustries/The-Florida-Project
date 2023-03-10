@@ -1,7 +1,7 @@
 #include "VectorMethods.h"
 #include <math.h>
 
-namespace CoreMath
+namespace CoreUtility
 {
 
 

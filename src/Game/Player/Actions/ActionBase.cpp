@@ -1,5 +1,5 @@
 #include "ActionBase.h"
-#include "Core/Math/CommonMath.h"
+#include "Core/Math/Utility.h"
 
 namespace Florida
 {
@@ -31,7 +31,7 @@ ActionBase::~ActionBase()
 // -------------------------------------------------------
 bool ActionBase::CollidedWithEnemy(const SDL_Rect& rect1, const SDL_Rect& rect2)
 {
-    return CoreMath::CommonMath::CollisionBetweenTwoRectangles(rect1, rect2);
+    return CoreUtility::Utility::CollisionBetweenTwoRectangles(rect1, rect2);
 }
 
 }

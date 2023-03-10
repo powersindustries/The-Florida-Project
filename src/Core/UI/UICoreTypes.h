@@ -2,8 +2,8 @@
 #include <SDL.h> // SDL Main
 #include <SDL_ttf.h> // SDL Fonts or Text
 #include <SDL_image.h> // SDL Image
+#include "../Utility/VectorMethods.h"
 
-#include "../Math/VectorMethods.h"
 
 namespace CoreUI
 {
@@ -108,7 +108,7 @@ public:
     AlignmentData m_ElementAlignment;
 
     // Offset position based on the anchor point.
-    CoreMath::Vec2i m_vOffset;
+    CoreUtility::Vec2i m_vOffset;
 
     // Rectangle for determining position and size of UI element.
     SDL_Rect m_BaseRectangle;

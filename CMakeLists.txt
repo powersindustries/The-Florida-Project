@@ -46,7 +46,6 @@ endif ()
 set(RESOURCE_FILES
 
 src/Data/AssetManifest.xml
-src/Data/Inventory.xml
 src/Data/Items.xml
 src/Data/MapsManifest.xml
 src/Data/Player.xml
@@ -80,10 +79,10 @@ src/Core/Systems/Logging.h
 src/Core/Systems/Hash.h
 src/Core/Systems/Event.h
 
-src/Core/Math/VectorMethods.h
-src/Core/Math/VectorMethods.cpp
-src/Core/Math/CommonMath.h
-src/Core/Math/CommonMath.cpp
+src/Core/Utility/VectorMethods.h
+src/Core/Utility/VectorMethods.cpp
+src/Core/Utility/Utility.h
+src/Core/Utility/Utility.cpp
 
 src/Core/UI/UICoreTypes.h
 src/Core/UI/UICoreTypes.cpp
@@ -107,8 +106,6 @@ src/Game/Player/Player.h
 src/Game/Player/Player.cpp
 src/Game/Player/PlayerMovement.h
 src/Game/Player/PlayerMovement.cpp
-src/Game/Player/PlayerInventory.h
-src/Game/Player/PlayerInventory.cpp
 src/Game/Player/PlayerStatistics.h
 src/Game/Player/PlayerStatistics.cpp
 src/Game/Player/PlayerAction.h

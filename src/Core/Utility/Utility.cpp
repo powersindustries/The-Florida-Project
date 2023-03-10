@@ -1,14 +1,14 @@
-#include "CommonMath.h"
+#include "Utility.h"
 #include <math.h>
 #include <float.h>
 
-namespace CoreMath
+namespace CoreUtility
 {
 
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-double CommonMath::DistanceBetweenTwoPoints(const int rect1X, const int rect1Y, const int rect2X, const int rect2Y)
+double Utility::DistanceBetweenTwoPoints(const int rect1X, const int rect1Y, const int rect2X, const int rect2Y)
 {
     return sqrt(pow((rect1X - rect2X), 2) + pow((rect1Y - rect2Y), 2));
 }
@@ -16,7 +16,7 @@ double CommonMath::DistanceBetweenTwoPoints(const int rect1X, const int rect1Y, 
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-double CommonMath::DirectionalDistanceBetweenTwoRectangles(const Florida::Direction direction, SDL_Rect& rect1, SDL_Rect& rect2)
+double Utility::DirectionalDistanceBetweenTwoRectangles(const Florida::Direction direction, SDL_Rect& rect1, SDL_Rect& rect2)
 {
     switch (direction)
     {
@@ -44,7 +44,7 @@ double CommonMath::DirectionalDistanceBetweenTwoRectangles(const Florida::Direct
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-bool CommonMath::CollisionBetweenTwoRectangles(const SDL_Rect& rect1, const SDL_Rect& rect2)
+bool Utility::CollisionBetweenTwoRectangles(const SDL_Rect& rect1, const SDL_Rect& rect2)
 {
     return  rect1.x < rect2.x + rect2.w &&
             rect1.x + rect1.w > rect2.x &&
@@ -55,7 +55,7 @@ bool CommonMath::CollisionBetweenTwoRectangles(const SDL_Rect& rect1, const SDL_
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-bool CommonMath::CollisionBetweenTwoRectanglesWithPadding(const SDL_Rect& rect1, const SDL_Rect& rect2, const int iPadding)
+bool Utility::CollisionBetweenTwoRectanglesWithPadding(const SDL_Rect& rect1, const SDL_Rect& rect2, const int iPadding)
 {
     return (rect1.x - iPadding) < rect2.x + rect2.w &&
            (rect1.x + rect1.w + iPadding) > rect2.x &&
@@ -66,7 +66,7 @@ bool CommonMath::CollisionBetweenTwoRectanglesWithPadding(const SDL_Rect& rect1,
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-double CommonMath::ATan2InDegrees(const int iY, const int iX)
+double Utility::ATan2InDegrees(const int iY, const int iX)
 {
     const double dRadians = atan2(iY, iX);
     return dRadians * (180.0 / Florida::g_GameGlobals.PI);
@@ -75,9 +75,17 @@ double CommonMath::ATan2InDegrees(const int iY, const int iX)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-double CommonMath::ATan2InRadians(const int iY, const int iX)
+double Utility::ATan2InRadians(const int iY, const int iX)
 {
     return atan2(static_cast<double>(iY), static_cast<double>(iX));
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+bool Utility::StringToBool(const std::string Text)
+{
+    return (Text == "True" || Text == "true" || Text == "T" || Text == "t") ? true : false;
 }
 
 }

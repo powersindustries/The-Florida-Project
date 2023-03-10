@@ -7,9 +7,12 @@
 #include "Core/Managers/InputManager.h"
 #include "../Managers/EventManager.h"
 #include "../Managers/GameManager.h"
+#include "../Managers/ItemManager.h"
 
 #define HAMMER_ID "itm_Hammer"
 #define GUN_ID "itm_Gun"
+#define AMMO_ID "itm_Ammo"
+#define STAMINA_POTION_ID "itm_StaminaPotion"
 #define PLAYER_WIDTHHEIGHT 32
 
 namespace Florida
@@ -53,7 +56,6 @@ Player::~Player()
 void Player::InitializePlayer()
 {
     InitializePlayerSprite();
-    InitializePlayerInventory();
     m_PlayerAction.InitializeActions();
     m_PlayerStatistics.InitializePlayerStatistics();
 
@@ -128,42 +130,9 @@ void Player::SetPlayerPosition(int x, int y)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-const std::vector<InventoryItemData>& Player::GetPlayerInventoryAll() const
-{
-    return m_PlayerInventory.m_Inventory;
-}
-
-
-// -------------------------------------------------------
-// -------------------------------------------------------
-void Player::AddItemToInventory(const uint32_t idHash, const uint32_t amount)
-{
-    m_PlayerInventory.AddItemToInventory(idHash, amount);
-}
-
-
-// -------------------------------------------------------
-// -------------------------------------------------------
-void Player::RemoveItemFromInventory(const uint32_t idHash, const uint32_t amount)
-{
-    m_PlayerInventory.RemoveItemFromInventory(idHash, amount);
-}
-
-
-// -------------------------------------------------------
-// -------------------------------------------------------
-Florida::InventoryItemData& Player::GetPlayerInventoryDataByID(uint32_t uiItemID)
-{
-    const uint32_t uiInventoryIndex = m_PlayerInventory.m_InventoryMap[uiItemID];
-    return m_PlayerInventory.m_Inventory[uiInventoryIndex];
-}
-
-
-// -------------------------------------------------------
-// -------------------------------------------------------
 void Player::ShootAmmo()
 {
-    m_PlayerInventory.UseAmmo();
+    g_ItemManager.RemoveItem(CoreSystems::StringToHash32(std::string(AMMO_ID)), 1);
 }
 
 
@@ -195,12 +164,8 @@ void Player::DecreaseStamina(uint8_t uiAmount)
 // -------------------------------------------------------
 void Player::ResetPlayer()
 {
-    m_PlayerInventory.ResetPlayerInventory();
     m_PlayerAction.ResetPlayerActions();
     m_PlayerStatistics.ResetPlayerStatistics();
-
-    m_PlayerInventory.m_PrimaryEquippedItem = CoreSystems::StringToHash32(std::string(HAMMER_ID));
-    m_PlayerInventory.m_SecondaryEquippedItem = CoreSystems::StringToHash32(std::string(GUN_ID));
 
     g_EventManager.Broadcast(Events::ePlayerPrimaryEquippedItemChanged);
     g_EventManager.Broadcast(Events::ePlayerSecondaryEquippedItemChanged);
@@ -230,39 +195,13 @@ void Player::InitializePlayerSprite()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void Player::InitializePlayerInventory()
-{
-    rapidxml::file<> xmlFile(m_sInventoryFilepath.c_str());
-    rapidxml::xml_document<> doc;
-    doc.parse<0>(xmlFile.data());
-
-    rapidxml::xml_node<>* inventoryNode = doc.first_node("Inventory");
-    for (rapidxml::xml_node<>* child = inventoryNode->first_node(); child; child = child->next_sibling())
-    {
-        std::string sItemId = child->first_attribute("ID")->value();
-        int iAmount = std::atoi(child->first_attribute("Amount")->value());
-
-        m_PlayerInventory.AddItemToInventory(CoreSystems::StringToHash32(sItemId), iAmount);
-    }
-
-    m_PlayerInventory.SetMasterInventory();
-    m_PlayerInventory.m_PrimaryEquippedItem = CoreSystems::StringToHash32(std::string(HAMMER_ID));
-    m_PlayerInventory.m_SecondaryEquippedItem = CoreSystems::StringToHash32(std::string(GUN_ID));
-
-    g_EventManager.Broadcast(Events::ePlayerPrimaryEquippedItemChanged);
-    g_EventManager.Broadcast(Events::ePlayerSecondaryEquippedItemChanged);
-
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Player Inventory Initialization Complete!");
-}
-
-
-// -------------------------------------------------------
-// -------------------------------------------------------
 void Player::SwapPrimarySecondaryEquipment()
 {
-    const uint32_t uiPrimaryWeapon = m_PlayerInventory.m_PrimaryEquippedItem;
-    m_PlayerInventory.m_PrimaryEquippedItem = m_PlayerInventory.m_SecondaryEquippedItem;
-    m_PlayerInventory.m_SecondaryEquippedItem = uiPrimaryWeapon;
+    const uint32_t uiPrimaryWeapon = g_ItemManager.GetPrimaryWeaponID();
+    const uint32_t uiSecondaryWeapon = g_ItemManager.GetSecondaryWeaponID();
+
+    g_ItemManager.GetPrimaryWeaponID(uiSecondaryWeapon);
+    g_ItemManager.GetSecondaryWeaponID(uiPrimaryWeapon);
 
     g_EventManager.Broadcast(Events::ePlayerPrimaryEquippedItemChanged);
     g_EventManager.Broadcast(Events::ePlayerSecondaryEquippedItemChanged);
@@ -273,7 +212,7 @@ void Player::SwapPrimarySecondaryEquipment()
 // -------------------------------------------------------
 void Player::UseStaminaPotion()
 {
-    m_PlayerInventory.UseStaminaPotion();
+    g_ItemManager.RemoveItem(CoreSystems::StringToHash32(std::string(STAMINA_POTION_ID)), 1);
 }
 
 

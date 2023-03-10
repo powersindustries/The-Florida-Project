@@ -5,9 +5,9 @@
 #include "Core/Systems/Hash.h"
 #include <time.h>
 #include "../Managers/MapManager.h"
-#include "Core/Math/CommonMath.h"
 #include "../Managers/EventManager.h"
 #include "../Managers/SoundManager.h"
+#include "Core/Utility/Utility.h"
 
 #define TEXTURE_WIDTH 28
 #define TEXTURE_HEIGHT 40
@@ -119,7 +119,7 @@ void CreepEnemy::Update(float deltaTime)
             }
 
             // Check to see if in range to attack.
-            const double iDistance = CoreMath::CommonMath::DirectionalDistanceBetweenTwoRectangles(m_Direction, m_BaseRectangle, playerRect);
+            const double iDistance = CoreUtility::Utility::DirectionalDistanceBetweenTwoRectangles(m_Direction, m_BaseRectangle, playerRect);
             if (iDistance <= m_iAttackRange)
             {
                 m_State = CreepState::ePreAttack;
@@ -138,7 +138,7 @@ void CreepEnemy::Update(float deltaTime)
         }
         case CreepState::eAttack:
         {
-            double iDistance = CoreMath::CommonMath::DirectionalDistanceBetweenTwoRectangles(m_Direction, m_BaseRectangle, playerRect);
+            double iDistance = CoreUtility::Utility::DirectionalDistanceBetweenTwoRectangles(m_Direction, m_BaseRectangle, playerRect);
             if (iDistance <= m_iDamageRange)
             {
                 CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eError, "Creep Enemy Attacked!!");

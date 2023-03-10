@@ -1,6 +1,6 @@
 #pragma once
 
-namespace CoreMath
+namespace CoreUtility
 {
 
 

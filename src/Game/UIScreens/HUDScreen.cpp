@@ -83,7 +83,7 @@ void HUDScreen::Draw(SDL_Renderer* renderer)
     m_StaminaBarBackground.Draw(renderer);
     m_StaminaBar.Draw(renderer);
 
-    if (g_Player.GetPrimaryEquippedItemID() == CoreSystems::StringToHash32(std::string(HAMMER_ID)))
+    if (g_ItemManager.GetPrimaryWeaponID() == CoreSystems::StringToHash32(std::string(HAMMER_ID)))
     {
         m_HammerIcon.Draw(renderer);
     }
@@ -290,23 +290,24 @@ void HUDScreen::OnShow()
 // -------------------------------------------------------
 void HUDScreen::UpdateResourcesUI()
 {
-    std::vector<InventoryItemData> vPlayerInventory = g_Player.GetPlayerInventoryAll();
+    const uint32_t uiScrapID = CoreSystems::StringToHash32(std::string(SCRAP_ID));
+    const uint32_t uiWoodID = CoreSystems::StringToHash32(std::string(WOOD_ID));
+
+    const std::vector<ItemData> vPlayerInventory = g_ItemManager.GetAllItemData();
     const uint32_t uiItemSize = static_cast<uint32_t>(vPlayerInventory.size());
     for (uint32_t x = 0; x < uiItemSize; ++x)
     {
-        InventoryItemData& currInventoryItem = vPlayerInventory[x];
-        uint32_t currItemIndex = g_ItemManager.m_ItemDataMap[currInventoryItem.m_uiID];
-        ItemData& currItem = g_ItemManager.m_ItemData[currItemIndex];
+        const ItemData& currItem = vPlayerInventory[x];
 
         if (currItem.m_Type == ItemType::eResource)
         {
-            std::string resourceText = std::to_string(currInventoryItem.m_uiAmount);
+            std::string resourceText = std::to_string(currItem.m_uiAmount);
 
-            if (currItem.m_sID == SCRAP_ID)
+            if (currItem.m_uiID == uiScrapID)
             {
                 m_ScrapAmountText.SetText(resourceText);
             }
-            else if (currItem.m_sID == WOOD_ID)
+            else if (currItem.m_uiID == uiWoodID)
             {
                 m_WoodAmountText.SetText(resourceText);
             }
@@ -365,7 +366,7 @@ void HUDScreen::OnPlayerHealthChangedEvent()
 // -------------------------------------------------------
 void HUDScreen::OnPlayerEquippedItemChangedEvent()
 {
-    m_bHammerEquipped = (g_Player.GetPrimaryEquippedItemID() == CoreSystems::StringToHash32(std::string(HAMMER_ID)));
+    m_bHammerEquipped = (g_ItemManager.GetPrimaryWeaponID() == CoreSystems::StringToHash32(std::string(HAMMER_ID)));
 }
 
 
@@ -382,7 +383,7 @@ void HUDScreen::OnDayCountChangedEvent()
 void HUDScreen::OnAmmoCountChangedEvent()
 {
     uint32_t ammoID = CoreSystems::StringToHash32(std::string(AMMO_ID));
-    const InventoryItemData& ammoItemData = g_Player.GetPlayerInventoryDataByID(ammoID);
+    const ItemData& ammoItemData = g_ItemManager.GetItemDataByID(ammoID);
  
     m_AmmoAmountText->SetText(std::to_string(ammoItemData.m_uiAmount));
 }
@@ -393,7 +394,7 @@ void HUDScreen::OnAmmoCountChangedEvent()
 void HUDScreen::OnStaminaPotionUsedEvent()
 {
     uint32_t staminaPotionID = CoreSystems::StringToHash32(std::string(STAMINA_ICON));
-    const InventoryItemData& staminaPotionItemData = g_Player.GetPlayerInventoryDataByID(staminaPotionID);
+    const ItemData& staminaPotionItemData = g_ItemManager.GetItemDataByID(staminaPotionID);
  
     m_StaminaPotionAmountText->SetText(std::to_string(staminaPotionItemData.m_uiAmount));
 }

@@ -5,7 +5,6 @@
 #include <string>
 
 #include "PlayerMovement.h"
-#include "PlayerInventory.h"
 #include "PlayerStatistics.h"
 #include "PlayerAction.h"
 #include "Core/Types/Sprite.h"
@@ -43,19 +42,6 @@ public:
 
     inline const InteractState& GetInteractState() { return m_InteractState; };
 
-    // Inventory.
-    const std::vector<InventoryItemData>& GetPlayerInventoryAll() const;
-
-    void AddItemToInventory(const uint32_t idHash, const uint32_t amount);
-    void RemoveItemFromInventory(const uint32_t idHash, const uint32_t amount);
-
-    inline uint32_t GetPrimaryEquippedItemID() { return m_PlayerInventory.m_PrimaryEquippedItem; }
-    inline uint32_t GetSecondaryEquippedItemID() { return m_PlayerInventory.m_SecondaryEquippedItem; }
-
-    inline const InventoryItemData GetLastAddedInventoryItemData() { return m_PlayerInventory.m_LastAddedInventoryItemData; }
-    InventoryItemData& GetPlayerInventoryDataByID(uint32_t uiItemID);
-
-
     void TakeDamage(uint8_t uiAmount);
     void Heal(uint8_t uiAmount);
     void DecreaseStamina(uint8_t uiAmount);
@@ -68,7 +54,6 @@ public:
 private:
 
     void InitializePlayerSprite();
-    void InitializePlayerInventory();
 
     void SwapPrimarySecondaryEquipment();
 
@@ -80,7 +65,6 @@ private:
 public:
 
     PlayerMovement m_PlayerMovement;
-    PlayerInventory m_PlayerInventory;
     PlayerAction m_PlayerAction;
     PlayerStatistics m_PlayerStatistics;
 

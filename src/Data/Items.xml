@@ -8,6 +8,8 @@
     Description="A handful of metal parts."
     Type="resource"
     ActionType="none"
+    Discovered="true"
+    Amount="1"
     />
 
   <Item
@@ -16,6 +18,8 @@
     Description="Comes from Trees."
     Type="resource"
     ActionType="none"
+    Discovered="true"
+    Amount="0"
     />
 
   <Item
@@ -24,6 +28,8 @@
     Description="Sustains life, and other things..."
     Type="resource"
     ActionType="none"
+    Discovered="true"
+    Amount="0"
     />
 
 
@@ -34,6 +40,8 @@
     Description="Designed for building, and for breaking."
     Type="tool"
     ActionType="melee"
+    Discovered="true"
+    Amount="1"
     />
 
   <Item
@@ -42,6 +50,8 @@
     Description="Guns guns guns."
     Type="tool"
     ActionType="bullet"
+    Discovered="true"
+    Amount="1"
     />
 
 
@@ -52,6 +62,8 @@
     Description="Put it in a gun and fire away."
     Type="disposable"
     ActionType="none"
+    Discovered="true"
+    Amount="2"
     />
 
   <Item
@@ -60,6 +72,8 @@
     Description="Gives you an extra boost when you need it."
     Type="disposable"
     ActionType="none"
+    Discovered="true"
+    Amount="0"
     />
 
   

@@ -11,7 +11,8 @@
 #include "Core/Systems/Logging.h"
 #include "Core/Systems/Hash.h"
 #include "Core/Managers/SettingsManager.h"
-#include "Core/Math/CommonMath.h"
+#include "ItemManager.h"
+#include "Core/Utility/Utility.h"
 
 
 namespace Florida
@@ -264,7 +265,7 @@ void MapManager::Update(float deltaTime)
     {
         NavigationData& currNavigation = m_ActiveMap->m_Navigations[x];
 
-        if (CoreMath::CommonMath::CollisionBetweenTwoRectanglesWithPadding(currNavigation.m_Rectangle, g_Player.GetPlayerRectangle(), currNavigation.m_uiPadding) &&
+        if (CoreUtility::Utility::CollisionBetweenTwoRectanglesWithPadding(currNavigation.m_Rectangle, g_Player.GetPlayerRectangle(), currNavigation.m_uiPadding) &&
             (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eUp) || CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eDown)))
         {
             SDL_Rect& playerRect = g_Player.GetPlayerRectangle();
@@ -296,7 +297,7 @@ void MapManager::Update(float deltaTime)
     {
         PickupData* currPickup = m_ActiveMap->m_PickupVector[x];
         if (currPickup->m_bActive &&
-            CoreMath::CommonMath::CollisionBetweenTwoRectanglesWithPadding(currPickup->m_Rectangle, g_Player.GetPlayerRectangle(), currPickup->m_uiPadding) &&
+            CoreUtility::Utility::CollisionBetweenTwoRectanglesWithPadding(currPickup->m_Rectangle, g_Player.GetPlayerRectangle(), currPickup->m_uiPadding) &&
             g_Player.GetInteractState().m_bHeld)
         {
             uint16_t uiCountdown = currPickup->m_uiPickupTime - static_cast<uint16_t>(deltaTime - g_Player.GetInteractState().m_fTime);
@@ -310,7 +311,7 @@ void MapManager::Update(float deltaTime)
 
             if (deltaTime >= (g_Player.GetInteractState().m_fTime + currPickup->m_uiPickupTime))
             {
-                g_Player.AddItemToInventory(currPickup->m_uiItem, currPickup->m_uiAmount);
+                g_ItemManager.AddItem(currPickup->m_uiItem, currPickup->m_uiAmount);
                 m_ActiveMap->m_PickupVector[x]->m_bActive = false;
             }
         
@@ -347,9 +348,9 @@ void MapManager::Update(float deltaTime)
         }
 
 
-        if (currRefresh->m_bActive && CoreMath::CommonMath::CollisionBetweenTwoRectanglesWithPadding(currRefresh->m_Rectangle, g_Player.GetPlayerRectangle(), currRefresh->m_uiPadding))
+        if (currRefresh->m_bActive && CoreUtility::Utility::CollisionBetweenTwoRectanglesWithPadding(currRefresh->m_Rectangle, g_Player.GetPlayerRectangle(), currRefresh->m_uiPadding))
         {
-            g_Player.AddItemToInventory(currRefresh->m_uiItem, currRefresh->m_uiAmount);
+            g_ItemManager.AddItem(currRefresh->m_uiItem, currRefresh->m_uiAmount);
             m_ActiveMap->m_RefreshVector[x]->m_bActive = false;
 
             currRefresh->m_fGatheredTimestamp = deltaTime;
@@ -360,7 +361,7 @@ void MapManager::Update(float deltaTime)
     for (uint32_t x = 0; x < uiStorySize; ++x)
     {
         StoryData* currStory = m_ActiveMap->m_StoryVector[x];
-        if (currStory->m_bActive && CoreMath::CommonMath::CollisionBetweenTwoRectanglesWithPadding(currStory->m_Rectangle, g_Player.GetPlayerRectangle(), currStory->m_uiPadding))
+        if (currStory->m_bActive && CoreUtility::Utility::CollisionBetweenTwoRectanglesWithPadding(currStory->m_Rectangle, g_Player.GetPlayerRectangle(), currStory->m_uiPadding))
         {
             CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Story interaction!");
         }

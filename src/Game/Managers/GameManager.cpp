@@ -43,7 +43,7 @@ void GameManager::InitializeGameManager(SDL_Renderer* renderer)
 {
     g_AssetManager.InitialializeAssetManager(renderer);
 
-    g_ItemManager.LoadItems();
+    g_ItemManager.InitializeItemManager();
     g_MapManager.InitialLoad();
     g_CraftingManager.InitializeCraftingManager();
     g_Player.InitializePlayer();
@@ -167,6 +167,7 @@ void GameManager::SetGameOver(bool bGameOver)
 void GameManager::StartNewGame()
 {
     g_GameplayManager.ResetGameplayManager();
+    g_ItemManager.ResetItemManager();
     g_MapManager.ResetMapManager();
     g_Player.ResetPlayer();
     g_EnemyManager.ResetEnemyManager();

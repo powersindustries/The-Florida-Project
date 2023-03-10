@@ -5,9 +5,9 @@
 #include <string>
 #include <unordered_map>
 
-#include "Core/Math/VectorMethods.h"
 #include "Core/Types/Sprite.h"
 #include "GameGlobals.h"
+#include "Core/Utility/VectorMethods.h"
 
 
 namespace Florida
@@ -87,8 +87,8 @@ struct NavigationData
 {
     SDL_Rect m_Rectangle;
     uint8_t m_uiPadding = 5;
-    CoreMath::Vec2i m_vUpPosition;
-    CoreMath::Vec2i m_vDownPosition;
+    CoreUtility::Vec2i m_vUpPosition;
+    CoreUtility::Vec2i m_vDownPosition;
 };
 
 
@@ -97,7 +97,7 @@ struct MapData
     std::string m_sID;
     uint32_t m_uiIDHash;
 
-    CoreMath::Vec2i m_vPlayerStartPosition;
+    CoreUtility::Vec2i m_vPlayerStartPosition;
 
     // Background
     SDL_Color m_BackgroundColor;
