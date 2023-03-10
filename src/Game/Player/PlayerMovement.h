@@ -29,6 +29,9 @@ public:
 
     void SetHaultMovement(bool bHault);
 
+    inline const MovementState& GetMovementState() const { return m_State; };
+    inline const Direction& GetDirection() const { return m_Direction; };
+
 
 private:
 

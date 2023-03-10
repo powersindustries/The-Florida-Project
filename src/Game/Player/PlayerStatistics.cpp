@@ -117,7 +117,7 @@ void PlayerStatistics::UpdateStamina(float deltaTime)
     }
 
     // Running Stamina use.
-    if (g_Player.GetMovementState() == MovementState::eRunning)
+    if (g_Player.m_PlayerMovement.GetMovementState() == MovementState::eRunning)
     {
         if (m_iCurrStamina > 0)
         {

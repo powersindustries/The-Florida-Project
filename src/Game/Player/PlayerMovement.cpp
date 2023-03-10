@@ -97,7 +97,7 @@ void PlayerMovement::Update(float deltaTime)
 
         // Set Speed value.
         uint8_t uiSpeedOffset = m_uiPlayerSpeed;
-        if (g_Player.GetStaminaStatus() == EStaminaStatus::eBurnout)
+        if (g_Player.m_PlayerStatistics.GetStaminaStatus() == EStaminaStatus::eBurnout)
         {
             uiSpeedOffset /= 2;
         }

@@ -30,6 +30,13 @@ public:
 
     void ResetPlayerStatistics();
 
+    inline const int8_t& GetCurrHealth() { return m_uiCurrHealth; }
+    inline const int8_t& GetMaxHealth() { return m_uiMaxHealth; }
+    inline const int8_t& GetCurrStamina() { return m_iCurrStamina; }
+    inline const int8_t& GetMaxStamina() { return m_iMaxStamina; }
+
+    inline const EStaminaStatus GetStaminaStatus() { return m_StaminaStatus; }
+
 
 private:
 

@@ -12,7 +12,7 @@ namespace Florida
 // -------------------------------------------------------
 MeleeAction::MeleeAction()
 {
-    m_Direction = g_Player.GetDirection();
+    m_Direction = g_Player.m_PlayerMovement.GetDirection();
 
     m_BaseRectangle.w = 25;
     m_BaseRectangle.h = 25;
@@ -55,11 +55,11 @@ void MeleeAction::Update(float deltaTime)
     if (deltaTime > (m_fMeleeTimeStamp + m_fMeleeTimer))
     {
         m_bActive = false;
-        g_Player.SetHaultMovement(false);
+        g_Player.m_PlayerMovement.SetHaultMovement(false);
     }
     else
     {
-        g_Player.SetHaultMovement(true);
+        g_Player.m_PlayerMovement.SetHaultMovement(true);
     }
 }
 

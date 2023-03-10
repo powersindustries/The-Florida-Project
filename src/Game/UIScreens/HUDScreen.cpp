@@ -325,7 +325,7 @@ void HUDScreen::UpdateResourcesUI()
 // -------------------------------------------------------
 void HUDScreen::UpdateHealthbarUI()
 {
-    float ihealthPercentage = static_cast<float>(g_Player.GetCurrHealth()) / static_cast<float>(g_Player.GetMaxHealth());
+    float ihealthPercentage = static_cast<float>(g_Player.m_PlayerStatistics.GetCurrHealth()) / static_cast<float>(g_Player.m_PlayerStatistics.GetMaxHealth());
     float iHealthbarWidth = ihealthPercentage * m_uiBarMaxWidth;
 
     m_HealthBar.SetSize(static_cast<int>(iHealthbarWidth), m_uiBarMaxHeight);
@@ -336,7 +336,7 @@ void HUDScreen::UpdateHealthbarUI()
 // -------------------------------------------------------
 void HUDScreen::UpdateStaminabarUI()
 {
-    float iStaminaPercentage = static_cast<float>(g_Player.GetCurrStamina()) / static_cast<float>(g_Player.GetMaxStamina());
+    float iStaminaPercentage = static_cast<float>(g_Player.m_PlayerStatistics.GetCurrStamina()) / static_cast<float>(g_Player.m_PlayerStatistics.GetMaxStamina());
     float iStaminaBarWidth = iStaminaPercentage * m_uiBarMaxWidth;
 
     m_StaminaBar.SetSize(static_cast<int>(iStaminaBarWidth), m_uiBarMaxHeight);

@@ -123,7 +123,7 @@ void PlayerAction::CreateNewBullet(SDL_Rect& currRect)
 
         ActionBase* newBullet = new BulletAction;
         newBullet->SetPosition(currRect.x, currRect.y);
-        newBullet->SetDirection(g_Player.GetDirection());
+        newBullet->SetDirection(g_Player.m_PlayerMovement.GetDirection());
 
         m_LiveActions.push_back(newBullet);
 
@@ -152,7 +152,7 @@ void PlayerAction::UpdateAimIndicator()
     const int iOffset = 25;
     
     const SDL_Rect& playerRect = g_Player.GetPlayerRectangle();
-    Direction currDirection = g_Player.GetDirection();
+    Direction currDirection = g_Player.m_PlayerMovement.GetDirection();
 
     if (currDirection == Direction::eLeft)
     {
