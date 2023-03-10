@@ -8,6 +8,8 @@ As enemies die, they periodically drop resources. The three main resources are s
 
 See how many days you can survive in the Florida Project!
 
+Gameplay Clip: [link](https://www.youtube.com/watch?v=Dx_jHjRQZmw)
+
 ## Controls
 W,A,S,D - Movement
 
