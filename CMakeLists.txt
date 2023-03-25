@@ -50,6 +50,7 @@ src/Data/Items.xml
 src/Data/MapsManifest.xml
 src/Data/Player.xml
 
+src/Data/Styles.xml
 src/Data/Settings.xml
 
 src/Data/Maps/mp_Main.xml
@@ -90,10 +91,14 @@ src/Core/UI/Types/Box.h
 src/Core/UI/Types/Box.cpp
 src/Core/UI/Types/Button.h
 src/Core/UI/Types/Button.cpp
-src/Core/UI/Types/StackPanel.h
-src/Core/UI/Types/StackPanel.cpp
+src/Core/UI/Types/VerticalStack.h
+src/Core/UI/Types/VerticalStack.cpp
+src/Core/UI/Types/HorizontalStack.h
+src/Core/UI/Types/HorizontalStack.cpp
 src/Core/UI/Types/TextBlock.h
 src/Core/UI/Types/TextBlock.cpp
+src/Core/UI/Types/TextBlockRaw.h
+src/Core/UI/Types/TextBlockRaw.cpp
 src/Core/UI/Types/Icon.h
 src/Core/UI/Types/Icon.cpp
 
@@ -101,6 +106,8 @@ src/Core/Managers/SettingsManager.h
 src/Core/Managers/SettingsManager.cpp
 src/Core/Managers/InputManager.h
 src/Core/Managers/InputManager.cpp
+src/Core/Managers/StyleManager.h
+src/Core/Managers/StyleManager.cpp
 
 src/Game/Player/Player.h
 src/Game/Player/Player.cpp

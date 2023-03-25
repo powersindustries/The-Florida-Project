@@ -4,9 +4,10 @@
 #include <SDL_image.h> // SDL Image
 
 #include "Core/UI/Types/Box.h"
-#include "Core/UI/Types/StackPanel.h"
 #include "Core/UI/Types/TextBlock.h"
 #include "Core/UI/Types/Icon.h"
+#include "Core/UI/Types/HorizontalStack.h"
+#include "Core/UI/Types/Button.h"
 
 using namespace CoreUI;
 
@@ -41,7 +42,7 @@ private:
 
     TextBlock m_MenuTitleText;
 
-    StackPanel m_ResourceStack;
+    HorizontalStack m_ResourceStack;
     Icon m_ScrapIcon;
     Icon m_WoodIcon;
     Icon m_WaterIcon;
@@ -49,11 +50,16 @@ private:
     TextBlock m_WoodAmountText;
     TextBlock m_WaterAmountText;
 
-    StackPanel m_CraftingStack;
-    
-    StackPanel m_BaseEquipmentStack;
+    HorizontalStack m_AmmoCraftingStack;
+    Button m_AmmoCraftButton;
+    TextBlock m_AmmoCraftText;
 
-    StackPanel m_InventoryStack;
+    HorizontalStack m_StaminaCraftingStack;
+    Button m_StaminaCraftButton;
+    TextBlock m_StaminaCraftText;
+
+    HorizontalStack m_InventoryStack;
+    TextBlock m_InventoryTitleText;
     TextBlock m_AmmoAmountText;
     TextBlock m_StaminaPotionAmountText;
 

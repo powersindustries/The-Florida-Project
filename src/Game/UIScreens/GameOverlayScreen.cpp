@@ -57,10 +57,10 @@ void GameOverlayScreen::Draw(SDL_Renderer* renderer)
 // -------------------------------------------------------
 void GameOverlayScreen::Initialize()
 {
-    m_PickupCooldownText.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_PickupCooldownText.SetPosition(CoreManagers::g_SettingsManager.GetRelativeScreenX(200), CoreManagers::g_SettingsManager.GetRelativeScreenY(200));
+    m_PickupCooldownText.SetAnchor(Anchor::eTopLeft);
     m_PickupCooldownText.SetText("Number");
     m_PickupCooldownText.SetColor(g_GameGlobals.COLOR_WHITE);
+    m_PickupCooldownText.SetOffset(200, 200);
 }
 
 

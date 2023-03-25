@@ -26,7 +26,7 @@ ControlsScreen::~ControlsScreen()
 // -------------------------------------------------------
 void ControlsScreen::Update()
 {
-    m_XButton.Update(CoreManagers::g_InputManager);
+    m_XButton.Update();
 
     if (m_XButton.LeftClickPressed())
     {
@@ -43,7 +43,7 @@ void ControlsScreen::Draw(SDL_Renderer* renderer)
     m_BackgroundBox.Draw(renderer);
     m_Title.Draw(renderer);
     m_XButton.Draw(renderer);
-    m_StackPanel.Draw(renderer);
+    m_VerticalStack.Draw(renderer);
 }
 
 
@@ -51,28 +51,36 @@ void ControlsScreen::Draw(SDL_Renderer* renderer)
 // -------------------------------------------------------
 void ControlsScreen::Initialize()
 {
-    m_OpacityBox.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_OpacityBox.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_OpacityBox.SetSize(CoreManagers::g_SettingsManager.GetScreenWidth(), CoreManagers::g_SettingsManager.GetScreenHeight());
+    m_OpacityBox.SetAnchor(Anchor::eTopLeft);
     m_OpacityBox.SetColor(g_GameGlobals.COLOR_BLACK);
-    m_OpacityBox.SetDisplayType(DisplayType::eDisabled);
+    m_OpacityBox.SetSize(CoreManagers::g_SettingsManager.GetScreenWidth(), CoreManagers::g_SettingsManager.GetScreenHeight());
+    m_OpacityBox.SetVisibility(UIVisibility::eDisabled);
 
-    m_BackgroundBox.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_BackgroundBox.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_BackgroundBox.SetSize(CoreManagers::g_SettingsManager.GetScreenWidth() / 2, CoreManagers::g_SettingsManager.GetScreenHeight() - CoreManagers::g_SettingsManager.GetRelativeScreenY(50));
+    m_BackgroundBox.SetAnchor(Anchor::eTopCenter);
     m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
+    m_BackgroundBox.SetSize(
+        CoreManagers::g_SettingsManager.GetScreenWidth() / 2, 
+        CoreManagers::g_SettingsManager.GetScreenHeight() - CoreManagers::g_SettingsManager.GetRelativeScreenY(50)
+    );
+    m_BackgroundBox.SetOffset(
+        ( (m_BackgroundBox.GetWidth() / 2) * -1),
+        0
+    );
 
-    m_Title.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_Title.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_Title.SetOffset(0, CoreManagers::g_SettingsManager.GetRelativeScreenY(75));
+    m_Title.SetAnchor(Anchor::eTopCenter);
     m_Title.SetText("Controls");
-    m_Title.SetColor(g_GameGlobals.COLOR_BLACK);
+    m_Title.SetOffset(
+        ( (m_Title.GetWidth() / 2) * -1),
+        CoreManagers::g_SettingsManager.GetRelativeScreenY(75)
+    );
 
-    m_XButton.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_XButton.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_XButton.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(400), CoreManagers::g_SettingsManager.GetRelativeScreenY(50));
+    m_XButton.SetAnchor(Anchor::eTopCenter);
     m_XButton.SetText("X");
     m_XButton.SetSize(50, 50);
+    m_XButton.SetOffset(
+        CoreManagers::g_SettingsManager.GetRelativeScreenX(400), 
+        CoreManagers::g_SettingsManager.GetRelativeScreenY(50)
+    );
 
     TextBlock* movementText = new TextBlock;
     movementText->SetText("W,A,S,D - Movement");
@@ -98,18 +106,20 @@ void ControlsScreen::Initialize()
     TextBlock* craftText = new TextBlock;
     craftText->SetText("TAB - Open Crafting Menu");
 
-    m_StackPanel.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eBottom);
-    m_StackPanel.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_StackPanel.AddChild(movementText);
-    m_StackPanel.AddChild(attackText);
-    m_StackPanel.AddChild(sprintText);
-    m_StackPanel.AddChild(changeWeaponsText);
-    m_StackPanel.AddChild(staminaPotionText);
-    m_StackPanel.AddChild(interactText);
-    m_StackPanel.AddChild(escText);
-    m_StackPanel.AddChild(craftText);
-    m_StackPanel.SetPadding(75);
-    m_StackPanel.SetOffset(0, CoreManagers::g_SettingsManager.GetRelativeScreenY(125));
+    m_VerticalStack.SetAnchor(Anchor::eTopCenter);
+    m_VerticalStack.SetPadding(75);
+    m_VerticalStack.AddChild(movementText);
+    m_VerticalStack.AddChild(attackText);
+    m_VerticalStack.AddChild(sprintText);
+    m_VerticalStack.AddChild(changeWeaponsText);
+    m_VerticalStack.AddChild(staminaPotionText);
+    m_VerticalStack.AddChild(interactText);
+    m_VerticalStack.AddChild(escText);
+    m_VerticalStack.AddChild(craftText);
+    m_VerticalStack.SetOffset(
+        ( (m_VerticalStack.GetWidth() / 2) * -1),
+        CoreManagers::g_SettingsManager.GetRelativeScreenY(200)
+    );
 
 }
 

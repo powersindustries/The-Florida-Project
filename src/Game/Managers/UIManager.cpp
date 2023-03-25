@@ -216,7 +216,6 @@ void UIManager::AddNewRefreshUI(uint32_t uiMapIDHash, int iPositionX, int iPosit
     RefreshUI newRefreshUI;
     newRefreshUI.m_uiMapIDHash = uiMapIDHash;
     newRefreshUI.m_bActive = true;
-    newRefreshUI.m_RefreshText.SetElementAlignment(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
     newRefreshUI.m_RefreshText.SetPosition(iPositionX, iPositionY);
     newRefreshUI.m_RefreshText.SetText("0");
     newRefreshUI.m_RefreshText.SetColor(g_GameGlobals.COLOR_WHITE);

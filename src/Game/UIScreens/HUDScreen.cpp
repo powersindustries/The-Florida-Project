@@ -32,7 +32,6 @@ namespace Florida
 // -------------------------------------------------------
 // -------------------------------------------------------
 HUDScreen::HUDScreen()
-    :  m_ArrowIcon(nullptr), m_StaminaPotionIcon(nullptr), m_AmmoAmountText(nullptr), m_StaminaPotionAmountText(nullptr)
 {
 }
 
@@ -41,10 +40,6 @@ HUDScreen::HUDScreen()
 // -------------------------------------------------------
 HUDScreen::~HUDScreen()
 {
-    delete m_ArrowIcon;
-    delete m_StaminaPotionIcon;
-    delete m_AmmoAmountText;
-    delete m_StaminaPotionAmountText;
 }
 
 
@@ -55,12 +50,15 @@ void HUDScreen::Update()
     UpdateStaminabarUI();
 
     m_TimeText.SetText(g_GameplayManager.GetDisplayTime());
-
+    m_TimeText.SetOffset(
+        ( (m_TimeText.GetWidth() / 2) * -1),
+        m_DayNightStack.GetHeight() + 20
+    );
 
     // Only draw Skip to Night button during the daytime.
     if (g_GameplayManager.GetDayNightValue() == DayNightValues::eDay)
     {
-        m_SkipNightButton.Update(CoreManagers::g_InputManager);
+        m_SkipNightButton.Update();
         if (m_SkipNightButton.LeftClickPressed())
         {
             g_GameplayManager.SkipToNight();
@@ -73,42 +71,19 @@ void HUDScreen::Update()
 // -------------------------------------------------------
 void HUDScreen::Draw(SDL_Renderer* renderer)
 {
-    m_ResourceStack.Draw(renderer);
-
-    m_HealthIcon.Draw(renderer);
-    m_HealthBarBackground.Draw(renderer);
-    m_HealthBar.Draw(renderer);
-
-    m_StaminaIcon.Draw(renderer);
-    m_StaminaBarBackground.Draw(renderer);
-    m_StaminaBar.Draw(renderer);
-
-    if (g_ItemManager.GetPrimaryWeaponID() == CoreSystems::StringToHash32(std::string(HAMMER_ID)))
-    {
-        m_HammerIcon.Draw(renderer);
-    }
-    else
-    {
-        m_BowIcon.Draw(renderer);
-    }
-
+    m_IconStack.Draw(renderer);
+    m_BarBackgroundStack.Draw(renderer);
+    m_BarStack.Draw(renderer);
     m_AmmoStack.Draw(renderer);
-
+    m_StaminaPotionStack.Draw(renderer);
+    m_ResourceStack.Draw(renderer);
+    m_DayNightStack.Draw(renderer);
     m_TimeText.Draw(renderer);
-    m_DayCountText.Draw(renderer);
-
 
     // Only draw Skip to Night button during the daytime.
     if (g_GameplayManager.GetDayNightValue() == DayNightValues::eDay)
     {
         m_SkipNightButton.Draw(renderer);
-
-        m_DayIcon.Draw(renderer);
-
-    }
-    else
-    {
-        m_NightIcon.Draw(renderer);
     }
 }
 
@@ -118,90 +93,89 @@ void HUDScreen::Draw(SDL_Renderer* renderer)
 void HUDScreen::Initialize()
 {
     // Top Left Corner.
-    m_HealthIcon.SetAnchor(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    m_HealthIcon.SetOffset(10, 10);
-    m_HealthIcon.SetSize(25,25);
     m_HealthIcon.SetTexture(CoreSystems::StringToHash32(std::string(HEALTH_ICON)));
+    m_HealthIcon.SetSize(25,25);
 
-    m_HealthBarBackground.SetAnchor(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    m_HealthBarBackground.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(50), CoreManagers::g_SettingsManager.GetRelativeScreenY(10));
-    m_HealthBarBackground.SetSize(200,25);
-    m_HealthBarBackground.SetColor(g_GameGlobals.COLOR_BLACK);
+	m_StaminaIcon.SetTexture(CoreSystems::StringToHash32(std::string(STAMINA_ICON)));
+	m_StaminaIcon.SetSize(25, 25);
 
-    m_HealthBar.SetAnchor(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    m_HealthBar.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(52), CoreManagers::g_SettingsManager.GetRelativeScreenY(12));
-    m_HealthBar.SetSize(196,21);
-    m_HealthBar.SetColor(g_GameGlobals.COLOR_RED);
-    
+	m_WeaponIcon.SetTexture(CoreSystems::StringToHash32(std::string(HAMMER_ICON)));
+	m_WeaponIcon.SetSize(25, 25);
+
+	m_IconStack.SetAnchor(Anchor::eTopLeft);
+    m_IconStack.SetPadding(10);
+    m_IconStack.AddChild(&m_HealthIcon);
+    m_IconStack.AddChild(&m_StaminaIcon);
+    m_IconStack.AddChild(&m_WeaponIcon);
+    m_IconStack.SetOffset(10,10);
+
+	m_HealthBarBackground.SetColor(g_GameGlobals.COLOR_BLACK);
+	m_HealthBarBackground.SetSize(200, 25);
+
+	m_StaminaBarBackground.SetColor(g_GameGlobals.COLOR_BLACK);
+	m_StaminaBarBackground.SetSize(200, 25);
+
+	m_BarBackgroundStack.SetAnchor(Anchor::eTopLeft);
+	m_BarBackgroundStack.SetPadding(10);
+	m_BarBackgroundStack.AddChild(&m_HealthBarBackground);
+	m_BarBackgroundStack.AddChild(&m_StaminaBarBackground);
+	m_BarBackgroundStack.SetOffset(
+		m_IconStack.GetWidth() + 25,
+		10
+	);
+
+	m_HealthBar.SetColor(g_GameGlobals.COLOR_RED);
+	m_HealthBar.SetSize(m_uiBarMaxWidth, m_uiBarMaxHeight);
+
+	m_StaminaBar.SetColor(g_GameGlobals.COLOR_GREEN);
+	m_StaminaBar.SetSize(m_uiBarMaxWidth, m_uiBarMaxHeight);
+
+	m_BarStack.SetAnchor(Anchor::eTopLeft);
+	m_BarStack.SetPadding(14);
+	m_BarStack.AddChild(&m_HealthBar);
+	m_BarStack.AddChild(&m_StaminaBar);
+	m_BarStack.SetOffset(
+		m_IconStack.GetWidth() + 27,
+		12
+    );
+
     OnPlayerHealthChangedEvent();
-
-    m_StaminaIcon.SetAnchor(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    m_StaminaIcon.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(10), CoreManagers::g_SettingsManager.GetRelativeScreenY(50));
-    m_StaminaIcon.SetSize(25,25);
-    m_StaminaIcon.SetTexture(CoreSystems::StringToHash32(std::string(STAMINA_ICON)));
-
-    m_StaminaBarBackground.SetAnchor(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    m_StaminaBarBackground.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(50), CoreManagers::g_SettingsManager.GetRelativeScreenY(50));
-    m_StaminaBarBackground.SetSize(200,25);
-    m_StaminaBarBackground.SetColor(g_GameGlobals.COLOR_BLACK);
-
-    m_StaminaBar.SetAnchor(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    m_StaminaBar.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(52), CoreManagers::g_SettingsManager.GetRelativeScreenY(52));
-    m_StaminaBar.SetSize(196,21);
-    m_StaminaBar.SetColor(g_GameGlobals.COLOR_GREEN);
-
-    m_HammerIcon.SetAnchor(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    m_HammerIcon.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(10), CoreManagers::g_SettingsManager.GetRelativeScreenY(90));
-    m_HammerIcon.SetSize(25,25);
-    m_HammerIcon.SetTexture(CoreSystems::StringToHash32(std::string(HAMMER_ICON)));
-
-    m_BowIcon.SetAnchor(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    m_BowIcon.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(10), CoreManagers::g_SettingsManager.GetRelativeScreenY(90));
-    m_BowIcon.SetSize(25,25);
-    m_BowIcon.SetTexture(CoreSystems::StringToHash32(std::string(BOW_ICON)));
-
     OnPlayerEquippedItemChangedEvent();
 
 
-
     // Bottom Right Corner.
-    m_ArrowIcon = new Icon(CoreSystems::StringToHash32(std::string(ARROW_ICON)));
-    m_ArrowIcon->SetSize(25,25);
+    m_StaminaPotionIcon.SetTexture(CoreSystems::StringToHash32(std::string(STAMINA_POTION_ICON)));
+    m_StaminaPotionIcon.SetSize(25,25);
 
-    m_AmmoAmountText = new TextBlock;
-    m_AmmoAmountText->SetColor(g_GameGlobals.COLOR_WHITE);
+    m_StaminaPotionAmountText.SetColor(g_GameGlobals.COLOR_WHITE);
+    m_StaminaPotionAmountText.SetText("N");
 
-    StackPanel* arrowStack = new StackPanel;
-    arrowStack->SetChildAlignment(StackpanelAlignment::eHorizontal);
-    arrowStack->SetElementAlignment(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    arrowStack->SetPadding(10);
-    arrowStack->AddChild(m_ArrowIcon);
-    arrowStack->AddChild(m_AmmoAmountText);
-    
-    m_StaminaPotionIcon = new Icon(CoreSystems::StringToHash32(std::string(STAMINA_POTION_ICON)));
-    m_StaminaPotionIcon->SetSize(25,25);
+    m_StaminaPotionStack.SetAnchor(Anchor::eBottomLeft);
+    m_StaminaPotionStack.SetPadding(10);
+    m_StaminaPotionStack.AddChild(&m_StaminaPotionIcon);
+    m_StaminaPotionStack.AddChild(&m_StaminaPotionAmountText);
+    m_StaminaPotionStack.SetOffset(
+        10,
+        -10
+    );
 
-    m_StaminaPotionAmountText = new TextBlock;
-    m_StaminaPotionAmountText->SetColor(g_GameGlobals.COLOR_WHITE);
+    m_AmmoIcon.SetTexture(CoreSystems::StringToHash32(std::string(ARROW_ICON)));
+    m_AmmoIcon.SetSize(25,25);
 
-    StackPanel* staminaStack = new StackPanel;
-    staminaStack->SetChildAlignment(StackpanelAlignment::eHorizontal);
-    staminaStack->SetElementAlignment(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    staminaStack->SetPadding(10);
-    staminaStack->AddChild(m_StaminaPotionIcon);
-    staminaStack->AddChild(m_StaminaPotionAmountText);
-    
-    m_AmmoStack.SetAnchor(HorizontalAlignment::eRight, VerticalAlignment::eBottom);
-    m_AmmoStack.SetChildAlignment(StackpanelAlignment::eVertical);
-    m_AmmoStack.SetElementAlignment(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    m_AmmoStack.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(0), CoreManagers::g_SettingsManager.GetRelativeScreenY(-75));
-    m_AmmoStack.SetPadding(-50);
-    m_AmmoStack.AddChild(arrowStack); 
-    m_AmmoStack.AddChild(staminaStack);
+    m_AmmoAmountText.SetColor(g_GameGlobals.COLOR_WHITE);
+    m_AmmoAmountText.SetText("N");
+
+	m_AmmoStack.SetAnchor(Anchor::eBottomLeft);
+	m_AmmoStack.SetPadding(10);
+	m_AmmoStack.AddChild(&m_AmmoIcon);
+	m_AmmoStack.AddChild(&m_AmmoAmountText);
+	m_AmmoStack.SetOffset(
+        10,
+        (m_StaminaPotionStack.GetHeight() * -1) - 20
+	);
 
     OnAmmoCountChangedEvent();
     OnStaminaPotionUsedEvent();
-
 
 
     // Bottom Center.
@@ -213,20 +187,17 @@ void HUDScreen::Initialize()
     
     m_WaterIcon.SetTexture(CoreSystems::StringToHash32(std::string(WATER_ICON)));
     m_WaterIcon.SetSize(25,25);
-    
-    m_ScrapAmountText.SetText("Scrap");
+ 
     m_ScrapAmountText.SetColor(g_GameGlobals.COLOR_WHITE);
+    m_ScrapAmountText.SetText("Scrap");
 
-    m_WoodAmountText.SetText("Wood");
     m_WoodAmountText.SetColor(g_GameGlobals.COLOR_WHITE);
+    m_WoodAmountText.SetText("Wood");
 
-    m_WaterAmountText.SetText("Water");
     m_WaterAmountText.SetColor(g_GameGlobals.COLOR_WHITE);
+    m_WaterAmountText.SetText("Water");
 
-    m_ResourceStack.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eBottom);
-    m_ResourceStack.SetChildAlignment(StackpanelAlignment::eHorizontal);
-    m_ResourceStack.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_ResourceStack.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(0), CoreManagers::g_SettingsManager.GetRelativeScreenY(50));
+    m_ResourceStack.SetAnchor(Anchor::eBottomCenter);
     m_ResourceStack.SetPadding(15);
     m_ResourceStack.AddChild(&m_ScrapIcon);
     m_ResourceStack.AddChild(&m_ScrapAmountText);
@@ -234,39 +205,48 @@ void HUDScreen::Initialize()
     m_ResourceStack.AddChild(&m_WoodAmountText);
     m_ResourceStack.AddChild(&m_WaterIcon);
     m_ResourceStack.AddChild(&m_WaterAmountText);
+    m_ResourceStack.SetOffset(
+        ( (m_ResourceStack.GetWidth() / 2) * -1),
+        -10 
+    );
 
     UpdateResourcesUI();
 
-
-
     // Top Center.
-    m_DayIcon.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_DayIcon.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(-75), CoreManagers::g_SettingsManager.GetRelativeScreenY(25));
-    m_DayIcon.SetSize(25,25);
-    m_DayIcon.SetTexture(CoreSystems::StringToHash32(std::string(DAY_ICON)));
+    m_DayNightIcon.SetAnchor(Anchor::eTopCenter);
+    m_DayNightIcon.SetTexture(CoreSystems::StringToHash32(std::string(DAY_ICON)));
+    m_DayNightIcon.SetSize(25,25);
 
-    m_NightIcon.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_NightIcon.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(-75), CoreManagers::g_SettingsManager.GetRelativeScreenY(25));
-    m_NightIcon.SetSize(25,25);
-    m_NightIcon.SetTexture(CoreSystems::StringToHash32(std::string(NIGHT_ICON)));
-
-    m_DayCountText.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_DayCountText.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(-40), CoreManagers::g_SettingsManager.GetRelativeScreenY(25));
-    m_DayCountText.SetText("Day Count");
+    m_DayCountText.SetAnchor(Anchor::eTopCenter);
     m_DayCountText.SetColor(g_GameGlobals.COLOR_WHITE);
+    m_DayCountText.SetText("Day Count");
 
-    m_TimeText.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_TimeText.SetOffset(0, CoreManagers::g_SettingsManager.GetRelativeScreenX(25));
-    m_TimeText.SetText("Time");
-    m_TimeText.SetColor(g_GameGlobals.COLOR_WHITE);
+    m_DayNightStack.SetAnchor(Anchor::eTopCenter);
+    m_DayNightStack.SetPadding(25);
+    m_DayNightStack.AddChild(&m_DayNightIcon);
+    m_DayNightStack.AddChild(&m_DayCountText);
+    m_DayNightStack.SetOffset(
+        ( (m_DayNightStack.GetWidth() / 2) * -1),
+        10 
+    );
 
     OnDayCountChangedEvent();
 
+    m_TimeText.SetAnchor(Anchor::eTopCenter);
+    m_TimeText.SetColor(g_GameGlobals.COLOR_WHITE);
+    m_TimeText.SetText("Time");
+    m_TimeText.SetOffset(
+        ( (m_TimeText.GetWidth() / 2) * -1),
+        m_TimeText.GetHeight() + 10
+    );
 
-    m_SkipNightButton.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_SkipNightButton.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(90), CoreManagers::g_SettingsManager.GetRelativeScreenY(25));
-    m_SkipNightButton.SetText(" >>");
-    m_SkipNightButton.SetSize(60,25);
+    m_SkipNightButton.SetAnchor(Anchor::eTopCenter);
+    m_SkipNightButton.SetText("SKIP");
+    m_SkipNightButton.SetSize(200, 50);
+    m_SkipNightButton.SetOffset(
+        ( (m_SkipNightButton.GetWidth() / 2) * -1),
+        75 
+    );
 
 
     g_EventManager.Subscribe(Events::eInventoryChanged, [this]() { HUDScreen::OnInventoryChangedEvent(); });
@@ -275,6 +255,7 @@ void HUDScreen::Initialize()
     g_EventManager.Subscribe(Events::eDayCountChanged, [this]() { HUDScreen::OnDayCountChangedEvent(); });
     g_EventManager.Subscribe(Events::eAmmoChanged, [this]() { HUDScreen::OnAmmoCountChangedEvent(); });
     g_EventManager.Subscribe(Events::eStaminaPotionUsed, [this]() { HUDScreen::OnStaminaPotionUsedEvent(); });
+    g_EventManager.Subscribe(Events::eDayNightChanged, [this]() { HUDScreen::OnDayNightChangedEvent(); });
 
 }
 
@@ -283,7 +264,6 @@ void HUDScreen::Initialize()
 // -------------------------------------------------------
 void HUDScreen::OnShow()
 {
-
 }
 
 // -------------------------------------------------------
@@ -319,6 +299,12 @@ void HUDScreen::UpdateResourcesUI()
     }
 
     m_ResourceStack.RefreshUI();
+
+    // Recenter Resources Stack after updating text.
+    m_ResourceStack.SetOffset(
+        ( (m_ResourceStack.GetWidth() / 2) * -1),
+        -10 
+    );
 }
 
 
@@ -330,6 +316,8 @@ void HUDScreen::UpdateHealthbarUI()
     float iHealthbarWidth = ihealthPercentage * m_uiBarMaxWidth;
 
     m_HealthBar.SetSize(static_cast<int>(iHealthbarWidth), m_uiBarMaxHeight);
+
+    m_BarStack.RefreshUI();
 }
 
 
@@ -341,6 +329,8 @@ void HUDScreen::UpdateStaminabarUI()
     float iStaminaBarWidth = iStaminaPercentage * m_uiBarMaxWidth;
 
     m_StaminaBar.SetSize(static_cast<int>(iStaminaBarWidth), m_uiBarMaxHeight);
+
+    m_BarStack.RefreshUI();
 }
 
 
@@ -366,7 +356,16 @@ void HUDScreen::OnPlayerHealthChangedEvent()
 // -------------------------------------------------------
 void HUDScreen::OnPlayerEquippedItemChangedEvent()
 {
-    m_bHammerEquipped = (g_ItemManager.GetPrimaryWeaponID() == CoreSystems::StringToHash32(std::string(HAMMER_ID)));
+    if (g_ItemManager.GetPrimaryWeaponID() == CoreSystems::StringToHash32(std::string(HAMMER_ID)))
+    {
+        m_WeaponIcon.SetTexture(CoreSystems::StringToHash32(std::string(HAMMER_ICON)));
+    }
+    else
+    {
+        m_WeaponIcon.SetTexture(CoreSystems::StringToHash32(std::string(BOW_ICON)));
+    }
+
+    m_IconStack.RefreshUI();
 }
 
 
@@ -375,6 +374,14 @@ void HUDScreen::OnPlayerEquippedItemChangedEvent()
 void HUDScreen::OnDayCountChangedEvent()
 {
     m_DayCountText.SetText(std::to_string(g_GameplayManager.GetDayCount() + 1));
+
+    m_DayNightStack.RefreshUI();
+
+    m_DayNightStack.SetOffset(
+        ( (m_DayNightStack.GetWidth() / 2) * -1),
+        10
+    );
+
 }
 
 
@@ -385,7 +392,9 @@ void HUDScreen::OnAmmoCountChangedEvent()
     uint32_t ammoID = CoreSystems::StringToHash32(std::string(AMMO_ID));
     const ItemData& ammoItemData = g_ItemManager.GetItemDataByID(ammoID);
  
-    m_AmmoAmountText->SetText(std::to_string(ammoItemData.m_uiAmount));
+    m_AmmoAmountText.SetText(std::to_string(ammoItemData.m_uiAmount));
+
+    m_AmmoStack.RefreshUI();
 }
 
 
@@ -396,7 +405,30 @@ void HUDScreen::OnStaminaPotionUsedEvent()
     uint32_t staminaPotionID = CoreSystems::StringToHash32(std::string(STAMINA_ICON));
     const ItemData& staminaPotionItemData = g_ItemManager.GetItemDataByID(staminaPotionID);
  
-    m_StaminaPotionAmountText->SetText(std::to_string(staminaPotionItemData.m_uiAmount));
+    m_StaminaPotionAmountText.SetText(std::to_string(staminaPotionItemData.m_uiAmount));
+
+    m_StaminaPotionStack.RefreshUI();
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+void HUDScreen::OnDayNightChangedEvent()
+{
+	if (g_GameplayManager.GetDayNightValue() == DayNightValues::eDay)
+	{
+        m_DayNightIcon.SetTexture(CoreSystems::StringToHash32(std::string(DAY_ICON)));
+	}
+    else
+    {
+        m_DayNightIcon.SetTexture(CoreSystems::StringToHash32(std::string(NIGHT_ICON)));
+    }
+
+    m_DayNightStack.RefreshUI();
+	m_DayNightStack.SetOffset(
+		((m_DayNightStack.GetWidth() / 2) * -1),
+		10
+	);
 }
 
 }

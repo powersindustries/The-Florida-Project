@@ -31,12 +31,12 @@ DebugScreen::~DebugScreen()
 // -------------------------------------------------------
 void DebugScreen::Update()
 {
-    m_DamageButton.Update(CoreManagers::g_InputManager);
-    m_HealButton.Update(CoreManagers::g_InputManager);
-    m_ScrapButton.Update(CoreManagers::g_InputManager);
-    m_WoodButton.Update(CoreManagers::g_InputManager);
-    m_WaterButton.Update(CoreManagers::g_InputManager);
-    m_IncreaseTimeButton.Update(CoreManagers::g_InputManager);
+    m_DamageButton.Update();
+    m_HealButton.Update();
+    m_ScrapButton.Update();
+    m_WoodButton.Update();
+    m_WaterButton.Update();
+    m_IncreaseTimeButton.Update();
 
 
     if (m_DamageButton.LeftClickPressed())
@@ -84,35 +84,33 @@ void DebugScreen::Draw(SDL_Renderer* renderer)
 // -------------------------------------------------------
 void DebugScreen::Initialize()
 {
-    m_BackgroundBox.SetAnchor(HorizontalAlignment::eRight, VerticalAlignment::eCenter);
-    m_BackgroundBox.SetElementAlignment(HorizontalAlignment::eLeft, VerticalAlignment::eCenter);
-    m_BackgroundBox.SetOffset(25, 0);
-    m_BackgroundBox.SetSize(500, CoreManagers::g_SettingsManager.GetScreenHeight() - 50);
+    m_BackgroundBox.SetAnchor(Anchor::eTopRight);
     m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
-
+    m_BackgroundBox.SetSize(400, CoreManagers::g_SettingsManager.GetScreenHeight() - 50);
+    m_BackgroundBox.SetOffset(
+        -10, 
+        10 
+    );
 
     m_DamageButton.SetText("Damage Player");
-    m_DamageButton.SetSize(300, 30);
+    m_DamageButton.SetSize(300, 50);
 
     m_HealButton.SetText("Heal Player");
-    m_HealButton.SetSize(300, 30);
+    m_HealButton.SetSize(300, 50);
 
     m_ScrapButton.SetText("Increase Scrap");
-    m_ScrapButton.SetSize(300, 30);
+    m_ScrapButton.SetSize(300, 50);
 
     m_WoodButton.SetText("Increase Wood");
-    m_WoodButton.SetSize(300, 30);
+    m_WoodButton.SetSize(300, 50);
 
     m_WaterButton.SetText("Increase Water");
-    m_WaterButton.SetSize(300, 30);
+    m_WaterButton.SetSize(300, 50);
 
     m_IncreaseTimeButton.SetText("Increase Time");
-    m_IncreaseTimeButton.SetSize(300, 30);
+    m_IncreaseTimeButton.SetSize(300, 50);
 
-
-    m_MainStack.SetAnchor(HorizontalAlignment::eRight, VerticalAlignment::eTop);
-    m_MainStack.SetElementAlignment(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    m_MainStack.SetOffset(100, 50);
+    m_MainStack.SetAnchor(Anchor::eCenterRight);
     m_MainStack.SetPadding(10);
     m_MainStack.AddChild(&m_DamageButton);
     m_MainStack.AddChild(&m_HealButton);
@@ -120,6 +118,11 @@ void DebugScreen::Initialize()
     m_MainStack.AddChild(&m_WoodButton);
     m_MainStack.AddChild(&m_WaterButton);
     m_MainStack.AddChild(&m_IncreaseTimeButton);
+    m_MainStack.SetOffset(
+        -50,
+        ( (m_MainStack.GetHeight() / 2) * -1)
+        
+    );
 
 }
 

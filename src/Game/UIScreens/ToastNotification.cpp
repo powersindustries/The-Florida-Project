@@ -58,7 +58,6 @@ void ToastNotification::Draw(SDL_Renderer* renderer)
 {
     if (m_bShowNotification)
     {
-        m_BackgroundBox.Draw(renderer);
         m_NotificationText.Draw(renderer);
     }
 }
@@ -68,17 +67,13 @@ void ToastNotification::Draw(SDL_Renderer* renderer)
 // -------------------------------------------------------
 void ToastNotification::Initialize()
 {
-    m_BackgroundBox.SetAnchor(HorizontalAlignment::eRight, VerticalAlignment::eTop);
-    m_BackgroundBox.SetElementAlignment(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    m_BackgroundBox.SetSize(500, 75);
-    m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
-    m_BackgroundBox.SetOffset(25,25);
-
-    m_NotificationText.SetAnchor(HorizontalAlignment::eRight, VerticalAlignment::eTop);
-    m_NotificationText.SetElementAlignment(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
+    m_NotificationText.SetAnchor(Anchor::eTopRight);
+    m_NotificationText.SetColor(g_GameGlobals.COLOR_WHITE);
     m_NotificationText.SetText("Notifaction Text.");
-    m_NotificationText.SetColor(g_GameGlobals.COLOR_BLACK);
-    m_NotificationText.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(25), CoreManagers::g_SettingsManager.GetRelativeScreenX(50));
+    m_NotificationText.SetOffset(
+        CoreManagers::g_SettingsManager.GetRelativeScreenX(-25), 
+        CoreManagers::g_SettingsManager.GetRelativeScreenY(50)
+    );
 
 
     g_EventManager.Subscribe(Events::eInventoryChanged, [this]() { ToastNotification::OnInventoryChangedEvent(); });
@@ -121,8 +116,6 @@ void ToastNotification::OnInventoryChangedEvent()
     }
 
     const int iTextLength = m_NotificationText.GetWidth();
-    m_BackgroundBox.SetSize(iTextLength+25, m_BackgroundBox.GetHeight());
-
 }
 
 }

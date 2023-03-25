@@ -44,22 +44,18 @@ CraftingScreen::~CraftingScreen()
 // -------------------------------------------------------
 void CraftingScreen::Update()
 {
-    std::vector<CoreUI::UIBase*> craftingChildren = m_CraftingStack.GetChilren();
-    uint32_t uiCraftingStackSize = m_CraftingStack.GetChildrenCount();
-    for (uint32_t x=0; x < uiCraftingStackSize; ++x)
-    {
-        StackPanel* currStack = dynamic_cast<StackPanel*>(craftingChildren[x]); 
-        Button* currButton = dynamic_cast<Button*>(currStack->GetChilren()[0]);
-        if (currButton)
-        {
-            currButton->Update(CoreManagers::g_InputManager);
+    m_AmmoCraftButton.Update();
+	if (m_AmmoCraftButton.LeftClickPressed())
+	{
+		g_CraftingManager.CraftItemByIndex(m_AmmoCraftButton.GetData1());
+	}
 
-            if (currButton->LeftClickPressed())
-            {
-                g_CraftingManager.CraftItemByIndex(currButton->GetData1());
-            }
-        }
-    }
+    m_StaminaCraftButton.Update();
+	if (m_StaminaCraftButton.LeftClickPressed())
+	{
+		g_CraftingManager.CraftItemByIndex(m_StaminaCraftButton.GetData1());
+	}
+
 }
 
 
@@ -69,15 +65,14 @@ void CraftingScreen::Draw(SDL_Renderer* renderer)
 {
     m_OpacityBox.Draw(renderer);
     m_BackgroundBox.Draw(renderer);
-
     m_MenuTitleText.Draw(renderer);
 
     m_ResourceStack.Draw(renderer);
+    m_AmmoCraftingStack.Draw(renderer);
+    m_StaminaCraftingStack.Draw(renderer);
 
-    m_BaseEquipmentStack.Draw(renderer);
+    m_InventoryTitleText.Draw(renderer);
     m_InventoryStack.Draw(renderer);
-
-    m_CraftingStack.Draw(renderer);
 }
 
 
@@ -86,25 +81,30 @@ void CraftingScreen::Draw(SDL_Renderer* renderer)
 void CraftingScreen::Initialize()
 {
     // Backgrounds. 
-    m_OpacityBox.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_OpacityBox.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
+    m_OpacityBox.SetAnchor(Anchor::eTopLeft);
     m_OpacityBox.SetSize(CoreManagers::g_SettingsManager.GetScreenWidth(), CoreManagers::g_SettingsManager.GetScreenHeight());
     m_OpacityBox.SetColor(g_GameGlobals.COLOR_BLACK);
-    m_OpacityBox.SetDisplayType(DisplayType::eDisabled);
+    m_OpacityBox.SetVisibility(UIVisibility::eDisabled);
 
-    m_BackgroundBox.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_BackgroundBox.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_BackgroundBox.SetSize(CoreManagers::g_SettingsManager.GetScreenWidth() / 2, CoreManagers::g_SettingsManager.GetScreenHeight() - CoreManagers::g_SettingsManager.GetRelativeScreenY(50));
+    m_BackgroundBox.SetAnchor(Anchor::eCenter);
     m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
-
+    m_BackgroundBox.SetSize(
+        CoreManagers::g_SettingsManager.GetScreenWidth() / 2, 
+        CoreManagers::g_SettingsManager.GetScreenHeight() - CoreManagers::g_SettingsManager.GetRelativeScreenY(50)
+    );
+    m_BackgroundBox.SetOffset(
+        ( (m_BackgroundBox.GetWidth() / 2) * -1),
+        ( (m_BackgroundBox.GetHeight() / 2) * -1)
+    );
 
     // Title Text.
-    m_MenuTitleText.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_MenuTitleText.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_MenuTitleText.SetText("Crafting Menu");
-    m_MenuTitleText.SetOffset(0, CoreManagers::g_SettingsManager.GetRelativeScreenY(50));
+    m_MenuTitleText.SetAnchor(Anchor::eTopCenter);
     m_MenuTitleText.SetColor(g_GameGlobals.COLOR_BLACK);
-
+    m_MenuTitleText.SetText("Crafting Menu");
+    m_MenuTitleText.SetOffset(
+        ( (m_MenuTitleText.GetWidth() / 2) * -1),
+        CoreManagers::g_SettingsManager.GetRelativeScreenY(50)
+    );
 
     // Current Resources.
     m_ScrapIcon.SetTexture(CoreSystems::StringToHash32(std::string(SCRAP_ICON)));
@@ -125,10 +125,7 @@ void CraftingScreen::Initialize()
     m_WaterAmountText.SetText("water");
     m_WaterAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
 
-    m_ResourceStack.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_ResourceStack.SetChildAlignment(StackpanelAlignment::eHorizontal);
-    m_ResourceStack.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_ResourceStack.SetOffset(0, CoreManagers::g_SettingsManager.GetRelativeScreenY(125));
+    m_ResourceStack.SetAnchor(Anchor::eTopCenter);
     m_ResourceStack.SetPadding(10);
     m_ResourceStack.AddChild(&m_ScrapIcon);
     m_ResourceStack.AddChild(&m_ScrapAmountText);
@@ -136,89 +133,44 @@ void CraftingScreen::Initialize()
     m_ResourceStack.AddChild(&m_WoodAmountText);
     m_ResourceStack.AddChild(&m_WaterIcon);
     m_ResourceStack.AddChild(&m_WaterAmountText);
+    m_ResourceStack.SetOffset(
+        ( (m_ResourceStack.GetWidth() / 2) * -1),
+        CoreManagers::g_SettingsManager.GetRelativeScreenY(100)
+    );
 
     UpdateResourcesText();
 
-
     // Crafting Options.
-    m_CraftingStack.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_CraftingStack.SetChildAlignment(StackpanelAlignment::eVertical);
-    m_CraftingStack.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_CraftingStack.SetOffset(0, CoreManagers::g_SettingsManager.GetRelativeScreenY(-10));
-    m_CraftingStack.SetPadding(10);
+    m_AmmoCraftButton.SetText("Craft Ammo");
+    m_AmmoCraftButton.SetSize(200,35);
 
-
-    // Base Equipment Info.
-    m_BaseEquipmentStack.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_BaseEquipmentStack.SetChildAlignment(StackpanelAlignment::eVertical);
-    m_BaseEquipmentStack.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_BaseEquipmentStack.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(-150),CoreManagers::g_SettingsManager.GetRelativeScreenY(150));
-    m_BaseEquipmentStack.SetPadding(50);
-
-
-    TextBlock* equipmentTitleText = new TextBlock;
-    equipmentTitleText->SetText("Weapons");
-    equipmentTitleText->SetColor(g_GameGlobals.COLOR_BLACK);
-
-
-    const uint32_t uiPrimaryEquippedItemID = g_ItemManager.GetPrimaryWeaponID();
-    const ItemData& primaryItemData = g_ItemManager.GetItemDataByID(uiPrimaryEquippedItemID);
-
-    const uint32_t uiSecondaryEquippedItemID = g_ItemManager.GetSecondaryWeaponID();
-    const ItemData& secondaryItemData = g_ItemManager.GetItemDataByID(uiSecondaryEquippedItemID);
-
-
-    StackPanel* primaryStack = new StackPanel;
-    primaryStack->SetChildAlignment(StackpanelAlignment::eHorizontal);
-    primaryStack->SetElementAlignment(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    primaryStack->SetPadding(25);
-
-    const uint32_t uiHammerID = CoreSystems::StringToHash32(std::string(HAMMER_ID));
-
-    Icon* primaryIcon = new Icon;
-    primaryIcon->SetSize(25,25);
-    if (primaryItemData.m_uiID == uiHammerID)
-    {
-        primaryIcon->SetTexture(CoreSystems::StringToHash32(std::string(HAMMER_ICON)));
-    }
-    else
-    {
-        primaryIcon->SetTexture(CoreSystems::StringToHash32(std::string(BOW_ICON)));
-    }
+    m_AmmoCraftText.SetColor(g_GameGlobals.COLOR_BLACK);
+    m_AmmoCraftText.SetText("Ammo Text");
     
-    Icon* secondaryIcon = new Icon;
-    secondaryIcon->SetSize(25,25);
-    if (secondaryItemData.m_uiID == uiHammerID)
-    {
-        secondaryIcon->SetTexture(CoreSystems::StringToHash32(std::string(HAMMER_ICON)));
-    }
-    else
-    {
-        secondaryIcon->SetTexture(CoreSystems::StringToHash32(std::string(BOW_ICON)));
-    }
+    m_AmmoCraftingStack.SetAnchor(Anchor::eTopCenter);
+    m_AmmoCraftingStack.SetPadding(10);
+    m_AmmoCraftingStack.AddChild(&m_AmmoCraftButton);
+    m_AmmoCraftingStack.AddChild(&m_AmmoCraftText);
+
+    m_StaminaCraftButton.SetText("Craft Stamina Potion");
+    m_StaminaCraftButton.SetSize(200,35);
+
+    m_StaminaCraftText.SetColor(g_GameGlobals.COLOR_BLACK);
+    m_StaminaCraftText.SetText("Stamina Text");
     
-    primaryStack->AddChild(primaryIcon);
-    primaryStack->AddChild(secondaryIcon);
-
-    m_BaseEquipmentStack.AddChild(equipmentTitleText);
-    m_BaseEquipmentStack.AddChild(primaryStack);
-
+    m_StaminaCraftingStack.SetAnchor(Anchor::eTopCenter);
+    m_StaminaCraftingStack.SetPadding(10);
+    m_StaminaCraftingStack.AddChild(&m_StaminaCraftButton);
+    m_StaminaCraftingStack.AddChild(&m_StaminaCraftText);
 
     // Inventory Disposable Info.
-    m_InventoryStack.SetAnchor(HorizontalAlignment::eCenter, VerticalAlignment::eCenter);
-    m_InventoryStack.SetChildAlignment(StackpanelAlignment::eVertical);
-    m_InventoryStack.SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-    m_InventoryStack.SetOffset(CoreManagers::g_SettingsManager.GetRelativeScreenX(150), CoreManagers::g_SettingsManager.GetRelativeScreenY(150));
-    m_InventoryStack.SetPadding(50);
-
-    TextBlock* newResourceText = new TextBlock;
-    newResourceText->SetText(std::string("Disposable Items"));
-    newResourceText->SetColor(g_GameGlobals.COLOR_BLACK);
-
-    StackPanel* ammoStack = new StackPanel;
-    ammoStack->SetChildAlignment(StackpanelAlignment::eHorizontal);
-    ammoStack->SetElementAlignment(HorizontalAlignment::eLeft, VerticalAlignment::eTop);
-    ammoStack->SetPadding(25);
+    m_InventoryTitleText.SetAnchor(Anchor::eCenter);
+    m_InventoryTitleText.SetColor(g_GameGlobals.COLOR_BLACK);
+    m_InventoryTitleText.SetText(std::string("Disposable Items"));
+    m_InventoryTitleText.SetOffset(
+        ( (m_InventoryTitleText.GetWidth() / 2) * -1 ),
+        -100
+    );
 
     Icon* ammoIcon = new Icon;
     ammoIcon->SetSize(25,25);
@@ -231,17 +183,15 @@ void CraftingScreen::Initialize()
     m_AmmoAmountText.SetText("NUMBER");
     m_AmmoAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
 
-    ammoStack->AddChild(ammoIcon);
-    ammoStack->AddChild(&m_AmmoAmountText);
-
     m_StaminaPotionAmountText.SetText("NUMBER");
     m_StaminaPotionAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
 
-    ammoStack->AddChild(staminaPotionIcon);
-    ammoStack->AddChild(&m_StaminaPotionAmountText);
-
-    m_InventoryStack.AddChild(newResourceText);
-    m_InventoryStack.AddChild(ammoStack);
+    m_InventoryStack.SetAnchor(Anchor::eCenter);
+    m_InventoryStack.SetPadding(50);
+    m_InventoryStack.AddChild(ammoIcon);
+    m_InventoryStack.AddChild(&m_AmmoAmountText);
+    m_InventoryStack.AddChild(staminaPotionIcon);
+    m_InventoryStack.AddChild(&m_StaminaPotionAmountText);
 
 
     g_EventManager.Subscribe(Events::eInventoryChanged, [this]() { CraftingScreen::OnInventoryChangedEvent(); });
@@ -292,6 +242,10 @@ void CraftingScreen::UpdateResourcesText()
     }
 
     m_ResourceStack.RefreshUI();
+	m_ResourceStack.SetOffset(
+		((m_ResourceStack.GetWidth() / 2) * -1),
+		CoreManagers::g_SettingsManager.GetRelativeScreenY(100)
+	);
 }
 
 
@@ -299,35 +253,44 @@ void CraftingScreen::UpdateResourcesText()
 // -------------------------------------------------------
 void CraftingScreen::UpdateCraftingText()
 {
-    m_CraftingStack.ClearChildren();
-
     const std::vector<RecipeData>& RecipesVector = g_CraftingManager.GetAllRecipes();
-    const uint8_t RecipesVectorSize = static_cast<uint8_t>(RecipesVector.size());
-    for (uint8_t x=0; x < RecipesVectorSize; ++x)
+    const uint8_t uiRecipesVectorSize = static_cast<uint8_t>(RecipesVector.size());
+    for (uint8_t x=0; x < uiRecipesVectorSize; ++x)
     {
         const RecipeData& currRecipeData = RecipesVector[x];
         const ItemData& rewardItemData = g_ItemManager.GetItemDataByID(currRecipeData.m_Reward.m_uiItemID);
-  
-        Button* newButton = new Button;
-        newButton->SetText(rewardItemData.m_sName);
-        newButton->SetSize(200, 50);
-        newButton->SetData1(x); // Set Data1 to index of recipe.
-        newButton->SetDisplayType(g_CraftingManager.HasEnoughResourcesToCraft(currRecipeData.m_uiRecipeID) ? DisplayType::eVisible : DisplayType::eDisabled);
+ 
+        if (rewardItemData.m_uiID == CoreSystems::StringToHash32(std::string("itm_Ammo")))
+        {
+            m_AmmoCraftButton.SetText(rewardItemData.m_sName);
+            m_AmmoCraftButton.SetData1(x); // Set Data1 to recipe index.
+            m_AmmoCraftButton.SetVisibility(g_CraftingManager.HasEnoughResourcesToCraft(currRecipeData.m_uiRecipeID) ? UIVisibility::eVisible : UIVisibility::eDisabled);
 
-        TextBlock* newText = new TextBlock;
-        newText->SetText(currRecipeData.m_sIngredientText);
+            m_AmmoCraftText.SetText(currRecipeData.m_sIngredientText);
+        }
+        else if (rewardItemData.m_uiID == CoreSystems::StringToHash32(std::string("itm_StaminaPotion")))
+        {
 
-        StackPanel* newStack = new StackPanel;
-        newStack->SetChildAlignment(StackpanelAlignment::eHorizontal);
-        newStack->SetElementAlignment(HorizontalAlignment::eCenter, VerticalAlignment::eTop);
-        newStack->SetPadding(25);
-        newStack->AddChild(newButton);
-        newStack->AddChild(newText);
+            m_StaminaCraftButton.SetText(rewardItemData.m_sName);
+            m_StaminaCraftButton.SetData1(x); // Set Data1 to recipe index.
+            m_StaminaCraftButton.SetVisibility(g_CraftingManager.HasEnoughResourcesToCraft(currRecipeData.m_uiRecipeID) ? UIVisibility::eVisible : UIVisibility::eDisabled);
 
-        m_CraftingStack.AddChild(newStack);
+            m_StaminaCraftText.SetText(currRecipeData.m_sIngredientText);
+        }
     }
 
-    m_CraftingStack.RefreshUI();
+    m_AmmoCraftingStack.RefreshUI();
+    m_AmmoCraftingStack.SetOffset(
+		( (m_AmmoCraftingStack.GetWidth() / 2) * -1 ),
+		CoreManagers::g_SettingsManager.GetRelativeScreenY(200)
+    );
+
+    m_StaminaCraftingStack.RefreshUI();
+    m_StaminaCraftingStack.SetOffset(
+		( (m_StaminaCraftingStack.GetWidth() / 2) * -1 ),
+		CoreManagers::g_SettingsManager.GetRelativeScreenY(300)
+    );
+
 }
 
 
@@ -335,26 +298,32 @@ void CraftingScreen::UpdateCraftingText()
 // -------------------------------------------------------
 void CraftingScreen::UpdateDisposablesText()
 {
-    const uint32_t uiAmmoID = CoreSystems::StringToHash32(std::string(AMMO_ID));
- 
-    const std::vector<ItemData> vPlayerInventory = g_ItemManager.GetAllItemData();
-    const uint32_t uiItemSize = static_cast<uint32_t>(vPlayerInventory.size());
-    for (uint32_t x = 0; x < uiItemSize; ++x)
-    {
-        const ItemData& currItem = vPlayerInventory[x];
+	const uint32_t uiAmmoID = CoreSystems::StringToHash32(std::string(AMMO_ID));
 
-        if (currItem.m_Type == ItemType::eDisposable)
-        {
-            if (currItem.m_uiID == uiAmmoID)
-            {
-                m_AmmoAmountText.SetText(std::to_string(currItem.m_uiAmount));
-            }
-            else
-            {
-                m_StaminaPotionAmountText.SetText(std::to_string(currItem.m_uiAmount));
-            }
-        }
-    }
+	const std::vector<ItemData> vPlayerInventory = g_ItemManager.GetAllItemData();
+	const uint32_t uiItemSize = static_cast<uint32_t>(vPlayerInventory.size());
+	for (uint32_t x = 0; x < uiItemSize; ++x)
+	{
+		const ItemData& currItem = vPlayerInventory[x];
+
+		if (currItem.m_Type == ItemType::eDisposable)
+		{
+			if (currItem.m_uiID == uiAmmoID)
+			{
+				m_AmmoAmountText.SetText(std::to_string(currItem.m_uiAmount));
+			}
+			else
+			{
+				m_StaminaPotionAmountText.SetText(std::to_string(currItem.m_uiAmount));
+			}
+		}
+	}
+
+	m_InventoryStack.RefreshUI();
+	m_InventoryStack.SetOffset(
+		((m_InventoryStack.GetWidth() / 2) * -1),
+		-50
+	);
 }
 
 

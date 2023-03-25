@@ -10,6 +10,7 @@
 #include "Managers/SettingsManager.h"
 #include "Managers/InputManager.h"
 #include "Game/Managers/GameManager.h"
+#include "Managers/StyleManager.h"
 
 #define MIX_FREQUENCY 44100
 #define MIX_CHUNK_SIZE 2048
@@ -75,7 +76,7 @@ void Game::InitializeSession()
     // Initialize Core.
     CoreManagers::g_SettingsManager.InitializeSettings();
     g_EventManager.InitializeEvents();
-
+    CoreManagers::g_StyleManager.InitializeStyleManager();
 
     // Create Window.
     m_Window = SDL_CreateWindow(

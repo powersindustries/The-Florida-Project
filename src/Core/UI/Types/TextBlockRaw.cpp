@@ -1,4 +1,4 @@
-#include "TextBlock.h"
+#include "TextBlockRaw.h"
 #include "GameGlobals.h"
 #include "Core/Game.h"
 
@@ -14,7 +14,7 @@ namespace CoreUI
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-TextBlock::TextBlock()
+TextBlockRaw::TextBlockRaw()
     : m_Font(nullptr), m_MessageTexture(nullptr)
 {
     m_Text = "";
@@ -28,14 +28,14 @@ TextBlock::TextBlock()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-TextBlock::~TextBlock()
+TextBlockRaw::~TextBlockRaw()
 {
 }
 
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void TextBlock::Draw(SDL_Renderer* renderer)
+void TextBlockRaw::Draw(SDL_Renderer* renderer)
 {
     if (m_Visibility == UIVisibility::eHidden)
     {
@@ -48,7 +48,7 @@ void TextBlock::Draw(SDL_Renderer* renderer)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void TextBlock::SetStyle(uint32_t uiStyleID)
+void TextBlockRaw::SetStyle(uint32_t uiStyleID)
 {
     const CoreManagers::TextBlockStyle& currStyleData = CoreManagers::g_StyleManager.GetTextBlockStyle(uiStyleID);
 
@@ -63,24 +63,24 @@ void TextBlock::SetStyle(uint32_t uiStyleID)
     m_bStyleSet = true;
 
     CreateWordTexture();
-    RefreshUI();
+    //RefreshUI();
 }
 
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void TextBlock::SetText(std::string text)
+void TextBlockRaw::SetText(std::string text)
 {
     m_Text = text;
 
     CreateWordTexture();
-    RefreshUI();
+    //RefreshUI();
 }
 
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void TextBlock::SetVisibility(UIVisibility visibility)
+void TextBlockRaw::SetVisibility(UIVisibility visibility)
 {
     UIBase::SetVisibility(visibility);
 
@@ -90,30 +90,38 @@ void TextBlock::SetVisibility(UIVisibility visibility)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void TextBlock::SetSize(const int x, const int y)
+void TextBlockRaw::SetSize(const int x, const int y)
 {
     m_vSize.m_X = x;
     m_vSize.m_Y = y;
 
     CreateWordTexture();
-    RefreshUI();
+    //RefreshUI();
 }
 
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void TextBlock::SetWordWrap(uint8_t uiWordWrap)
+void TextBlockRaw::SetWordWrap(uint8_t uiWordWrap)
 {
     m_uiWordWrap = uiWordWrap;
 
     CreateWordTexture();
-    RefreshUI();
+    //RefreshUI();
 }
 
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void TextBlock::SetPositionNoRefresh(const int x, const int y)
+void TextBlockRaw::SetPosition(const int x, const int y)
+{
+    SetPositionNoRefresh(x, y);
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+void TextBlockRaw::SetPositionNoRefresh(const int x, const int y)
 {
     m_BaseRectangle.x = x;
     m_BaseRectangle.y = y;
@@ -122,7 +130,7 @@ void TextBlock::SetPositionNoRefresh(const int x, const int y)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void TextBlock::CreateWordTexture()
+void TextBlockRaw::CreateWordTexture()
 {
     SDL_Color tempColor = 
     { 
@@ -180,7 +188,7 @@ void TextBlock::CreateWordTexture()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void TextBlock::SetFont(uint32_t fontIDHash)
+void TextBlockRaw::SetFont(uint32_t fontIDHash)
 {
     m_Font = Florida::g_AssetManager.m_FontAssets[fontIDHash].m_Font;
 }
@@ -188,7 +196,7 @@ void TextBlock::SetFont(uint32_t fontIDHash)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void TextBlock::SetColor(SDL_Color color)
+void TextBlockRaw::SetColor(SDL_Color color)
 {
     UIBase::SetColor(color);
 

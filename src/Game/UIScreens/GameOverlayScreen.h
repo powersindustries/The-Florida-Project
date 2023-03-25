@@ -4,7 +4,7 @@
 #include <SDL_image.h> // SDL Image
 #include <unordered_map>
 
-#include "Core/UI/Types/TextBlock.h"
+#include "Core/UI/Types/TextBlockRaw.h"
 
 using namespace CoreUI;
 
@@ -15,7 +15,7 @@ namespace Florida
 struct RefreshUI
 {
     uint32_t m_uiMapIDHash;
-    TextBlock m_RefreshText;
+    TextBlockRaw m_RefreshText;
     bool m_bActive;
 };
 
@@ -34,7 +34,7 @@ public:
 
 public:
 
-    TextBlock m_PickupCooldownText;
+    TextBlockRaw m_PickupCooldownText;
 
     bool m_bShowCooldownUI;
 

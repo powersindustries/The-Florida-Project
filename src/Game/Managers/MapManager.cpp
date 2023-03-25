@@ -93,8 +93,8 @@ void MapManager::LoadMapData(std::string sMapPath)
     newMapData.m_BackgroundRectangle.w = CoreManagers::g_SettingsManager.GetScreenWidth();
     newMapData.m_BackgroundRectangle.h = CoreManagers::g_SettingsManager.GetScreenHeight();
 
-    newMapData.m_vPlayerStartPosition.m_iX = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(mapNode->first_attribute("PlayerX")->value()));
-    newMapData.m_vPlayerStartPosition.m_iY = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(mapNode->first_attribute("PlayerY")->value()));
+    newMapData.m_vPlayerStartPosition.m_X = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(mapNode->first_attribute("PlayerX")->value()));
+    newMapData.m_vPlayerStartPosition.m_Y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(mapNode->first_attribute("PlayerY")->value()));
 
     std::string sNightTextureID = mapNode->first_attribute("BackgroundTextureNight")->value();
     uint32_t uiNightTextureIDHash = CoreSystems::StringToHash32(sNightTextureID);
@@ -118,11 +118,11 @@ void MapManager::LoadMapData(std::string sMapPath)
 
         newNavigation.m_uiPadding = std::stoi(child->first_attribute("Padding")->value());
 
-        newNavigation.m_vUpPosition.m_iX = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("UpX")->value()));
-        newNavigation.m_vUpPosition.m_iY = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("UpY")->value()));
+        newNavigation.m_vUpPosition.m_X = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("UpX")->value()));
+        newNavigation.m_vUpPosition.m_Y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("UpY")->value()));
 
-        newNavigation.m_vDownPosition.m_iX = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("DownX")->value()));
-        newNavigation.m_vDownPosition.m_iY = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("DownY")->value()));
+        newNavigation.m_vDownPosition.m_X = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("DownX")->value()));
+        newNavigation.m_vDownPosition.m_Y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("DownY")->value()));
 
         newMapData.m_Navigations.push_back(newNavigation);
     }
@@ -274,11 +274,11 @@ void MapManager::Update(float deltaTime)
 
             if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eUp) && yOffsetBottom > 0 && yOffsetBottom < 50)
             {
-                g_Player.SetPlayerPosition(currNavigation.m_vUpPosition.m_iX, currNavigation.m_vUpPosition.m_iY);
+                g_Player.SetPlayerPosition(currNavigation.m_vUpPosition.m_X, currNavigation.m_vUpPosition.m_Y);
             }
             else if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eDown) && yOffsetTop > 0 && yOffsetTop < 50)
             {
-                g_Player.SetPlayerPosition(currNavigation.m_vDownPosition.m_iX, currNavigation.m_vDownPosition.m_iY);
+                g_Player.SetPlayerPosition(currNavigation.m_vDownPosition.m_X, currNavigation.m_vDownPosition.m_Y);
             }
         }
     }
@@ -454,7 +454,7 @@ void MapManager::LoadMapByID(uint32_t uiMapIDHash)
 
     if (m_ActiveMap)
     {
-        g_Player.SetPlayerPosition(m_ActiveMap->m_vPlayerStartPosition.m_iX, m_ActiveMap->m_vPlayerStartPosition.m_iY);
+        g_Player.SetPlayerPosition(m_ActiveMap->m_vPlayerStartPosition.m_X, m_ActiveMap->m_vPlayerStartPosition.m_Y);
 
         g_EnemyManager.SetupEnemySpawning(m_ActiveMap->m_EnemySpawners);
     }

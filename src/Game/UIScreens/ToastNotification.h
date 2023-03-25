@@ -38,7 +38,6 @@ private:
     const float m_fTimer = 3.0f; // 1 second.
     float m_fTimeStamp = 0.0f;
 
-    Box m_BackgroundBox;
     TextBlock m_NotificationText;
 
 };

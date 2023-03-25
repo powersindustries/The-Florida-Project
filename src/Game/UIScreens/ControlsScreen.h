@@ -3,10 +3,10 @@
 #include <SDL_ttf.h> // SDL Fonts or Text
 #include <SDL_image.h> // SDL Image
 
-#include "Core/UI/Types/StackPanel.h"
 #include "Core/UI/Types/Box.h"
 #include "Core/UI/Types/TextBlock.h"
 #include "Core/UI/Types/Button.h"
+#include "Core/UI/Types/VerticalStack.h"
 
 using namespace CoreUI;
 
@@ -32,7 +32,7 @@ private:
 
     Button m_XButton;
 
-    StackPanel m_StackPanel;
+    VerticalStack m_VerticalStack;
 
 };
 }

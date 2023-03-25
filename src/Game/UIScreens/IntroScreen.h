@@ -5,8 +5,8 @@
 
 #include "Core/UI/Types/Box.h"
 #include "Core/UI/Types/Button.h"
-#include "Core/UI/Types/StackPanel.h"
 #include "Core/UI/Types/Icon.h"
+#include "Core/UI/Types/VerticalStack.h"
 
 using namespace CoreUI;
 
@@ -35,7 +35,7 @@ private:
     Button m_ControlsButton;
     Button m_ExitGameButton;
 
-    StackPanel m_StackPanel;
+    VerticalStack m_VerticalStack;
 
 };
 }

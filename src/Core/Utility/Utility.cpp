@@ -66,6 +66,17 @@ bool Utility::CollisionBetweenTwoRectanglesWithPadding(const SDL_Rect& rect1, co
 
 // -------------------------------------------------------
 // -------------------------------------------------------
+bool Utility::CollisionBetweenPointAndRectangle(const SDL_Rect& rect, const CoreUtility::Vec2i& v2i)
+{
+	return !((v2i.m_X < rect.x)
+		|| (v2i.m_X > rect.x + rect.w)
+		|| (v2i.m_Y < rect.y)
+		|| (v2i.m_Y > rect.y + rect.h));
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
 double Utility::ATan2InDegrees(const int iY, const int iX)
 {
     const double dRadians = atan2(iY, iX);

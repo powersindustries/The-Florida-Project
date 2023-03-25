@@ -8,11 +8,11 @@
 
 namespace CoreUI
 {
-class TextBlock : public UIBase
+class TextBlockRaw : public UIBase
 {
 public:
-    TextBlock();
-    ~TextBlock();
+    TextBlockRaw();
+    ~TextBlockRaw();
 
     void Draw(SDL_Renderer* renderer);
     void SetStyle(uint32_t uiStyleID);
@@ -24,6 +24,7 @@ public:
     void SetSize(const int x, const int y);
     void SetWordWrap(uint8_t uiWordWrap);
 
+    void SetPosition(const int x, const int y);
 
 private:
 

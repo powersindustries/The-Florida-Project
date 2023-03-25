@@ -4,38 +4,30 @@
 #include <SDL_image.h> // SDL Image
 
 #include "../UICoreTypes.h"
-#include "Core/Types/Sprite.h"
 
 namespace CoreUI
 {
-
 class Icon : public UIBase
 {
 public:
     Icon();
     ~Icon();
 
-    Icon(uint32_t uiTextureID);
-
-    void Update();
     void Draw(SDL_Renderer* renderer);
-    void SetPosition(int x, int y);
-    void RefreshUI();
+    void SetStyle(uint32_t uiStyleID);
 
     void SetSize(int width, int height);
-
-    void SetTexture(uint32_t uiTextureID);
-
-
-    inline void SetColor(SDL_Color color) { m_Color = color; }
+    void SetTexture(const uint32_t uiTextureID);
 
 
 private:
 
-    SDL_Color m_Color;
+    void SetPositionNoRefresh(const int x, const int y);
 
-    CoreTypes::Sprite* m_Sprite;
+
+private:
+
+    SDL_Texture* m_Texture;
 
 };
-
 }
