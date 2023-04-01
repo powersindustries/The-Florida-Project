@@ -6,7 +6,7 @@
 #include "Core/Managers/StyleManager.h"
 #include "Game/Managers/AssetManager.h"
 
-namespace CoreUI
+namespace UI
 {
 
 
@@ -83,7 +83,7 @@ void Button::Draw(SDL_Renderer* renderer)
 // -------------------------------------------------------
 void Button::SetStyle(uint32_t uiStyleID)
 {
-    const CoreManagers::ButtonStyle& currStyleData = CoreManagers::g_StyleManager.GetButtonStyle(uiStyleID);
+    const Core::ButtonStyle& currStyleData = Core::g_StyleManager.GetButtonStyle(uiStyleID);
 
     m_Font = Florida::g_AssetManager.m_FontAssets[currStyleData.m_uiFont].m_Font;
 

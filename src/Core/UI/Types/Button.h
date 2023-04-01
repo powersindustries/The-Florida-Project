@@ -7,7 +7,7 @@
 #include "../UICoreTypes.h"
 #include "Core/Managers/InputManager.h"
 
-namespace CoreUI
+namespace UI
 {
 class Button : public UIBase
 {

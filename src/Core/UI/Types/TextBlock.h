@@ -6,7 +6,7 @@
 
 #include "../UICoreTypes.h"
 
-namespace CoreUI
+namespace UI
 {
 class TextBlock : public UIBase
 {
@@ -39,7 +39,7 @@ private:
     SDL_Texture* m_MessageTexture;
     TTF_Font* m_Font;
 
-    CoreUtility::Vec2i m_vSize;
+    Core::Vec2i m_vSize;
 
     uint8_t m_uiWordWrap;
 

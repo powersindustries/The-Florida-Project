@@ -37,7 +37,7 @@ struct PickupData
     uint32_t m_uiItem;
     uint32_t m_uiAmount;
 
-    CoreTypes::Sprite* m_Sprite = nullptr;
+    Core::Sprite* m_Sprite = nullptr;
 
 };
 
@@ -61,7 +61,7 @@ struct RefreshData
     uint32_t m_uiItem;
     uint32_t m_uiAmount;
 
-    CoreTypes::Sprite* m_Sprite = nullptr;
+    Core::Sprite* m_Sprite = nullptr;
 };
 
 
@@ -87,8 +87,8 @@ struct NavigationData
 {
     SDL_Rect m_Rectangle;
     uint8_t m_uiPadding = 5;
-    CoreUtility::Vec2i m_vUpPosition;
-    CoreUtility::Vec2i m_vDownPosition;
+    Core::Vec2i m_vUpPosition;
+    Core::Vec2i m_vDownPosition;
 };
 
 
@@ -97,7 +97,7 @@ struct MapData
     std::string m_sID;
     uint32_t m_uiIDHash;
 
-    CoreUtility::Vec2i m_vPlayerStartPosition;
+    Core::Vec2i m_vPlayerStartPosition;
 
     // Background
     SDL_Color m_BackgroundColor;

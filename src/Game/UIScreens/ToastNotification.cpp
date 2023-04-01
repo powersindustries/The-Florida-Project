@@ -30,7 +30,7 @@ ToastNotification::~ToastNotification()
 // -------------------------------------------------------
 void ToastNotification::Update()
 {
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Wrong Update method was called in ToastNotification.");
+    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Wrong Update method was called in ToastNotification.");
 }
 
 
@@ -71,8 +71,8 @@ void ToastNotification::Initialize()
     m_NotificationText.SetColor(g_GameGlobals.COLOR_WHITE);
     m_NotificationText.SetText("Notifaction Text.");
     m_NotificationText.SetOffset(
-        CoreManagers::g_SettingsManager.GetRelativeScreenX(-25), 
-        CoreManagers::g_SettingsManager.GetRelativeScreenY(50)
+        Core::g_SettingsManager.GetRelativeScreenX(-25), 
+        Core::g_SettingsManager.GetRelativeScreenY(50)
     );
 
 

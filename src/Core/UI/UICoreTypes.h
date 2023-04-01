@@ -6,7 +6,7 @@
 #include "../Utility/VectorMethods.h"
 
 
-namespace CoreUI
+namespace UI
 {
 
 
@@ -96,7 +96,7 @@ public:
 
     // Dictates which part of the screen the UI is attached to.
     // Defaults value: Anchor::eTopLeft
-    CoreUtility::Vec2i m_vOffset;
+    Core::Vec2i m_vOffset;
 
 
     // Dictates which part of the screen the UI is attached to.

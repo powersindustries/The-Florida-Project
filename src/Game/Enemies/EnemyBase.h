@@ -34,7 +34,7 @@ public:
 
     SDL_Rect m_BaseRectangle;
 
-    CoreTypes::Sprite* m_Sprite;
+    Core::Sprite* m_Sprite;
 
     bool m_bActive;
 

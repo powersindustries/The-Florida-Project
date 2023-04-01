@@ -6,7 +6,7 @@
 
 #include "../UICoreTypes.h"
 
-namespace CoreUI
+namespace UI
 {
 
 class VerticalStack : public UIBase

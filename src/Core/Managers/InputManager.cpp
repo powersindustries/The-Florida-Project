@@ -3,7 +3,7 @@
 
 #define DEFAULT_TIMESTAMP -1
 
-namespace CoreManagers
+namespace Core
 {
 
 

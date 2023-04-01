@@ -1,6 +1,6 @@
 #pragma once
 
-namespace CoreUtility
+namespace Core
 {
 
 

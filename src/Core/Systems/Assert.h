@@ -3,7 +3,7 @@
 
 #include "Logging.h"
 
-namespace CoreSystems
+namespace Core
 {
 
 

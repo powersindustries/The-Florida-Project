@@ -86,7 +86,7 @@ void DebugScreen::Initialize()
 {
     m_BackgroundBox.SetAnchor(Anchor::eTopRight);
     m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
-    m_BackgroundBox.SetSize(400, CoreManagers::g_SettingsManager.GetScreenHeight() - 50);
+    m_BackgroundBox.SetSize(400, Core::g_SettingsManager.GetScreenHeight() - 50);
     m_BackgroundBox.SetOffset(
         -10, 
         10 
@@ -155,7 +155,7 @@ void DebugScreen::OnHealButton()
 // -------------------------------------------------------
 void DebugScreen::OnIncreaseScrapButton()
 {
-    g_ItemManager.AddItem(CoreSystems::StringToHash32(std::string("itm_Scrap")), 1);
+    g_ItemManager.AddItem(Core::StringToHash32(std::string("itm_Scrap")), 1);
 }
 
 
@@ -163,7 +163,7 @@ void DebugScreen::OnIncreaseScrapButton()
 // -------------------------------------------------------
 void DebugScreen::OnIncreaseWoodButton()
 {
-    g_ItemManager.AddItem(CoreSystems::StringToHash32(std::string("itm_Wood")), 1);
+    g_ItemManager.AddItem(Core::StringToHash32(std::string("itm_Wood")), 1);
 }
 
 
@@ -171,7 +171,7 @@ void DebugScreen::OnIncreaseWoodButton()
 // -------------------------------------------------------
 void DebugScreen::OnIncreaseWaterButton()
 {
-    g_ItemManager.AddItem(CoreSystems::StringToHash32(std::string("itm_Water")), 1);
+    g_ItemManager.AddItem(Core::StringToHash32(std::string("itm_Water")), 1);
 }
 
 

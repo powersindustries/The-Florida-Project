@@ -2,7 +2,7 @@
 #include <vector>
 #include <functional>
 
-namespace CoreSystems
+namespace Core
 {
 
 class Event

@@ -35,7 +35,7 @@ Game::Game()
     m_fDeltaTime = 0.0f;
     m_uiTicksLastFrame = 0;
 
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Game was created.");
+    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Game was created.");
 }
 
 
@@ -47,7 +47,7 @@ Game::~Game()
     IMG_Quit();
     Mix_Quit();
 
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Game was destroyed.");
+    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Game was destroyed.");
 }
 
 
@@ -57,39 +57,39 @@ void Game::InitializeSession()
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
-        CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eError, "Error with SDL_Init.");
+        Core::SYSTEMS_LOG(Core::LoggingLevel::eError, "Error with SDL_Init.");
         return;
     }
 
     if (TTF_Init() != 0)
     {
-        CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eError, "Error with TTF_Init.");
+        Core::SYSTEMS_LOG(Core::LoggingLevel::eError, "Error with TTF_Init.");
         return;
     }
 
     if (Mix_OpenAudio(MIX_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_CHANNEL_COUND, MIX_CHUNK_SIZE) < 0)
     {
-        CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eError, "Error with MixerOpenAudio.");
+        Core::SYSTEMS_LOG(Core::LoggingLevel::eError, "Error with MixerOpenAudio.");
         return;
     }
 
     // Initialize Core.
-    CoreManagers::g_SettingsManager.InitializeSettings();
+    Core::g_SettingsManager.InitializeSettings();
     g_EventManager.InitializeEvents();
-    CoreManagers::g_StyleManager.InitializeStyleManager();
+    Core::g_StyleManager.InitializeStyleManager();
 
     // Create Window.
     m_Window = SDL_CreateWindow(
-        CoreManagers::g_SettingsManager.GetTitle().c_str(),
+        Core::g_SettingsManager.GetTitle().c_str(),
         SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
-        CoreManagers::g_SettingsManager.GetScreenWidth(),
-        CoreManagers::g_SettingsManager.GetScreenHeight(),
+        Core::g_SettingsManager.GetScreenWidth(),
+        Core::g_SettingsManager.GetScreenHeight(),
         SDL_WINDOW_SHOWN);
 
     if (!m_Window)
     {
-        CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eError, "Window did not work.");
+        Core::SYSTEMS_LOG(Core::LoggingLevel::eError, "Window did not work.");
         return;
     }
 
@@ -98,7 +98,7 @@ void Game::InitializeSession()
 
     if (!m_Renderer)
     {
-        CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eError, "Renderer did not work.");
+        Core::SYSTEMS_LOG(Core::LoggingLevel::eError, "Renderer did not work.");
         return;
     }
 
@@ -126,7 +126,7 @@ void Game::EndSession()
 // -------------------------------------------------------
 void Game::ProcessInputs()
 {
-    CoreManagers::g_InputManager.ProcessInputs();
+    Core::g_InputManager.ProcessInputs();
 }
 
 

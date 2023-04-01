@@ -4,7 +4,7 @@
 #include <SDL_image.h> // SDL Image
 #include <string>
 
-namespace CoreManagers
+namespace Core
 {
 
 

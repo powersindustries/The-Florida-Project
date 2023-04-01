@@ -54,7 +54,7 @@ void PlayerStatistics::TakeDamage(uint8_t uiAmount)
     if (iTempHealth <= 0)
     {
         // Dead.
-        CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eError, "PLAYER DIED!");
+        Core::SYSTEMS_LOG(Core::LoggingLevel::eError, "PLAYER DIED!");
         g_GameplayManager.GameOver();
     }
     else

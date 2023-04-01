@@ -8,7 +8,7 @@
 
 #define DEFAULT_TEXTBLOCK_ID "DEFAULT"
 
-namespace CoreUI
+namespace UI
 {
 
 
@@ -55,13 +55,13 @@ void UIBase::Update()
     SDL_GetMouseState(&iMouseX, &iMouseY);
 
     // Update button state.
-    if (CoreUtility::Utility::CollisionBetweenPointAndRectangle(m_BaseRectangle, CoreUtility::Vec2i(iMouseX, iMouseY)))
+    if (Core::Utility::CollisionBetweenPointAndRectangle(m_BaseRectangle, Core::Vec2i(iMouseX, iMouseY)))
     {
         // Hover
         m_uiMouseState |= MouseState::eHover;
 
         // LMouse
-        if (CoreManagers::g_InputManager.GetActionPressed(CoreManagers::InputMappings::eMouse1))
+        if (Core::g_InputManager.GetActionPressed(Core::InputMappings::eMouse1))
         {
             m_uiMouseState |= MouseState::eLMouse;
         }
@@ -71,7 +71,7 @@ void UIBase::Update()
         }
 
         // RMouse
-        if (CoreManagers::g_InputManager.GetActionPressed(CoreManagers::InputMappings::eMouse2))
+        if (Core::g_InputManager.GetActionPressed(Core::InputMappings::eMouse2))
         {
             m_uiMouseState |= MouseState::eRMouse;
         }
@@ -95,64 +95,64 @@ void UIBase::RefreshUI()
 {
     if (!m_bStyleSet)
     {
-        SetStyle(CoreSystems::StringToHash32(std::string(DEFAULT_TEXTBLOCK_ID)));
+        SetStyle(Core::StringToHash32(std::string(DEFAULT_TEXTBLOCK_ID)));
     }
 
-    const int iScreenWidth = CoreManagers::g_SettingsManager.GetScreenWidth();
-    const int iScreenHeight = CoreManagers::g_SettingsManager.GetScreenHeight();
+    const int iScreenWidth = Core::g_SettingsManager.GetScreenWidth();
+    const int iScreenHeight = Core::g_SettingsManager.GetScreenHeight();
 
     // Set the base position based on Anchoring.
     switch (m_Anchor)
     {
-    case CoreUI::Anchor::eTopLeft: 
+    case UI::Anchor::eTopLeft: 
     {
         m_BaseRectangle.x = 0;
         m_BaseRectangle.y = 0;
         break;
     }
-    case CoreUI::Anchor::eTopCenter:
+    case UI::Anchor::eTopCenter:
     {
         m_BaseRectangle.x = iScreenWidth / 2;
         m_BaseRectangle.y = 0;
         break;
     }
-    case CoreUI::Anchor::eTopRight:
+    case UI::Anchor::eTopRight:
     {
         m_BaseRectangle.x = iScreenWidth - m_BaseRectangle.w;
         m_BaseRectangle.y = 0;
         break;
     }
-    case CoreUI::Anchor::eCenterLeft:
+    case UI::Anchor::eCenterLeft:
     {
         m_BaseRectangle.x = 0;
         m_BaseRectangle.y = iScreenHeight / 2;
         break;
     }
-    case CoreUI::Anchor::eCenter:
+    case UI::Anchor::eCenter:
     {
         m_BaseRectangle.x = iScreenWidth / 2;
         m_BaseRectangle.y = iScreenHeight / 2;
         break;
     }
-    case CoreUI::Anchor::eCenterRight:
+    case UI::Anchor::eCenterRight:
     {
         m_BaseRectangle.x = iScreenWidth - m_BaseRectangle.w;
         m_BaseRectangle.y = iScreenHeight / 2;
         break;
     }
-    case CoreUI::Anchor::eBottomLeft:
+    case UI::Anchor::eBottomLeft:
     {
         m_BaseRectangle.x = 0;
         m_BaseRectangle.y = iScreenHeight - m_BaseRectangle.h;
         break;
     }
-    case CoreUI::Anchor::eBottomCenter:
+    case UI::Anchor::eBottomCenter:
     {
         m_BaseRectangle.x = iScreenWidth / 2;
         m_BaseRectangle.y = iScreenHeight - m_BaseRectangle.h;
         break;
     }
-    case CoreUI::Anchor::eBottomRight:
+    case UI::Anchor::eBottomRight:
     {
         m_BaseRectangle.x = iScreenWidth - m_BaseRectangle.w;
         m_BaseRectangle.y = iScreenHeight - m_BaseRectangle.h;
@@ -165,51 +165,51 @@ void UIBase::RefreshUI()
     // Offset position based on Alignment.
     switch (m_Alignment)
     {
-    case CoreUI::Anchor::eTopCenter:
+    case UI::Anchor::eTopCenter:
     {
         m_BaseRectangle.x -= (m_BaseRectangle.w / 2);
         break;
     }
-    case CoreUI::Anchor::eTopRight:
+    case UI::Anchor::eTopRight:
     {
         m_BaseRectangle.x -= m_BaseRectangle.w;
         break;
     }
-    case CoreUI::Anchor::eCenterLeft:
+    case UI::Anchor::eCenterLeft:
     {
         m_BaseRectangle.y -= (m_BaseRectangle.h / 2);
         break;
     }
-    case CoreUI::Anchor::eCenter:
+    case UI::Anchor::eCenter:
     {
         m_BaseRectangle.x -= (m_BaseRectangle.w / 2);
         m_BaseRectangle.y -= (m_BaseRectangle.h / 2);
         break;
     }
-    case CoreUI::Anchor::eCenterRight:
+    case UI::Anchor::eCenterRight:
     {
         m_BaseRectangle.x -= m_BaseRectangle.w;
         m_BaseRectangle.y -= (m_BaseRectangle.h / 2);
         break;
     }
-    case CoreUI::Anchor::eBottomLeft:
+    case UI::Anchor::eBottomLeft:
     {
         m_BaseRectangle.y -= m_BaseRectangle.h;
         break;
     }
-    case CoreUI::Anchor::eBottomCenter:
+    case UI::Anchor::eBottomCenter:
     {
         m_BaseRectangle.x -= (m_BaseRectangle.w / 2);
         m_BaseRectangle.y -= m_BaseRectangle.h;
         break;
     }
-    case CoreUI::Anchor::eBottomRight:
+    case UI::Anchor::eBottomRight:
     {
         m_BaseRectangle.x -= m_BaseRectangle.w;
         m_BaseRectangle.y -= m_BaseRectangle.h;
         break;
     }
-    case CoreUI::Anchor::eTopLeft: 
+    case UI::Anchor::eTopLeft: 
     default:
         break;
     }
@@ -256,7 +256,7 @@ void UIBase::SetOffset(const int x, const int y)
 // -------------------------------------------------------
 TTF_Font* UIBase::GetDefaultFont()
 {
-    return Florida::g_AssetManager.m_FontAssets[CoreSystems::StringToHash32(std::string("fnt_Orbitron"))].m_Font;
+    return Florida::g_AssetManager.m_FontAssets[Core::StringToHash32(std::string("fnt_Orbitron"))].m_Font;
 }
 
 }

@@ -70,24 +70,24 @@ void GameManager::Update(float deltaTime)
         return;
     }
 
-    if (CoreManagers::g_InputManager.GetActionPressed(CoreManagers::InputMappings::eESCMenu) && IntroSeen())
+    if (Core::g_InputManager.GetActionPressed(Core::InputMappings::eESCMenu) && IntroSeen())
     {
         m_GameStateData.m_bGamePaused = !m_GameStateData.m_bGamePaused;
         g_UIManager.ActivatePauseMenu();
     }
 
-    if (!m_GameStateData.m_bGameOver && CoreManagers::g_InputManager.GetActionPressed(CoreManagers::InputMappings::eTabMenu) && IntroSeen())
+    if (!m_GameStateData.m_bGameOver && Core::g_InputManager.GetActionPressed(Core::InputMappings::eTabMenu) && IntroSeen())
     {
         m_GameStateData.m_bGamePaused = true;
         g_UIManager.ActivateInventoryMenu();
     }
 
-    if (!m_GameStateData.m_bGameOver && CoreManagers::g_InputManager.GetActionPressed(CoreManagers::InputMappings::eDebug1))
+    if (!m_GameStateData.m_bGameOver && Core::g_InputManager.GetActionPressed(Core::InputMappings::eDebug1))
     {
         m_GameStateData.m_bGraphicsDebugMode = !m_GameStateData.m_bGraphicsDebugMode;
     }
 
-    if (!m_GameStateData.m_bGameOver && CoreManagers::g_InputManager.GetActionPressed(CoreManagers::InputMappings::eDebug4))
+    if (!m_GameStateData.m_bGameOver && Core::g_InputManager.GetActionPressed(Core::InputMappings::eDebug4))
     {
         m_GameStateData.m_bDebugScreenActive = !m_GameStateData.m_bDebugScreenActive;
     }
@@ -173,7 +173,7 @@ void GameManager::StartNewGame()
     g_EnemyManager.ResetEnemyManager();
     g_SoundManager.ResetSoundManager();
 
-    uint32_t mapIDHash = CoreSystems::StringToHash32(std::string(MAP_ID));
+    uint32_t mapIDHash = Core::StringToHash32(std::string(MAP_ID));
     g_MapManager.LoadMapByID(mapIDHash);
 
     g_UIManager.ResetUIManager();

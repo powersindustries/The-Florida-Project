@@ -6,7 +6,7 @@
 #include "Core/Systems/Logging.h"
 #include "GameGlobals.h"
 
-namespace CoreManagers
+namespace Core
 {
 
 
@@ -54,7 +54,7 @@ void SettingsManager::InitializeSettings()
     m_SettingsData.m_iFXVolumePercentage    = std::stoi(settingsNode->first_attribute("FXVolume")->value());
 
 
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Settings initialization complete.");
+    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Settings initialization complete.");
 }
 
 

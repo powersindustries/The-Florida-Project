@@ -7,7 +7,7 @@
 #include "Transform.h"
 #include "String.h"
 
-namespace CoreTypes
+namespace Core
 {
 
 

@@ -44,21 +44,21 @@ CreepEnemy::CreepEnemy()
     m_uiSpeed = static_cast<uint8_t>(rand() % (m_uiMaxSpeed - m_uiMinSpeed + 1) + m_uiMinSpeed);
     if (m_uiSpeed == 1)
     {
-        m_Sprite = new Sprite(CoreSystems::StringToHash32(std::string(BLUE_ID)), 90);
+        m_Sprite = new Sprite(Core::StringToHash32(std::string(BLUE_ID)), 90);
     }
     else if (m_uiSpeed == 2)
     {
-        m_Sprite = new Sprite(CoreSystems::StringToHash32(std::string(GREEN_ID)), 90);
+        m_Sprite = new Sprite(Core::StringToHash32(std::string(GREEN_ID)), 90);
     }
     else
     {
-        m_Sprite = new Sprite(CoreSystems::StringToHash32(std::string(YELLOW_ID)), 90);
+        m_Sprite = new Sprite(Core::StringToHash32(std::string(YELLOW_ID)), 90);
     }
 
     m_DroppableItems.reserve(3);
-    m_DroppableItems.push_back(CoreSystems::StringToHash32(std::string(SCRAP_ID)));
-    m_DroppableItems.push_back(CoreSystems::StringToHash32(std::string(WOOD_ID)));
-    m_DroppableItems.push_back(CoreSystems::StringToHash32(std::string(WATER_ID)));
+    m_DroppableItems.push_back(Core::StringToHash32(std::string(SCRAP_ID)));
+    m_DroppableItems.push_back(Core::StringToHash32(std::string(WOOD_ID)));
+    m_DroppableItems.push_back(Core::StringToHash32(std::string(WATER_ID)));
 
 }
 
@@ -119,7 +119,7 @@ void CreepEnemy::Update(float deltaTime)
             }
 
             // Check to see if in range to attack.
-            const double iDistance = CoreUtility::Utility::DirectionalDistanceBetweenTwoRectangles(m_Direction, m_BaseRectangle, playerRect);
+            const double iDistance = Core::Utility::DirectionalDistanceBetweenTwoRectangles(m_Direction, m_BaseRectangle, playerRect);
             if (iDistance <= m_iAttackRange)
             {
                 m_State = CreepState::ePreAttack;
@@ -138,10 +138,10 @@ void CreepEnemy::Update(float deltaTime)
         }
         case CreepState::eAttack:
         {
-            double iDistance = CoreUtility::Utility::DirectionalDistanceBetweenTwoRectangles(m_Direction, m_BaseRectangle, playerRect);
+            double iDistance = Core::Utility::DirectionalDistanceBetweenTwoRectangles(m_Direction, m_BaseRectangle, playerRect);
             if (iDistance <= m_iDamageRange)
             {
-                CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eError, "Creep Enemy Attacked!!");
+                Core::SYSTEMS_LOG(Core::LoggingLevel::eError, "Creep Enemy Attacked!!");
                 g_Player.TakeDamage(m_uiDamageAmount);
             }
 
@@ -159,7 +159,7 @@ void CreepEnemy::Update(float deltaTime)
         }
         default:
         {
-            CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eError, "Creep enemy state does not exist.");
+            Core::SYSTEMS_LOG(Core::LoggingLevel::eError, "Creep enemy state does not exist.");
             break;
         }
         }
@@ -210,17 +210,17 @@ void CreepEnemy::KillEnemy()
         const uint8_t uiRandomDrop = static_cast<uint8_t>(rand() % m_DroppableItems.size());
         newPickup->m_uiItem = m_DroppableItems[uiRandomDrop];
 
-        if (newPickup->m_uiItem == CoreSystems::StringToHash32(std::string(SCRAP_ID)))
+        if (newPickup->m_uiItem == Core::StringToHash32(std::string(SCRAP_ID)))
         {
-            newPickup->m_Sprite = new Sprite(CoreSystems::StringToHash32(std::string(SCRAP_ANIMATION)), g_GameGlobals.ITEM_ANIMATION_SPEED);
+            newPickup->m_Sprite = new Sprite(Core::StringToHash32(std::string(SCRAP_ANIMATION)), g_GameGlobals.ITEM_ANIMATION_SPEED);
         }
-        else if (newPickup->m_uiItem == CoreSystems::StringToHash32(std::string(WOOD_ID)))
+        else if (newPickup->m_uiItem == Core::StringToHash32(std::string(WOOD_ID)))
         {
-            newPickup->m_Sprite = new Sprite(CoreSystems::StringToHash32(std::string(WOOD_ANIMATION)), g_GameGlobals.ITEM_ANIMATION_SPEED);
+            newPickup->m_Sprite = new Sprite(Core::StringToHash32(std::string(WOOD_ANIMATION)), g_GameGlobals.ITEM_ANIMATION_SPEED);
         }
-        else if (newPickup->m_uiItem == CoreSystems::StringToHash32(std::string(WATER_ID)))
+        else if (newPickup->m_uiItem == Core::StringToHash32(std::string(WATER_ID)))
         {
-            newPickup->m_Sprite = new Sprite(CoreSystems::StringToHash32(std::string(WATER_ANIMATION)), g_GameGlobals.ITEM_ANIMATION_SPEED);
+            newPickup->m_Sprite = new Sprite(Core::StringToHash32(std::string(WATER_ANIMATION)), g_GameGlobals.ITEM_ANIMATION_SPEED);
         }
 
         g_MapManager.m_ActiveMap->m_PickupVector.push_back(newPickup);

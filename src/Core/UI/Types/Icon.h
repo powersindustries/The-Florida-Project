@@ -5,7 +5,7 @@
 
 #include "../UICoreTypes.h"
 
-namespace CoreUI
+namespace UI
 {
 class Icon : public UIBase
 {

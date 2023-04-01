@@ -4,7 +4,7 @@
 #include "Core/Systems/Logging.h"
 #include "Game/Managers/AssetManager.h"
 
-namespace CoreUI
+namespace UI
 {
 
 
@@ -85,7 +85,7 @@ void Icon::SetTexture(const uint32_t uiTextureID)
     }
     else
     {
-        CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eError, "Texture Asset ID does not exist!");
+        Core::SYSTEMS_LOG(Core::LoggingLevel::eError, "Texture Asset ID does not exist!");
     }
 }
 

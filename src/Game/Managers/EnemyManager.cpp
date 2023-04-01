@@ -148,7 +148,7 @@ void EnemyManager::SpawnNewEnemy()
 // -------------------------------------------------------
 void EnemyManager::OnDayNightChangedEvent()
 {
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Enemies deleted.");
+    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Enemies deleted.");
 
     m_ActiveEnemies.clear();
 }

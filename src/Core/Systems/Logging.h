@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include <string>
 
-namespace CoreSystems
+namespace Core
 {
 
 

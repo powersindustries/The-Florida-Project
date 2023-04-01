@@ -37,8 +37,8 @@ MapManager::MapManager()
 
     m_BackgroundRectangle.x = 0;
     m_BackgroundRectangle.y = 0;
-    m_BackgroundRectangle.w = CoreManagers::g_SettingsManager.GetScreenWidth();
-    m_BackgroundRectangle.h = CoreManagers::g_SettingsManager.GetScreenHeight();
+    m_BackgroundRectangle.w = Core::g_SettingsManager.GetScreenWidth();
+    m_BackgroundRectangle.h = Core::g_SettingsManager.GetScreenHeight();
 }
 
 
@@ -65,7 +65,7 @@ void MapManager::InitialLoad()
         LoadMapData(sMapID);
     }
 
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Map data Load Complete!");
+    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Map data Load Complete!");
 }
 
 
@@ -81,7 +81,7 @@ void MapManager::LoadMapData(std::string sMapPath)
 
     MapData newMapData;
     newMapData.m_sID = mapNode->first_attribute("ID")->value();
-    newMapData.m_uiIDHash = CoreSystems::StringToHash32(newMapData.m_sID);
+    newMapData.m_uiIDHash = Core::StringToHash32(newMapData.m_sID);
 
     newMapData.m_BackgroundColor.r = std::stoi(mapNode->first_attribute("BackgroundR")->value());
     newMapData.m_BackgroundColor.g = std::stoi(mapNode->first_attribute("BackgroundG")->value());
@@ -90,17 +90,17 @@ void MapManager::LoadMapData(std::string sMapPath)
 
     newMapData.m_BackgroundRectangle.x = 0;
     newMapData.m_BackgroundRectangle.y = 0;
-    newMapData.m_BackgroundRectangle.w = CoreManagers::g_SettingsManager.GetScreenWidth();
-    newMapData.m_BackgroundRectangle.h = CoreManagers::g_SettingsManager.GetScreenHeight();
+    newMapData.m_BackgroundRectangle.w = Core::g_SettingsManager.GetScreenWidth();
+    newMapData.m_BackgroundRectangle.h = Core::g_SettingsManager.GetScreenHeight();
 
-    newMapData.m_vPlayerStartPosition.m_X = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(mapNode->first_attribute("PlayerX")->value()));
-    newMapData.m_vPlayerStartPosition.m_Y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(mapNode->first_attribute("PlayerY")->value()));
+    newMapData.m_vPlayerStartPosition.m_X = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(mapNode->first_attribute("PlayerX")->value()));
+    newMapData.m_vPlayerStartPosition.m_Y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(mapNode->first_attribute("PlayerY")->value()));
 
     std::string sNightTextureID = mapNode->first_attribute("BackgroundTextureNight")->value();
-    uint32_t uiNightTextureIDHash = CoreSystems::StringToHash32(sNightTextureID);
+    uint32_t uiNightTextureIDHash = Core::StringToHash32(sNightTextureID);
 
     std::string sDayTextureID = mapNode->first_attribute("BackgroundTextureDay")->value();
-    uint32_t uiDayTextureIDHash = CoreSystems::StringToHash32(sDayTextureID);
+    uint32_t uiDayTextureIDHash = Core::StringToHash32(sDayTextureID);
 
     newMapData.m_BackgroundTextureDay = g_AssetManager.m_TextureAssets[uiDayTextureIDHash].m_Texture;
     newMapData.m_BackgroundTextureNight = g_AssetManager.m_TextureAssets[uiNightTextureIDHash].m_Texture;
@@ -110,19 +110,19 @@ void MapManager::LoadMapData(std::string sMapPath)
     for (rapidxml::xml_node<>* child = navigationsNode->first_node(); child; child = child->next_sibling())
     {
         NavigationData newNavigation;
-        newNavigation.m_Rectangle.x = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
-        newNavigation.m_Rectangle.y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
+        newNavigation.m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
+        newNavigation.m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
 
-        newNavigation.m_Rectangle.w = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("w")->value()));
-        newNavigation.m_Rectangle.h = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("h")->value()));
+        newNavigation.m_Rectangle.w = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("w")->value()));
+        newNavigation.m_Rectangle.h = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("h")->value()));
 
         newNavigation.m_uiPadding = std::stoi(child->first_attribute("Padding")->value());
 
-        newNavigation.m_vUpPosition.m_X = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("UpX")->value()));
-        newNavigation.m_vUpPosition.m_Y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("UpY")->value()));
+        newNavigation.m_vUpPosition.m_X = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("UpX")->value()));
+        newNavigation.m_vUpPosition.m_Y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("UpY")->value()));
 
-        newNavigation.m_vDownPosition.m_X = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("DownX")->value()));
-        newNavigation.m_vDownPosition.m_Y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("DownY")->value()));
+        newNavigation.m_vDownPosition.m_X = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("DownX")->value()));
+        newNavigation.m_vDownPosition.m_Y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("DownY")->value()));
 
         newMapData.m_Navigations.push_back(newNavigation);
     }
@@ -133,11 +133,11 @@ void MapManager::LoadMapData(std::string sMapPath)
     {
 
         CollisionData newCollision;
-        newCollision.m_Rectangle.x = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
-        newCollision.m_Rectangle.y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
+        newCollision.m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
+        newCollision.m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
 
-        newCollision.m_Rectangle.w = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("w")->value()));
-        newCollision.m_Rectangle.h = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("h")->value()));
+        newCollision.m_Rectangle.w = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("w")->value()));
+        newCollision.m_Rectangle.h = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("h")->value()));
 
         newCollision.m_uiPadding = std::stoi(child->first_attribute("Padding")->value());
 
@@ -151,8 +151,8 @@ void MapManager::LoadMapData(std::string sMapPath)
         EnemySpawnerData newEnemy;
         newEnemy.m_uiMapIDHash = newMapData.m_uiIDHash;
 
-        newEnemy.m_Rectangle.x = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
-        newEnemy.m_Rectangle.y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
+        newEnemy.m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
+        newEnemy.m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
         newEnemy.m_Rectangle.w = 25;
         newEnemy.m_Rectangle.h = 50;
 
@@ -178,18 +178,18 @@ void MapManager::LoadMapData(std::string sMapPath)
                 PickupData* newPickupInteraction = new PickupData;
                 newPickupInteraction->m_Type = currInteractionType;
 
-                newPickupInteraction->m_Rectangle.x = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
-                newPickupInteraction->m_Rectangle.y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
+                newPickupInteraction->m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
+                newPickupInteraction->m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
                 newPickupInteraction->m_Rectangle.w = std::stoi(child->first_attribute("w")->value());
                 newPickupInteraction->m_Rectangle.h = std::stoi(child->first_attribute("h")->value());
                 newPickupInteraction->m_uiPadding = std::stoi(child->first_attribute("Padding")->value());
 
                 newPickupInteraction->m_uiPickupTime = std::stoi(child->first_attribute("PickupTime")->value());
 
-                newPickupInteraction->m_uiItem = CoreSystems::StringToHash32(std::string(child->first_attribute("Item")->value()));
+                newPickupInteraction->m_uiItem = Core::StringToHash32(std::string(child->first_attribute("Item")->value()));
                 newPickupInteraction->m_uiAmount = std::stoi(child->first_attribute("Amount")->value());
 
-                newPickupInteraction->m_Sprite = new Sprite(CoreSystems::StringToHash32(std::string(child->first_attribute("Texture")->value())), g_GameGlobals.ITEM_ANIMATION_SPEED);
+                newPickupInteraction->m_Sprite = new Sprite(Core::StringToHash32(std::string(child->first_attribute("Texture")->value())), g_GameGlobals.ITEM_ANIMATION_SPEED);
 
                 newMapData.m_PickupVector.push_back(newPickupInteraction);
 
@@ -201,8 +201,8 @@ void MapManager::LoadMapData(std::string sMapPath)
                 newRefreshInteraction->m_Type = currInteractionType;
                 newRefreshInteraction->m_uiMapIDHash = newMapData.m_uiIDHash;
 
-                newRefreshInteraction->m_Rectangle.x = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
-                newRefreshInteraction->m_Rectangle.y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
+                newRefreshInteraction->m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
+                newRefreshInteraction->m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
                 newRefreshInteraction->m_Rectangle.w = std::stoi(child->first_attribute("w")->value());
                 newRefreshInteraction->m_Rectangle.h = std::stoi(child->first_attribute("h")->value());
                 newRefreshInteraction->m_uiPadding = std::stoi(child->first_attribute("Padding")->value());
@@ -210,10 +210,10 @@ void MapManager::LoadMapData(std::string sMapPath)
                 newRefreshInteraction->m_uiPickupTime = std::stoi(child->first_attribute("PickupTime")->value());
                 newRefreshInteraction->m_uiRefreshTime = std::stoi(child->first_attribute("RefreshTime")->value());
 
-                newRefreshInteraction->m_uiItem = CoreSystems::StringToHash32(std::string(child->first_attribute("Item")->value()));
+                newRefreshInteraction->m_uiItem = Core::StringToHash32(std::string(child->first_attribute("Item")->value()));
                 newRefreshInteraction->m_uiAmount = std::stoi(child->first_attribute("Amount")->value());
 
-                newRefreshInteraction->m_Sprite = new Sprite(CoreSystems::StringToHash32(std::string(child->first_attribute("Texture")->value())), g_GameGlobals.ITEM_ANIMATION_SPEED);
+                newRefreshInteraction->m_Sprite = new Sprite(Core::StringToHash32(std::string(child->first_attribute("Texture")->value())), g_GameGlobals.ITEM_ANIMATION_SPEED);
                 
                 newMapData.m_RefreshVector.push_back(newRefreshInteraction);
 
@@ -226,8 +226,8 @@ void MapManager::LoadMapData(std::string sMapPath)
                 StoryData* newStoryInteraction = new StoryData;
                 newStoryInteraction->m_Type = currInteractionType;
 
-                newStoryInteraction->m_Rectangle.y = CoreManagers::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
-                newStoryInteraction->m_Rectangle.x = CoreManagers::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
+                newStoryInteraction->m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
+                newStoryInteraction->m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
                 newStoryInteraction->m_Rectangle.w = std::stoi(child->first_attribute("w")->value());
                 newStoryInteraction->m_Rectangle.h = std::stoi(child->first_attribute("h")->value());
                 newStoryInteraction->m_uiPadding = std::stoi(child->first_attribute("Padding")->value());
@@ -265,18 +265,18 @@ void MapManager::Update(float deltaTime)
     {
         NavigationData& currNavigation = m_ActiveMap->m_Navigations[x];
 
-        if (CoreUtility::Utility::CollisionBetweenTwoRectanglesWithPadding(currNavigation.m_Rectangle, g_Player.GetPlayerRectangle(), currNavigation.m_uiPadding) &&
-            (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eUp) || CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eDown)))
+        if (Core::Utility::CollisionBetweenTwoRectanglesWithPadding(currNavigation.m_Rectangle, g_Player.GetPlayerRectangle(), currNavigation.m_uiPadding) &&
+            (Core::g_InputManager.GetActionHeld(Core::InputMappings::eUp) || Core::g_InputManager.GetActionHeld(Core::InputMappings::eDown)))
         {
             SDL_Rect& playerRect = g_Player.GetPlayerRectangle();
             int yOffsetTop = currNavigation.m_Rectangle.y - playerRect.y;
             int yOffsetBottom = (currNavigation.m_Rectangle.y + currNavigation.m_Rectangle.h) - playerRect.y;
 
-            if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eUp) && yOffsetBottom > 0 && yOffsetBottom < 50)
+            if (Core::g_InputManager.GetActionHeld(Core::InputMappings::eUp) && yOffsetBottom > 0 && yOffsetBottom < 50)
             {
                 g_Player.SetPlayerPosition(currNavigation.m_vUpPosition.m_X, currNavigation.m_vUpPosition.m_Y);
             }
-            else if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eDown) && yOffsetTop > 0 && yOffsetTop < 50)
+            else if (Core::g_InputManager.GetActionHeld(Core::InputMappings::eDown) && yOffsetTop > 0 && yOffsetTop < 50)
             {
                 g_Player.SetPlayerPosition(currNavigation.m_vDownPosition.m_X, currNavigation.m_vDownPosition.m_Y);
             }
@@ -297,7 +297,7 @@ void MapManager::Update(float deltaTime)
     {
         PickupData* currPickup = m_ActiveMap->m_PickupVector[x];
         if (currPickup->m_bActive &&
-            CoreUtility::Utility::CollisionBetweenTwoRectanglesWithPadding(currPickup->m_Rectangle, g_Player.GetPlayerRectangle(), currPickup->m_uiPadding) &&
+            Core::Utility::CollisionBetweenTwoRectanglesWithPadding(currPickup->m_Rectangle, g_Player.GetPlayerRectangle(), currPickup->m_uiPadding) &&
             g_Player.GetInteractState().m_bHeld)
         {
             uint16_t uiCountdown = currPickup->m_uiPickupTime - static_cast<uint16_t>(deltaTime - g_Player.GetInteractState().m_fTime);
@@ -348,7 +348,7 @@ void MapManager::Update(float deltaTime)
         }
 
 
-        if (currRefresh->m_bActive && CoreUtility::Utility::CollisionBetweenTwoRectanglesWithPadding(currRefresh->m_Rectangle, g_Player.GetPlayerRectangle(), currRefresh->m_uiPadding))
+        if (currRefresh->m_bActive && Core::Utility::CollisionBetweenTwoRectanglesWithPadding(currRefresh->m_Rectangle, g_Player.GetPlayerRectangle(), currRefresh->m_uiPadding))
         {
             g_ItemManager.AddItem(currRefresh->m_uiItem, currRefresh->m_uiAmount);
             m_ActiveMap->m_RefreshVector[x]->m_bActive = false;
@@ -361,9 +361,9 @@ void MapManager::Update(float deltaTime)
     for (uint32_t x = 0; x < uiStorySize; ++x)
     {
         StoryData* currStory = m_ActiveMap->m_StoryVector[x];
-        if (currStory->m_bActive && CoreUtility::Utility::CollisionBetweenTwoRectanglesWithPadding(currStory->m_Rectangle, g_Player.GetPlayerRectangle(), currStory->m_uiPadding))
+        if (currStory->m_bActive && Core::Utility::CollisionBetweenTwoRectanglesWithPadding(currStory->m_Rectangle, g_Player.GetPlayerRectangle(), currStory->m_uiPadding))
         {
-            CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Story interaction!");
+            Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Story interaction!");
         }
     }
 }

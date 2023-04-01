@@ -6,7 +6,7 @@
 #include "GameGlobals.h"
 #include <vector>
 
-namespace CoreManagers
+namespace Core
 {
 
 
@@ -43,8 +43,8 @@ void StyleManager::InitializeStyleManager()
     for (rapidxml::xml_node<>* child = textBlockNode->first_node(); child; child = child->next_sibling())
     {
         TextBlockStyle textBlockStyle;
-        textBlockStyle.m_uiID = CoreSystems::StringToHash32(std::string(child->first_attribute("ID")->value()));
-        textBlockStyle.m_uiFont = CoreSystems::StringToHash32(std::string(child->first_attribute("Font")->value()));
+        textBlockStyle.m_uiID = Core::StringToHash32(std::string(child->first_attribute("ID")->value()));
+        textBlockStyle.m_uiFont = Core::StringToHash32(std::string(child->first_attribute("Font")->value()));
 
         textBlockStyle.m_Color = ColorStringToSDLColor(child->first_attribute("Color")->value());
 
@@ -57,8 +57,8 @@ void StyleManager::InitializeStyleManager()
     for (rapidxml::xml_node<>* child = buttonNode->first_node(); child; child = child->next_sibling())
     {
         ButtonStyle buttonStyle;
-        buttonStyle.m_uiID = CoreSystems::StringToHash32(std::string(child->first_attribute("ID")->value()));
-        buttonStyle.m_uiFont = CoreSystems::StringToHash32(std::string(child->first_attribute("Font")->value()));
+        buttonStyle.m_uiID = Core::StringToHash32(std::string(child->first_attribute("ID")->value()));
+        buttonStyle.m_uiFont = Core::StringToHash32(std::string(child->first_attribute("Font")->value()));
 
         buttonStyle.m_HoverColor = ColorStringToSDLColor(child->first_attribute("HoverColor")->value());
         buttonStyle.m_PressedColor = ColorStringToSDLColor(child->first_attribute("PressedColor")->value());
@@ -70,7 +70,7 @@ void StyleManager::InitializeStyleManager()
         m_ButtonStyles.insert( { buttonStyle.m_uiID, buttonStyle } );
     }
 
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Style Data Load Complete!");
+    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Style Data Load Complete!");
 }
 
 
@@ -108,7 +108,7 @@ SDL_Color StyleManager::ColorStringToSDLColor(const char* string)
     }
     else
     {
-        CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eError, "Unable to load color from string!");
+        Core::SYSTEMS_LOG(Core::LoggingLevel::eError, "Unable to load color from string!");
     }
 
     return output;

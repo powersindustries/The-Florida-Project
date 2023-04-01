@@ -31,10 +31,10 @@ void PlayerMovement::Update(float deltaTime)
     {
     case MovementState::eIdle:
     {
-        if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eLeft) || 
-            CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eRight) ||
-            CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eUp) ||
-            CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eDown)
+        if (Core::g_InputManager.GetActionHeld(Core::InputMappings::eLeft) || 
+            Core::g_InputManager.GetActionHeld(Core::InputMappings::eRight) ||
+            Core::g_InputManager.GetActionHeld(Core::InputMappings::eUp) ||
+            Core::g_InputManager.GetActionHeld(Core::InputMappings::eDown)
             )
         {
             m_State = MovementState::eMoving;
@@ -45,17 +45,17 @@ void PlayerMovement::Update(float deltaTime)
     case MovementState::eRunning:
     {
         // Check if movement has stopped. If it has, set state to IDLE and early out.
-        if (!CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eUp) &&
-            !CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eDown) &&
-            !CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eLeft) &&
-            !CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eRight))
+        if (!Core::g_InputManager.GetActionHeld(Core::InputMappings::eUp) &&
+            !Core::g_InputManager.GetActionHeld(Core::InputMappings::eDown) &&
+            !Core::g_InputManager.GetActionHeld(Core::InputMappings::eLeft) &&
+            !Core::g_InputManager.GetActionHeld(Core::InputMappings::eRight))
         {
             m_State = MovementState::eIdle;
             return;
         }
 
         // Check to see if running.
-        if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eRun))
+        if (Core::g_InputManager.GetActionHeld(Core::InputMappings::eRun))
         {
             m_State = MovementState::eRunning;
         }
@@ -67,32 +67,32 @@ void PlayerMovement::Update(float deltaTime)
         // Set Direction.
         int64_t iTempInputManagerTimestamp = -1;
 
-        if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eLeft) &&
-            CoreManagers::g_InputManager.GetActionHeldTimestamp(CoreManagers::InputMappings::eLeft) > iTempInputManagerTimestamp)
+        if (Core::g_InputManager.GetActionHeld(Core::InputMappings::eLeft) &&
+            Core::g_InputManager.GetActionHeldTimestamp(Core::InputMappings::eLeft) > iTempInputManagerTimestamp)
         {
             m_Direction = Direction::eLeft;
-            iTempInputManagerTimestamp = CoreManagers::g_InputManager.GetActionHeldTimestamp(CoreManagers::InputMappings::eLeft);
+            iTempInputManagerTimestamp = Core::g_InputManager.GetActionHeldTimestamp(Core::InputMappings::eLeft);
         }
 
-        if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eRight) &&
-            CoreManagers::g_InputManager.GetActionHeldTimestamp(CoreManagers::InputMappings::eRight) > iTempInputManagerTimestamp)
+        if (Core::g_InputManager.GetActionHeld(Core::InputMappings::eRight) &&
+            Core::g_InputManager.GetActionHeldTimestamp(Core::InputMappings::eRight) > iTempInputManagerTimestamp)
         {
             m_Direction = Direction::eRight;
-            iTempInputManagerTimestamp = CoreManagers::g_InputManager.GetActionHeldTimestamp(CoreManagers::InputMappings::eRight);
+            iTempInputManagerTimestamp = Core::g_InputManager.GetActionHeldTimestamp(Core::InputMappings::eRight);
         }
 
-        if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eUp) &&
-            CoreManagers::g_InputManager.GetActionHeldTimestamp(CoreManagers::InputMappings::eUp) > iTempInputManagerTimestamp)
+        if (Core::g_InputManager.GetActionHeld(Core::InputMappings::eUp) &&
+            Core::g_InputManager.GetActionHeldTimestamp(Core::InputMappings::eUp) > iTempInputManagerTimestamp)
         {
             m_Direction = Direction::eUp;
-            iTempInputManagerTimestamp = CoreManagers::g_InputManager.GetActionHeldTimestamp(CoreManagers::InputMappings::eUp);
+            iTempInputManagerTimestamp = Core::g_InputManager.GetActionHeldTimestamp(Core::InputMappings::eUp);
         }
 
-        if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eDown) &&
-            CoreManagers::g_InputManager.GetActionHeldTimestamp(CoreManagers::InputMappings::eDown) > iTempInputManagerTimestamp)
+        if (Core::g_InputManager.GetActionHeld(Core::InputMappings::eDown) &&
+            Core::g_InputManager.GetActionHeldTimestamp(Core::InputMappings::eDown) > iTempInputManagerTimestamp)
         {
             m_Direction = Direction::eDown;
-            iTempInputManagerTimestamp = CoreManagers::g_InputManager.GetActionHeldTimestamp(CoreManagers::InputMappings::eDown);
+            iTempInputManagerTimestamp = Core::g_InputManager.GetActionHeldTimestamp(Core::InputMappings::eDown);
         }
 
         // Set Speed value.

@@ -1,7 +1,7 @@
 #include "HorizontalStack.h"
 #include "Core/Managers/SettingsManager.h"
 
-namespace CoreUI
+namespace UI
 {
 
 

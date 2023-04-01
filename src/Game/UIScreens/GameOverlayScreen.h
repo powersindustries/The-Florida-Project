@@ -6,7 +6,7 @@
 
 #include "Core/UI/Types/TextBlockRaw.h"
 
-using namespace CoreUI;
+using namespace UI;
 
 namespace Florida
 {

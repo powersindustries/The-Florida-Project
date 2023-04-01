@@ -32,23 +32,23 @@ CraftingManager::~CraftingManager()
 void CraftingManager::InitializeCraftingManager()
 {
     IngredientData scrapData;
-    scrapData.m_uiItemID = CoreSystems::StringToHash32(std::string("itm_Scrap"));
+    scrapData.m_uiItemID = Core::StringToHash32(std::string("itm_Scrap"));
     scrapData.m_uiAmount = m_uiDefaultAmount;
 
     IngredientData waterData;
-    waterData.m_uiItemID = CoreSystems::StringToHash32(std::string("itm_Water"));
+    waterData.m_uiItemID = Core::StringToHash32(std::string("itm_Water"));
     waterData.m_uiAmount = m_uiDefaultAmount;
 
     IngredientData woodData;
-    woodData.m_uiItemID = CoreSystems::StringToHash32(std::string("itm_Wood"));
+    woodData.m_uiItemID = Core::StringToHash32(std::string("itm_Wood"));
     woodData.m_uiAmount = m_uiDefaultAmount;
 
     IngredientData ammoData;
-    ammoData.m_uiItemID = CoreSystems::StringToHash32(std::string("itm_Ammo"));
+    ammoData.m_uiItemID = Core::StringToHash32(std::string("itm_Ammo"));
     ammoData.m_uiAmount = m_uiDefaultAmount;
 
     IngredientData staminaPotionData;
-    staminaPotionData.m_uiItemID = CoreSystems::StringToHash32(std::string("itm_StaminaPotion"));
+    staminaPotionData.m_uiItemID = Core::StringToHash32(std::string("itm_StaminaPotion"));
     staminaPotionData.m_uiAmount = m_uiDefaultAmount;
 
     // Ammo Recipe (1 Wood, 1 Scrap)
@@ -92,7 +92,7 @@ void CraftingManager::CraftItemByIndex(uint32_t uiRecipeIndex)
 
         if (playerIventoryData.m_uiAmount < currIngredient.m_uiAmount)
         {
-            CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Not enough resources to craft current item.");
+            Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Not enough resources to craft current item.");
             return;
         }
     }

@@ -9,7 +9,7 @@
 #include "PlayerAction.h"
 #include "Core/Types/Sprite.h"
 
-using namespace CoreTypes;
+using namespace Core;
 
 namespace Florida
 {

@@ -66,14 +66,14 @@ void PauseScreen::Initialize()
     m_OpacityBox.SetAnchor(Anchor::eTopLeft);
     m_OpacityBox.SetColor(g_GameGlobals.COLOR_BLACK);
     m_OpacityBox.SetSize(
-        CoreManagers::g_SettingsManager.GetScreenWidth(), 
-        CoreManagers::g_SettingsManager.GetScreenHeight()
+        Core::g_SettingsManager.GetScreenWidth(), 
+        Core::g_SettingsManager.GetScreenHeight()
     );
     m_OpacityBox.SetVisibility(UIVisibility::eDisabled);
 
     m_BackgroundBox.SetAnchor(Anchor::eTopCenter);
     m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
-    m_BackgroundBox.SetSize(CoreManagers::g_SettingsManager.GetScreenWidth() / 2, CoreManagers::g_SettingsManager.GetScreenHeight() - CoreManagers::g_SettingsManager.GetRelativeScreenY(50));
+    m_BackgroundBox.SetSize(Core::g_SettingsManager.GetScreenWidth() / 2, Core::g_SettingsManager.GetScreenHeight() - Core::g_SettingsManager.GetRelativeScreenY(50));
     m_BackgroundBox.SetOffset(
         ( (m_BackgroundBox.GetWidth() / 2) * -1),
         0
@@ -84,7 +84,7 @@ void PauseScreen::Initialize()
     m_Title.SetText("Pause Menu");
     m_Title.SetOffset(
         ( (m_Title.GetWidth() / 2) * -1),
-        CoreManagers::g_SettingsManager.GetRelativeScreenY(75)
+        Core::g_SettingsManager.GetRelativeScreenY(75)
     );
 
     m_ReturnToGameButton.SetText("RETURN TO GAME");
@@ -103,7 +103,7 @@ void PauseScreen::Initialize()
     m_VerticalStack.AddChild(&m_QuitGameButton);
     m_VerticalStack.SetOffset(
         ( (m_VerticalStack.GetWidth() / 2) * -1),
-        CoreManagers::g_SettingsManager.GetRelativeScreenY(75)
+        Core::g_SettingsManager.GetRelativeScreenY(75)
     );
 
 }

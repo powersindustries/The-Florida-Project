@@ -5,7 +5,7 @@
 #define PRIME_1 37
 #define PRIME_2 1993
 
-namespace CoreSystems
+namespace Core
 {
 
 

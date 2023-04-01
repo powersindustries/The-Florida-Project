@@ -2,7 +2,7 @@
 #include <math.h>
 #include <float.h>
 
-namespace CoreUtility
+namespace Core
 {
 
 
@@ -66,7 +66,7 @@ bool Utility::CollisionBetweenTwoRectanglesWithPadding(const SDL_Rect& rect1, co
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-bool Utility::CollisionBetweenPointAndRectangle(const SDL_Rect& rect, const CoreUtility::Vec2i& v2i)
+bool Utility::CollisionBetweenPointAndRectangle(const SDL_Rect& rect, const Core::Vec2i& v2i)
 {
 	return !((v2i.m_X < rect.x)
 		|| (v2i.m_X > rect.x + rect.w)

@@ -2,7 +2,7 @@
 #include "GameGlobals.h"
 #include "Core/Managers/SettingsManager.h"
 
-namespace CoreUI
+namespace UI
 {
 
 

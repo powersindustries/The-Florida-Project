@@ -3,7 +3,7 @@
 #include <SDL_ttf.h> // SDL Fonts or Text
 #include <SDL_image.h> // SDL Image
 
-namespace CoreManagers
+namespace Core
 {
 
 

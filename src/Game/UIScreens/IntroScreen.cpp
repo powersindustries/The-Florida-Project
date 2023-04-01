@@ -70,25 +70,25 @@ void IntroScreen::Initialize()
 {
     m_OpacityBox.SetAnchor(Anchor::eTopLeft);
     m_OpacityBox.SetColor(g_GameGlobals.COLOR_BLACK);
-    m_OpacityBox.SetSize(CoreManagers::g_SettingsManager.GetScreenWidth(), CoreManagers::g_SettingsManager.GetScreenHeight());
+    m_OpacityBox.SetSize(Core::g_SettingsManager.GetScreenWidth(), Core::g_SettingsManager.GetScreenHeight());
     m_OpacityBox.SetVisibility(UIVisibility::eDisabled);
 
     m_BackgroundBox.SetAnchor(Anchor::eTopCenter);
     m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
     m_BackgroundBox.SetSize(
-        CoreManagers::g_SettingsManager.GetScreenWidth() / 2, 
-        CoreManagers::g_SettingsManager.GetScreenHeight() - CoreManagers::g_SettingsManager.GetRelativeScreenY(50));
+        Core::g_SettingsManager.GetScreenWidth() / 2, 
+        Core::g_SettingsManager.GetScreenHeight() - Core::g_SettingsManager.GetRelativeScreenY(50));
     m_BackgroundBox.SetOffset(
         ((m_BackgroundBox.GetWidth() / 2) * -1 ), 
-        CoreManagers::g_SettingsManager.GetRelativeScreenY(25)
+        Core::g_SettingsManager.GetRelativeScreenY(25)
     );
 
     m_GameLogo.SetAnchor(Anchor::eTopCenter);
-    m_GameLogo.SetTexture(CoreSystems::StringToHash32(std::string(FLORIDALOGO_ID)));
+    m_GameLogo.SetTexture(Core::StringToHash32(std::string(FLORIDALOGO_ID)));
     m_GameLogo.SetSize(500,300);
     m_GameLogo.SetOffset(
         ((m_GameLogo.GetWidth() / 2) * -1 ), 
-        CoreManagers::g_SettingsManager.GetRelativeScreenY(250)
+        Core::g_SettingsManager.GetRelativeScreenY(250)
     );
 
     m_StartGameButton.SetText("START NEW GAME");
@@ -107,7 +107,7 @@ void IntroScreen::Initialize()
     m_VerticalStack.AddChild(&m_ExitGameButton);
     m_VerticalStack.SetOffset(
         ((m_VerticalStack.GetWidth() / 2) * -1),
-        CoreManagers::g_SettingsManager.GetRelativeScreenY(-100)
+        Core::g_SettingsManager.GetRelativeScreenY(-100)
     );
 
 }

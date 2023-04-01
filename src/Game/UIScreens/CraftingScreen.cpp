@@ -82,15 +82,15 @@ void CraftingScreen::Initialize()
 {
     // Backgrounds. 
     m_OpacityBox.SetAnchor(Anchor::eTopLeft);
-    m_OpacityBox.SetSize(CoreManagers::g_SettingsManager.GetScreenWidth(), CoreManagers::g_SettingsManager.GetScreenHeight());
+    m_OpacityBox.SetSize(Core::g_SettingsManager.GetScreenWidth(), Core::g_SettingsManager.GetScreenHeight());
     m_OpacityBox.SetColor(g_GameGlobals.COLOR_BLACK);
     m_OpacityBox.SetVisibility(UIVisibility::eDisabled);
 
     m_BackgroundBox.SetAnchor(Anchor::eCenter);
     m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
     m_BackgroundBox.SetSize(
-        CoreManagers::g_SettingsManager.GetScreenWidth() / 2, 
-        CoreManagers::g_SettingsManager.GetScreenHeight() - CoreManagers::g_SettingsManager.GetRelativeScreenY(50)
+        Core::g_SettingsManager.GetScreenWidth() / 2, 
+        Core::g_SettingsManager.GetScreenHeight() - Core::g_SettingsManager.GetRelativeScreenY(50)
     );
     m_BackgroundBox.SetOffset(
         ( (m_BackgroundBox.GetWidth() / 2) * -1),
@@ -103,17 +103,17 @@ void CraftingScreen::Initialize()
     m_MenuTitleText.SetText("Crafting Menu");
     m_MenuTitleText.SetOffset(
         ( (m_MenuTitleText.GetWidth() / 2) * -1),
-        CoreManagers::g_SettingsManager.GetRelativeScreenY(50)
+        Core::g_SettingsManager.GetRelativeScreenY(50)
     );
 
     // Current Resources.
-    m_ScrapIcon.SetTexture(CoreSystems::StringToHash32(std::string(SCRAP_ICON)));
+    m_ScrapIcon.SetTexture(Core::StringToHash32(std::string(SCRAP_ICON)));
     m_ScrapIcon.SetSize(25, 25);
 
-    m_WoodIcon.SetTexture(CoreSystems::StringToHash32(std::string(WOOD_ICON)));
+    m_WoodIcon.SetTexture(Core::StringToHash32(std::string(WOOD_ICON)));
     m_WoodIcon.SetSize(25, 25);
 
-    m_WaterIcon.SetTexture(CoreSystems::StringToHash32(std::string(WATER_ICON)));
+    m_WaterIcon.SetTexture(Core::StringToHash32(std::string(WATER_ICON)));
     m_WaterIcon.SetSize(25, 25);
 
     m_ScrapAmountText.SetText("scrap");
@@ -135,7 +135,7 @@ void CraftingScreen::Initialize()
     m_ResourceStack.AddChild(&m_WaterAmountText);
     m_ResourceStack.SetOffset(
         ( (m_ResourceStack.GetWidth() / 2) * -1),
-        CoreManagers::g_SettingsManager.GetRelativeScreenY(100)
+        Core::g_SettingsManager.GetRelativeScreenY(100)
     );
 
     UpdateResourcesText();
@@ -174,11 +174,11 @@ void CraftingScreen::Initialize()
 
     Icon* ammoIcon = new Icon;
     ammoIcon->SetSize(25,25);
-    ammoIcon->SetTexture(CoreSystems::StringToHash32(std::string(ARROW_ICON)));
+    ammoIcon->SetTexture(Core::StringToHash32(std::string(ARROW_ICON)));
 
     Icon* staminaPotionIcon = new Icon;
     staminaPotionIcon->SetSize(25,25);
-    staminaPotionIcon->SetTexture(CoreSystems::StringToHash32(std::string(STAMINA_ICON)));
+    staminaPotionIcon->SetTexture(Core::StringToHash32(std::string(STAMINA_ICON)));
 
     m_AmmoAmountText.SetText("NUMBER");
     m_AmmoAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
@@ -213,8 +213,8 @@ void CraftingScreen::OnShow()
 // -------------------------------------------------------
 void CraftingScreen::UpdateResourcesText()
 {
-    const uint32_t uiScrapID = CoreSystems::StringToHash32(std::string(SCRAP_ID));
-    const uint32_t uiWoodID = CoreSystems::StringToHash32(std::string(WOOD_ID));
+    const uint32_t uiScrapID = Core::StringToHash32(std::string(SCRAP_ID));
+    const uint32_t uiWoodID = Core::StringToHash32(std::string(WOOD_ID));
 
     const std::vector<ItemData> vPlayerInventory = g_ItemManager.GetAllItemData();
     const uint32_t uiItemSize = static_cast<uint32_t>(vPlayerInventory.size());
@@ -244,7 +244,7 @@ void CraftingScreen::UpdateResourcesText()
     m_ResourceStack.RefreshUI();
 	m_ResourceStack.SetOffset(
 		((m_ResourceStack.GetWidth() / 2) * -1),
-		CoreManagers::g_SettingsManager.GetRelativeScreenY(100)
+		Core::g_SettingsManager.GetRelativeScreenY(100)
 	);
 }
 
@@ -260,7 +260,7 @@ void CraftingScreen::UpdateCraftingText()
         const RecipeData& currRecipeData = RecipesVector[x];
         const ItemData& rewardItemData = g_ItemManager.GetItemDataByID(currRecipeData.m_Reward.m_uiItemID);
  
-        if (rewardItemData.m_uiID == CoreSystems::StringToHash32(std::string("itm_Ammo")))
+        if (rewardItemData.m_uiID == Core::StringToHash32(std::string("itm_Ammo")))
         {
             m_AmmoCraftButton.SetText(rewardItemData.m_sName);
             m_AmmoCraftButton.SetData1(x); // Set Data1 to recipe index.
@@ -268,7 +268,7 @@ void CraftingScreen::UpdateCraftingText()
 
             m_AmmoCraftText.SetText(currRecipeData.m_sIngredientText);
         }
-        else if (rewardItemData.m_uiID == CoreSystems::StringToHash32(std::string("itm_StaminaPotion")))
+        else if (rewardItemData.m_uiID == Core::StringToHash32(std::string("itm_StaminaPotion")))
         {
 
             m_StaminaCraftButton.SetText(rewardItemData.m_sName);
@@ -282,13 +282,13 @@ void CraftingScreen::UpdateCraftingText()
     m_AmmoCraftingStack.RefreshUI();
     m_AmmoCraftingStack.SetOffset(
 		( (m_AmmoCraftingStack.GetWidth() / 2) * -1 ),
-		CoreManagers::g_SettingsManager.GetRelativeScreenY(200)
+		Core::g_SettingsManager.GetRelativeScreenY(200)
     );
 
     m_StaminaCraftingStack.RefreshUI();
     m_StaminaCraftingStack.SetOffset(
 		( (m_StaminaCraftingStack.GetWidth() / 2) * -1 ),
-		CoreManagers::g_SettingsManager.GetRelativeScreenY(300)
+		Core::g_SettingsManager.GetRelativeScreenY(300)
     );
 
 }
@@ -298,7 +298,7 @@ void CraftingScreen::UpdateCraftingText()
 // -------------------------------------------------------
 void CraftingScreen::UpdateDisposablesText()
 {
-	const uint32_t uiAmmoID = CoreSystems::StringToHash32(std::string(AMMO_ID));
+	const uint32_t uiAmmoID = Core::StringToHash32(std::string(AMMO_ID));
 
 	const std::vector<ItemData> vPlayerInventory = g_ItemManager.GetAllItemData();
 	const uint32_t uiItemSize = static_cast<uint32_t>(vPlayerInventory.size());

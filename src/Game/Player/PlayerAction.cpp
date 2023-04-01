@@ -53,9 +53,9 @@ void PlayerAction::Update(float deltaTime)
 
     // Check for new actions.
     if (deltaTime > (m_fBulletTimeStamp + m_fBulletTimer) && 
-        CoreManagers::g_InputManager.GetActionPressed(CoreManagers::InputMappings::eAction) &&
+        Core::g_InputManager.GetActionPressed(Core::InputMappings::eAction) &&
         !g_GameManager.GameIsPaused() && 
-        !CoreManagers::g_InputManager.GetMouseClickObsorbedByUI())
+        !Core::g_InputManager.GetMouseClickObsorbedByUI())
     {
         m_fBulletTimeStamp = deltaTime;
 
@@ -114,7 +114,7 @@ void PlayerAction::ResetPlayerActions()
 // -------------------------------------------------------
 void PlayerAction::CreateNewBullet(SDL_Rect& currRect)
 {
-    uint32_t uiAmmoID = CoreSystems::StringToHash32(std::string("itm_Ammo"));
+    uint32_t uiAmmoID = Core::StringToHash32(std::string("itm_Ammo"));
     const ItemData& ammoInventoryItem = g_ItemManager.GetItemDataByID(uiAmmoID);
     if (ammoInventoryItem.m_uiAmount > 0)
     {

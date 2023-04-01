@@ -8,7 +8,7 @@
 #include "Core/UI/Types/Button.h"
 #include "Core/UI/Types/VerticalStack.h"
 
-using namespace CoreUI;
+using namespace UI;
 
 namespace Florida
 {

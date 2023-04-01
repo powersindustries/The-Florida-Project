@@ -5,7 +5,7 @@
 
 #define NULL_TERMINATE_CHAR '\0'
 
-namespace CoreTypes
+namespace Core
 {
 
 

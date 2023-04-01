@@ -9,7 +9,7 @@
 #include "Core/UI/Types/VerticalStack.h"
 
 
-using namespace CoreUI;
+using namespace UI;
 
 namespace Florida
 {

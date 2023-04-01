@@ -31,7 +31,7 @@ ActionBase::~ActionBase()
 // -------------------------------------------------------
 bool ActionBase::CollidedWithEnemy(const SDL_Rect& rect1, const SDL_Rect& rect2)
 {
-    return CoreUtility::Utility::CollisionBetweenTwoRectangles(rect1, rect2);
+    return Core::Utility::CollisionBetweenTwoRectangles(rect1, rect2);
 }
 
 }

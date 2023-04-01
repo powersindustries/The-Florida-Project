@@ -5,7 +5,7 @@
 
 #include "EnemyBase.h"
 
-using namespace CoreTypes;
+using namespace Core;
 
 namespace Florida
 {

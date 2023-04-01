@@ -18,8 +18,8 @@ BulletAction::BulletAction()
     m_BaseRectangle.w = 25;
     m_BaseRectangle.h = 25;
 
-    m_SpriteVertical   = new CoreTypes::Sprite(CoreSystems::StringToHash32(std::string(ARROW_VERTICAL_ID)), CoreTypes::SpriteType::eNonAnimated);
-    m_SpriteHorizontal = new CoreTypes::Sprite(CoreSystems::StringToHash32(std::string(ARROW_HORIZONTAL_ID)), CoreTypes::SpriteType::eNonAnimated);
+    m_SpriteVertical   = new Core::Sprite(Core::StringToHash32(std::string(ARROW_VERTICAL_ID)), Core::SpriteType::eNonAnimated);
+    m_SpriteHorizontal = new Core::Sprite(Core::StringToHash32(std::string(ARROW_HORIZONTAL_ID)), Core::SpriteType::eNonAnimated);
 }
 
 
@@ -61,7 +61,7 @@ void BulletAction::Update(float deltaTime)
     }
 
     // Remove bullet if out of screen bounds.
-    if (m_BaseRectangle.x < 0 || m_BaseRectangle.x > CoreManagers::g_SettingsManager.GetScreenWidth())
+    if (m_BaseRectangle.x < 0 || m_BaseRectangle.x > Core::g_SettingsManager.GetScreenWidth())
     {
         m_bActive = false;
     }

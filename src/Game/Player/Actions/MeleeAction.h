@@ -31,8 +31,8 @@ private:
 
 private:
 
-    CoreTypes::Sprite* m_SpriteHorizontal;
-    CoreTypes::Sprite* m_SpriteVertical;
+    Core::Sprite* m_SpriteHorizontal;
+    Core::Sprite* m_SpriteVertical;
 
     const int m_iOffset = 2;
 

@@ -6,7 +6,7 @@
 #include "Core/UI/Types/Box.h"
 #include "Core/UI/Types/TextBlock.h"
 
-using namespace CoreUI;
+using namespace UI;
 
 namespace Florida
 {

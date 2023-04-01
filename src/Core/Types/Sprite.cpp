@@ -1,7 +1,7 @@
 #include "Sprite.h"
 #include "Game/Managers/AssetManager.h"
 
-namespace CoreTypes
+namespace Core
 {
 
 

@@ -6,7 +6,7 @@
 #include <string>
 #include "VectorMethods.h"
 
-namespace CoreUtility
+namespace Core
 {
 
 
@@ -19,7 +19,7 @@ public:
     
     static bool CollisionBetweenTwoRectangles(const SDL_Rect& rect1, const SDL_Rect& rect2);
     static bool CollisionBetweenTwoRectanglesWithPadding(const SDL_Rect& rect1, const SDL_Rect& rect2, const int iPadding);
-    static bool CollisionBetweenPointAndRectangle(const SDL_Rect& rect, const CoreUtility::Vec2i& v2i);
+    static bool CollisionBetweenPointAndRectangle(const SDL_Rect& rect, const Core::Vec2i& v2i);
 
     static double ATan2InDegrees(const int iY, const int iX);
     static double ATan2InRadians(const int iY, const int iX);

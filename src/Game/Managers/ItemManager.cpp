@@ -50,12 +50,12 @@ void ItemManager::InitializeItemManager()
     for (rapidxml::xml_node<>* child = texturesNode->first_node(); child; child = child->next_sibling())
     {
         ItemData itemData;
-        itemData.m_uiID = CoreSystems::StringToHash32(std::string(child->first_attribute("ID")->value()));
+        itemData.m_uiID = Core::StringToHash32(std::string(child->first_attribute("ID")->value()));
         itemData.m_sName = child->first_attribute("Name")->value();
         itemData.m_sDescription = child->first_attribute("Description")->value();
         itemData.m_Type = StringToItemType(child->first_attribute("Type")->value());
         itemData.m_ActionType = StringToActionItemType(child->first_attribute("ActionType")->value());
-        itemData.m_bDiscovered = CoreUtility::Utility::StringToBool(std::string(child->first_attribute("Discovered")->value()));
+        itemData.m_bDiscovered = Core::Utility::StringToBool(std::string(child->first_attribute("Discovered")->value()));
         itemData.m_uiAmount = static_cast<uint8_t>(std::stoi(child->first_attribute("Amount")->value()));
 
         m_ItemData.push_back(itemData);
@@ -67,13 +67,13 @@ void ItemManager::InitializeItemManager()
 
     m_MasterItemData = m_ItemData;
 
-    m_PrimaryWeapon = CoreSystems::StringToHash32(std::string(HAMMER_ID));
-    m_SecondaryWeapon = CoreSystems::StringToHash32(std::string(GUN_ID));
+    m_PrimaryWeapon = Core::StringToHash32(std::string(HAMMER_ID));
+    m_SecondaryWeapon = Core::StringToHash32(std::string(GUN_ID));
 
     g_EventManager.Broadcast(Events::ePlayerPrimaryEquippedItemChanged);
     g_EventManager.Broadcast(Events::ePlayerSecondaryEquippedItemChanged);
 
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Items Load Complete!");
+    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Items Load Complete!");
 }
 
 
@@ -83,8 +83,8 @@ void ItemManager::ResetItemManager()
 {
     m_ItemData = m_MasterItemData;
 
-    m_PrimaryWeapon = CoreSystems::StringToHash32(std::string(HAMMER_ID));
-    m_SecondaryWeapon = CoreSystems::StringToHash32(std::string(GUN_ID));
+    m_PrimaryWeapon = Core::StringToHash32(std::string(HAMMER_ID));
+    m_SecondaryWeapon = Core::StringToHash32(std::string(GUN_ID));
 
     g_EventManager.Broadcast(Events::ePlayerPrimaryEquippedItemChanged);
     g_EventManager.Broadcast(Events::ePlayerSecondaryEquippedItemChanged);
@@ -108,7 +108,7 @@ bool ItemManager::AddItem(const uint32_t uiID, const uint32_t uiAmount)
 {
     if (m_ItemDataMap.find(uiID) == m_ItemDataMap.end())
     {
-        CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "The item you're trying to add does not exist.");
+        Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "The item you're trying to add does not exist.");
         return false;
     }
     else
@@ -138,7 +138,7 @@ bool ItemManager::RemoveItem(const uint32_t uiID, const uint32_t uiAmount)
 {
     if (m_ItemDataMap.find(uiID) == m_ItemDataMap.end())
     {
-        CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "The item you're trying to remove does not exist.");
+        Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "The item you're trying to remove does not exist.");
         return false;
     }
     else

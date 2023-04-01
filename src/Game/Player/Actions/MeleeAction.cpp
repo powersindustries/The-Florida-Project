@@ -21,8 +21,8 @@ MeleeAction::MeleeAction()
 
     g_Player.DecreaseStamina(m_uiStaminaUseAmount);
 
-    m_SpriteHorizontal = new Sprite(CoreSystems::StringToHash32(std::string("txt_MeleeAttackHorizontal")), g_GameGlobals.ITEM_ANIMATION_SPEED);
-    m_SpriteVertical = new Sprite(CoreSystems::StringToHash32(std::string("txt_MeleeAttackVertical")), g_GameGlobals.ITEM_ANIMATION_SPEED);
+    m_SpriteHorizontal = new Sprite(Core::StringToHash32(std::string("txt_MeleeAttackHorizontal")), g_GameGlobals.ITEM_ANIMATION_SPEED);
+    m_SpriteVertical = new Sprite(Core::StringToHash32(std::string("txt_MeleeAttackVertical")), g_GameGlobals.ITEM_ANIMATION_SPEED);
 }
 
 

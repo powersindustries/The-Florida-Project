@@ -93,13 +93,13 @@ void HUDScreen::Draw(SDL_Renderer* renderer)
 void HUDScreen::Initialize()
 {
     // Top Left Corner.
-    m_HealthIcon.SetTexture(CoreSystems::StringToHash32(std::string(HEALTH_ICON)));
+    m_HealthIcon.SetTexture(Core::StringToHash32(std::string(HEALTH_ICON)));
     m_HealthIcon.SetSize(25,25);
 
-	m_StaminaIcon.SetTexture(CoreSystems::StringToHash32(std::string(STAMINA_ICON)));
+	m_StaminaIcon.SetTexture(Core::StringToHash32(std::string(STAMINA_ICON)));
 	m_StaminaIcon.SetSize(25, 25);
 
-	m_WeaponIcon.SetTexture(CoreSystems::StringToHash32(std::string(HAMMER_ICON)));
+	m_WeaponIcon.SetTexture(Core::StringToHash32(std::string(HAMMER_ICON)));
 	m_WeaponIcon.SetSize(25, 25);
 
 	m_IconStack.SetAnchor(Anchor::eTopLeft);
@@ -144,7 +144,7 @@ void HUDScreen::Initialize()
 
 
     // Bottom Right Corner.
-    m_StaminaPotionIcon.SetTexture(CoreSystems::StringToHash32(std::string(STAMINA_POTION_ICON)));
+    m_StaminaPotionIcon.SetTexture(Core::StringToHash32(std::string(STAMINA_POTION_ICON)));
     m_StaminaPotionIcon.SetSize(25,25);
 
     m_StaminaPotionAmountText.SetColor(g_GameGlobals.COLOR_WHITE);
@@ -159,7 +159,7 @@ void HUDScreen::Initialize()
         -10
     );
 
-    m_AmmoIcon.SetTexture(CoreSystems::StringToHash32(std::string(ARROW_ICON)));
+    m_AmmoIcon.SetTexture(Core::StringToHash32(std::string(ARROW_ICON)));
     m_AmmoIcon.SetSize(25,25);
 
     m_AmmoAmountText.SetColor(g_GameGlobals.COLOR_WHITE);
@@ -179,13 +179,13 @@ void HUDScreen::Initialize()
 
 
     // Bottom Center.
-    m_ScrapIcon.SetTexture(CoreSystems::StringToHash32(std::string(SCRAP_ICON)));
+    m_ScrapIcon.SetTexture(Core::StringToHash32(std::string(SCRAP_ICON)));
     m_ScrapIcon.SetSize(25,25);
     
-    m_WoodIcon.SetTexture(CoreSystems::StringToHash32(std::string(WOOD_ICON)));
+    m_WoodIcon.SetTexture(Core::StringToHash32(std::string(WOOD_ICON)));
     m_WoodIcon.SetSize(25,25);
     
-    m_WaterIcon.SetTexture(CoreSystems::StringToHash32(std::string(WATER_ICON)));
+    m_WaterIcon.SetTexture(Core::StringToHash32(std::string(WATER_ICON)));
     m_WaterIcon.SetSize(25,25);
  
     m_ScrapAmountText.SetColor(g_GameGlobals.COLOR_WHITE);
@@ -214,7 +214,7 @@ void HUDScreen::Initialize()
 
     // Top Center.
     m_DayNightIcon.SetAnchor(Anchor::eTopCenter);
-    m_DayNightIcon.SetTexture(CoreSystems::StringToHash32(std::string(DAY_ICON)));
+    m_DayNightIcon.SetTexture(Core::StringToHash32(std::string(DAY_ICON)));
     m_DayNightIcon.SetSize(25,25);
 
     m_DayCountText.SetAnchor(Anchor::eTopCenter);
@@ -270,8 +270,8 @@ void HUDScreen::OnShow()
 // -------------------------------------------------------
 void HUDScreen::UpdateResourcesUI()
 {
-    const uint32_t uiScrapID = CoreSystems::StringToHash32(std::string(SCRAP_ID));
-    const uint32_t uiWoodID = CoreSystems::StringToHash32(std::string(WOOD_ID));
+    const uint32_t uiScrapID = Core::StringToHash32(std::string(SCRAP_ID));
+    const uint32_t uiWoodID = Core::StringToHash32(std::string(WOOD_ID));
 
     const std::vector<ItemData> vPlayerInventory = g_ItemManager.GetAllItemData();
     const uint32_t uiItemSize = static_cast<uint32_t>(vPlayerInventory.size());
@@ -356,13 +356,13 @@ void HUDScreen::OnPlayerHealthChangedEvent()
 // -------------------------------------------------------
 void HUDScreen::OnPlayerEquippedItemChangedEvent()
 {
-    if (g_ItemManager.GetPrimaryWeaponID() == CoreSystems::StringToHash32(std::string(HAMMER_ID)))
+    if (g_ItemManager.GetPrimaryWeaponID() == Core::StringToHash32(std::string(HAMMER_ID)))
     {
-        m_WeaponIcon.SetTexture(CoreSystems::StringToHash32(std::string(HAMMER_ICON)));
+        m_WeaponIcon.SetTexture(Core::StringToHash32(std::string(HAMMER_ICON)));
     }
     else
     {
-        m_WeaponIcon.SetTexture(CoreSystems::StringToHash32(std::string(BOW_ICON)));
+        m_WeaponIcon.SetTexture(Core::StringToHash32(std::string(BOW_ICON)));
     }
 
     m_IconStack.RefreshUI();
@@ -389,7 +389,7 @@ void HUDScreen::OnDayCountChangedEvent()
 // -------------------------------------------------------
 void HUDScreen::OnAmmoCountChangedEvent()
 {
-    uint32_t ammoID = CoreSystems::StringToHash32(std::string(AMMO_ID));
+    uint32_t ammoID = Core::StringToHash32(std::string(AMMO_ID));
     const ItemData& ammoItemData = g_ItemManager.GetItemDataByID(ammoID);
  
     m_AmmoAmountText.SetText(std::to_string(ammoItemData.m_uiAmount));
@@ -402,7 +402,7 @@ void HUDScreen::OnAmmoCountChangedEvent()
 // -------------------------------------------------------
 void HUDScreen::OnStaminaPotionUsedEvent()
 {
-    uint32_t staminaPotionID = CoreSystems::StringToHash32(std::string(STAMINA_ICON));
+    uint32_t staminaPotionID = Core::StringToHash32(std::string(STAMINA_ICON));
     const ItemData& staminaPotionItemData = g_ItemManager.GetItemDataByID(staminaPotionID);
  
     m_StaminaPotionAmountText.SetText(std::to_string(staminaPotionItemData.m_uiAmount));
@@ -417,11 +417,11 @@ void HUDScreen::OnDayNightChangedEvent()
 {
 	if (g_GameplayManager.GetDayNightValue() == DayNightValues::eDay)
 	{
-        m_DayNightIcon.SetTexture(CoreSystems::StringToHash32(std::string(DAY_ICON)));
+        m_DayNightIcon.SetTexture(Core::StringToHash32(std::string(DAY_ICON)));
 	}
     else
     {
-        m_DayNightIcon.SetTexture(CoreSystems::StringToHash32(std::string(NIGHT_ICON)));
+        m_DayNightIcon.SetTexture(Core::StringToHash32(std::string(NIGHT_ICON)));
     }
 
     m_DayNightStack.RefreshUI();

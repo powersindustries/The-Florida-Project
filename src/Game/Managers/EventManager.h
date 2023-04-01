@@ -50,7 +50,7 @@ public:
 
 private:
 
-    std::vector<std::vector<CoreSystems::Event>> m_EventsVector;
+    std::vector<std::vector<Core::Event>> m_EventsVector;
     std::unordered_map<Events, uint16_t> m_EventsMap; // Key: Events enum, Value: index in m_EventsVector
 
 

@@ -7,7 +7,7 @@
 #include "Core/UI/Types/TextBlock.h"
 #include "Core/UI/Types/Button.h"
 
-using namespace CoreUI;
+using namespace UI;
 
 namespace Florida
 {

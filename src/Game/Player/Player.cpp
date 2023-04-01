@@ -73,7 +73,7 @@ void Player::Update(float deltaTime)
 
     m_PlayerSprite->Update(deltaTime, m_PlayerRectangle);
 
-    if (CoreManagers::g_InputManager.GetActionHeld(CoreManagers::InputMappings::eInteract))
+    if (Core::g_InputManager.GetActionHeld(Core::InputMappings::eInteract))
     {
         // Reset held timer.
         if (m_InteractState.m_fTime == 0.0f)
@@ -90,13 +90,13 @@ void Player::Update(float deltaTime)
     }
 
     // Change weapons on Q key.
-    if (CoreManagers::g_InputManager.GetActionPressed(CoreManagers::InputMappings::eSwitchEquipment))
+    if (Core::g_InputManager.GetActionPressed(Core::InputMappings::eSwitchEquipment))
     {
         SwapPrimarySecondaryEquipment();
     }
 
     // Use Stamina Potion on R key.
-    if (CoreManagers::g_InputManager.GetActionPressed(CoreManagers::InputMappings::eReload))
+    if (Core::g_InputManager.GetActionPressed(Core::InputMappings::eReload))
     {
         UseStaminaPotion();
     }
@@ -132,7 +132,7 @@ void Player::SetPlayerPosition(int x, int y)
 // -------------------------------------------------------
 void Player::ShootAmmo()
 {
-    g_ItemManager.RemoveItem(CoreSystems::StringToHash32(std::string(AMMO_ID)), 1);
+    g_ItemManager.RemoveItem(Core::StringToHash32(std::string(AMMO_ID)), 1);
 }
 
 
@@ -186,10 +186,10 @@ void Player::InitializePlayerSprite()
     std::string sTextureId = playerNode->first_attribute("Texture")->value();
     int iSpeed = std::atoi(playerNode->first_attribute("Speed")->value());
 
-    m_PlayerSprite = new Sprite(CoreSystems::StringToHash32(sTextureId), iSpeed);
+    m_PlayerSprite = new Sprite(Core::StringToHash32(sTextureId), iSpeed);
 
 
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Player Sprite Initialization Complete!");
+    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Player Sprite Initialization Complete!");
 }
 
 
@@ -212,7 +212,7 @@ void Player::SwapPrimarySecondaryEquipment()
 // -------------------------------------------------------
 void Player::UseStaminaPotion()
 {
-    g_ItemManager.RemoveItem(CoreSystems::StringToHash32(std::string(STAMINA_POTION_ID)), 1);
+    g_ItemManager.RemoveItem(Core::StringToHash32(std::string(STAMINA_POTION_ID)), 1);
 }
 
 
@@ -220,7 +220,7 @@ void Player::UseStaminaPotion()
 // -------------------------------------------------------
 void Player::OnDayNightChangedEvent()
 {
-    CoreSystems::SYSTEMS_LOG(CoreSystems::LoggingLevel::eInfo, "Player Actions deleted.");
+    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Player Actions deleted.");
 
     m_PlayerAction.m_LiveActions.clear();
 }

@@ -29,8 +29,8 @@ private:
 
 private:
 
-    CoreTypes::Sprite* m_SpriteVertical;
-    CoreTypes::Sprite* m_SpriteHorizontal;
+    Core::Sprite* m_SpriteVertical;
+    Core::Sprite* m_SpriteHorizontal;
     
     const uint8_t m_uiSpeed = 5;
 

@@ -53,14 +53,14 @@ void ControlsScreen::Initialize()
 {
     m_OpacityBox.SetAnchor(Anchor::eTopLeft);
     m_OpacityBox.SetColor(g_GameGlobals.COLOR_BLACK);
-    m_OpacityBox.SetSize(CoreManagers::g_SettingsManager.GetScreenWidth(), CoreManagers::g_SettingsManager.GetScreenHeight());
+    m_OpacityBox.SetSize(Core::g_SettingsManager.GetScreenWidth(), Core::g_SettingsManager.GetScreenHeight());
     m_OpacityBox.SetVisibility(UIVisibility::eDisabled);
 
     m_BackgroundBox.SetAnchor(Anchor::eTopCenter);
     m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
     m_BackgroundBox.SetSize(
-        CoreManagers::g_SettingsManager.GetScreenWidth() / 2, 
-        CoreManagers::g_SettingsManager.GetScreenHeight() - CoreManagers::g_SettingsManager.GetRelativeScreenY(50)
+        Core::g_SettingsManager.GetScreenWidth() / 2, 
+        Core::g_SettingsManager.GetScreenHeight() - Core::g_SettingsManager.GetRelativeScreenY(50)
     );
     m_BackgroundBox.SetOffset(
         ( (m_BackgroundBox.GetWidth() / 2) * -1),
@@ -71,15 +71,15 @@ void ControlsScreen::Initialize()
     m_Title.SetText("Controls");
     m_Title.SetOffset(
         ( (m_Title.GetWidth() / 2) * -1),
-        CoreManagers::g_SettingsManager.GetRelativeScreenY(75)
+        Core::g_SettingsManager.GetRelativeScreenY(75)
     );
 
     m_XButton.SetAnchor(Anchor::eTopCenter);
     m_XButton.SetText("X");
     m_XButton.SetSize(50, 50);
     m_XButton.SetOffset(
-        CoreManagers::g_SettingsManager.GetRelativeScreenX(400), 
-        CoreManagers::g_SettingsManager.GetRelativeScreenY(50)
+        Core::g_SettingsManager.GetRelativeScreenX(400), 
+        Core::g_SettingsManager.GetRelativeScreenY(50)
     );
 
     TextBlock* movementText = new TextBlock;
@@ -118,7 +118,7 @@ void ControlsScreen::Initialize()
     m_VerticalStack.AddChild(craftText);
     m_VerticalStack.SetOffset(
         ( (m_VerticalStack.GetWidth() / 2) * -1),
-        CoreManagers::g_SettingsManager.GetRelativeScreenY(200)
+        Core::g_SettingsManager.GetRelativeScreenY(200)
     );
 
 }
