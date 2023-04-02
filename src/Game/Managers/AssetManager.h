@@ -91,7 +91,6 @@ private:
     std::string m_sTextureDirectorypath;
     std::string m_sFontsDirectorypath;
     std::string m_sSoundsDirectorypath;
-    std::string m_sSaveDirectorypath;
 
 };
 

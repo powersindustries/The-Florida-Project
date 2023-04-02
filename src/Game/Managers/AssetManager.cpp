@@ -1,8 +1,7 @@
 #include "AssetManager.h"
-#include <rapidxml.hpp>
-#include <rapidxml_utils.hpp>
 
 #include "Core/Systems/Systems.h"
+#include "Core/Types/LuaTableLoader.h"
 #include "ItemManager.h"
 
 #define DEFAULT_FONT_SIZE 24
@@ -21,7 +20,7 @@ AssetManager g_AssetManager;
 AssetManager::AssetManager()
 {
     m_sManifestFilepath.append(__PROJECT_DIRECTORY__);
-    m_sManifestFilepath.append("/src/Data/AssetManifest.xml");
+    m_sManifestFilepath.append("/src/Data/AssetManifest.lua");
 
     m_sTextureDirectorypath.append(__PROJECT_DIRECTORY__);
     m_sTextureDirectorypath.append("/src/Assets/Textures/");
@@ -31,9 +30,6 @@ AssetManager::AssetManager()
 
     m_sSoundsDirectorypath.append(__PROJECT_DIRECTORY__);
     m_sSoundsDirectorypath.append("/src/Assets/Sounds/");
-
-    m_sSaveDirectorypath.append(__PROJECT_DIRECTORY__);
-    m_sSaveDirectorypath.append("/src/Data/Save.xml");
 }
 
 
@@ -69,40 +65,44 @@ SDL_Surface* AssetManager::GetAssetSurfaceByID(std::string AssetID)
 // -------------------------------------------------------
 void AssetManager::LoadTextureAssets(SDL_Renderer* renderer)
 {
-    rapidxml::file<> xmlFile(m_sManifestFilepath.c_str());
-    rapidxml::xml_document<> doc;
-    doc.parse<0>(xmlFile.data());
+	Core::LuaTableLoader* luaLoader = new Core::LuaTableLoader(m_sManifestFilepath);
 
-    rapidxml::xml_node<>* texturesNode = doc.first_node()->first_node("Textures");
-    for (rapidxml::xml_node<>* child = texturesNode->first_node(); child; child = child->next_sibling())
-    {
-        TextureAssetData textureAssetData;
-        textureAssetData.m_ID = child->first_attribute("ID")->value();
-        textureAssetData.m_File = child->first_attribute("File")->value();
+	// Load Textures table.
+	luaLoader->LoadTableByID("Textures");
 
-        rapidxml::xml_attribute<>* framesAttribute = child->first_attribute("Frames");
-        if (framesAttribute)
-        {
-            textureAssetData.m_uiFrames = std::stoi(framesAttribute->value());
-        }
-        else
-        {
-            textureAssetData.m_uiFrames = 0;
-        }
+	const uint8_t uiTexturesTableSize = luaLoader->GetCurrentTableSize();
+	for (uint8_t x = 0; x < uiTexturesTableSize; ++x)
+	{
+		int indexOffset = x + 1;
 
-        std::string sAssetPath = m_sTextureDirectorypath;
-        sAssetPath.append(textureAssetData.m_File);
+		if (luaLoader->PushIntegerAndGetTable(indexOffset))
+		{
+			break;
+		}
 
-        SDL_Surface* surface = IMG_Load(sAssetPath.c_str());
-        textureAssetData.m_Texture = SDL_CreateTextureFromSurface(renderer, surface);
-        SDL_FreeSurface(surface);
+		TextureAssetData textureAssetData;
+		textureAssetData.m_ID = luaLoader->GetStringByID("ID");
+		textureAssetData.m_File = luaLoader->GetStringByID("File");
+		textureAssetData.m_uiFrames = luaLoader->GetIntByID("Frames");
 
-        SDL_QueryTexture(textureAssetData.m_Texture, NULL, NULL, &textureAssetData.m_iWidth, &textureAssetData.m_iHeight);
+		std::string sAssetPath = m_sTextureDirectorypath;
+		sAssetPath.append(textureAssetData.m_File);
 
-        m_TextureAssets[Core::StringToHash32(textureAssetData.m_ID)] = textureAssetData;
-    }
+		SDL_Surface* surface = IMG_Load(sAssetPath.c_str());
+		textureAssetData.m_Texture = SDL_CreateTextureFromSurface(renderer, surface);
+		SDL_FreeSurface(surface);
 
-    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Texture Load Complete!");
+		SDL_QueryTexture(textureAssetData.m_Texture, NULL, NULL, &textureAssetData.m_iWidth, &textureAssetData.m_iHeight);
+
+		m_TextureAssets[Core::StringToHash32(textureAssetData.m_ID)] = textureAssetData;
+
+		luaLoader->PopTopTableElement();
+	}
+
+	delete luaLoader;
+
+
+	Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Texture Load Complete!");
 }
 
 
@@ -110,25 +110,38 @@ void AssetManager::LoadTextureAssets(SDL_Renderer* renderer)
 // -------------------------------------------------------
 void AssetManager::LoadFontAssets(SDL_Renderer* renderer)
 {
-    rapidxml::file<> xmlFile(m_sManifestFilepath.c_str());
-    rapidxml::xml_document<> doc;
-    doc.parse<0>(xmlFile.data());
+	Core::LuaTableLoader* luaLoader = new Core::LuaTableLoader(m_sManifestFilepath);
 
-    rapidxml::xml_node<>* fontNode = doc.first_node()->first_node("Fonts");
-    for (rapidxml::xml_node<>* child = fontNode->first_node(); child; child = child->next_sibling())
-    {
-        FontAssetData fontAssetData;
-        fontAssetData.m_ID = child->first_attribute("ID")->value();
-        fontAssetData.m_File = child->first_attribute("File")->value();
+	// Load Textures table.
+	luaLoader->LoadTableByID("Fonts");
 
-        std::string assetPath = m_sFontsDirectorypath;
-        assetPath.append(fontAssetData.m_File);
-        fontAssetData.m_Font = TTF_OpenFont(assetPath.c_str(), DEFAULT_FONT_SIZE);
+	const uint8_t uiFontsTableSize = luaLoader->GetCurrentTableSize();
+	for (uint8_t x = 0; x < uiFontsTableSize; ++x)
+	{
+		int indexOffset = x + 1;
 
-        m_FontAssets[Core::StringToHash32(fontAssetData.m_ID)] = fontAssetData;
-    }
+		if (luaLoader->PushIntegerAndGetTable(indexOffset))
+		{
+			break;
+		}
 
-    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Fonts Load Complete!");
+		FontAssetData fontAssetData;
+		fontAssetData.m_ID = luaLoader->GetStringByID("ID");
+		fontAssetData.m_File = luaLoader->GetStringByID("File");
+
+		std::string assetPath = m_sFontsDirectorypath;
+		assetPath.append(fontAssetData.m_File);
+		fontAssetData.m_Font = TTF_OpenFont(assetPath.c_str(), DEFAULT_FONT_SIZE);
+
+		m_FontAssets[Core::StringToHash32(fontAssetData.m_ID)] = fontAssetData;
+
+		luaLoader->PopTopTableElement();
+	}
+
+	delete luaLoader;
+
+
+	Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Fonts Load Complete!");
 }
 
 
@@ -136,36 +149,49 @@ void AssetManager::LoadFontAssets(SDL_Renderer* renderer)
 // -------------------------------------------------------
 void AssetManager::LoadSoundAssets()
 {
-    rapidxml::file<> xmlFile(m_sManifestFilepath.c_str());
-    rapidxml::xml_document<> doc;
-    doc.parse<0>(xmlFile.data());
+	Core::LuaTableLoader* luaLoader = new Core::LuaTableLoader(m_sManifestFilepath);
 
-    rapidxml::xml_node<>* soundNode = doc.first_node()->first_node("Sounds");
-    for (rapidxml::xml_node<>* child = soundNode->first_node(); child; child = child->next_sibling())
-    {
-        SoundAssetData soundAssetData;
-        soundAssetData.m_ID = child->first_attribute("ID")->value();
-        soundAssetData.m_File = child->first_attribute("File")->value();
+	// Load Textures table.
+	luaLoader->LoadTableByID("Sounds");
 
-        std::string assetPath = m_sSoundsDirectorypath;
-        assetPath.append(soundAssetData.m_File);
+	const uint8_t uiSoundsTableSize = luaLoader->GetCurrentTableSize();
+	for (uint8_t x = 0; x < uiSoundsTableSize; ++x)
+	{
+		int indexOffset = x + 1;
 
-        soundAssetData.m_SoundEffect = Mix_LoadWAV(assetPath.c_str());
+		if (luaLoader->PushIntegerAndGetTable(indexOffset))
+		{
+			break;
+		}
 
-        if (soundAssetData.m_SoundEffect)
-        {
-            m_SoundAssets[Core::StringToHash32(soundAssetData.m_ID)] = soundAssetData;
-        }
-        else
-        {
-            std::string errorMessage = "Sound asset unable to load: ";
-            errorMessage.append(soundAssetData.m_ID);
+		SoundAssetData soundAssetData;
+		soundAssetData.m_ID = luaLoader->GetStringByID("ID");
+		soundAssetData.m_File = luaLoader->GetStringByID("File");
 
-            Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, errorMessage);
-        }
-    }
+		std::string assetPath = m_sSoundsDirectorypath;
+		assetPath.append(soundAssetData.m_File);
 
-    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Sounds Load Complete!");
+		soundAssetData.m_SoundEffect = Mix_LoadWAV(assetPath.c_str());
+
+		if (soundAssetData.m_SoundEffect)
+		{
+			m_SoundAssets[Core::StringToHash32(soundAssetData.m_ID)] = soundAssetData;
+		}
+		else
+		{
+			std::string errorMessage = "Sound asset unable to load: ";
+			errorMessage.append(soundAssetData.m_ID);
+
+			Core::SYSTEMS_LOG(Core::LoggingLevel::eError, errorMessage.c_str());
+		}
+
+		luaLoader->PopTopTableElement();
+	}
+
+	delete luaLoader;
+
+
+	Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Sounds Load Complete!");
 }
 
 
@@ -173,36 +199,49 @@ void AssetManager::LoadSoundAssets()
 // -------------------------------------------------------
 void AssetManager::LoadMusicAssets()
 {
-    rapidxml::file<> xmlFile(m_sManifestFilepath.c_str());
-    rapidxml::xml_document<> doc;
-    doc.parse<0>(xmlFile.data());
+	Core::LuaTableLoader* luaLoader = new Core::LuaTableLoader(m_sManifestFilepath);
 
-    rapidxml::xml_node<>* musicNode = doc.first_node()->first_node("Music");
-    for (rapidxml::xml_node<>* child = musicNode->first_node(); child; child = child->next_sibling())
-    {
-        MusicAssetData musicAssetData;
-        musicAssetData.m_ID = child->first_attribute("ID")->value();
-        musicAssetData.m_File = child->first_attribute("File")->value();
+	// Load Textures table.
+	luaLoader->LoadTableByID("Music");
 
-        std::string assetPath = m_sSoundsDirectorypath;
-        assetPath.append(musicAssetData.m_File);
+	const uint8_t uiMusicTableSize = luaLoader->GetCurrentTableSize();
+	for (uint8_t x = 0; x < uiMusicTableSize; ++x)
+	{
+		int indexOffset = x + 1;
 
-        musicAssetData.m_Music = Mix_LoadMUS(assetPath.c_str());
+		if (luaLoader->PushIntegerAndGetTable(indexOffset))
+		{
+			break;
+		}
 
-        if (musicAssetData.m_Music)
-        {
-            m_MusicAssets[Core::StringToHash32(musicAssetData.m_ID)] = musicAssetData;
-        }
-        else
-        {
-            std::string errorMessage = "Music asset unable to load: ";
-            errorMessage.append(musicAssetData.m_ID);
+		MusicAssetData musicAssetData;
+		musicAssetData.m_ID = luaLoader->GetStringByID("ID");
+		musicAssetData.m_File = luaLoader->GetStringByID("File");
 
-            Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, errorMessage);
-        }
-    }
+		std::string assetPath = m_sSoundsDirectorypath;
+		assetPath.append(musicAssetData.m_File);
 
-    Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Music Load Complete!");
+		musicAssetData.m_Music = Mix_LoadMUS(assetPath.c_str());
+
+		if (musicAssetData.m_Music)
+		{
+			m_MusicAssets[Core::StringToHash32(musicAssetData.m_ID)] = musicAssetData;
+		}
+		else
+		{
+			std::string errorMessage = "Music asset unable to load: ";
+			errorMessage.append(musicAssetData.m_ID);
+
+			Core::SYSTEMS_LOG(Core::LoggingLevel::eError, errorMessage.c_str());
+		}
+
+		luaLoader->PopTopTableElement();
+	}
+
+	delete luaLoader;
+
+
+	Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Music Load Complete!");
 }
 
 }

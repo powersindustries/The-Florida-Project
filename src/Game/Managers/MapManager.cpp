@@ -1,6 +1,4 @@
 #include "MapManager.h"
-#include <rapidxml.hpp>
-#include <rapidxml_utils.hpp>
 
 #include "GameManager.h"
 #include "UIManager.h"
@@ -13,6 +11,7 @@
 #include "Core/Managers/SettingsManager.h"
 #include "ItemManager.h"
 #include "Core/Utility/Utility.h"
+#include "Core/Types/LuaTableLoader.h"
 
 
 namespace Florida
@@ -30,7 +29,7 @@ MapManager::MapManager()
     : m_ActiveMap(nullptr)
 {
     m_sMapManifestPath.append(__PROJECT_DIRECTORY__);
-    m_sMapManifestPath.append("/src/Data/MapsManifest.xml");
+    m_sMapManifestPath.append("/src/Data/MapsManifest.lua");
 
     m_sMapDirectoryPath.append(__PROJECT_DIRECTORY__);
     m_sMapDirectoryPath.append("/src/Data/Maps/");
@@ -53,17 +52,30 @@ MapManager::~MapManager()
 // -------------------------------------------------------
 void MapManager::InitialLoad()
 {
-    rapidxml::file<> xmlFile(m_sMapManifestPath.c_str());
-    rapidxml::xml_document<> doc;
-    doc.parse<0>(xmlFile.data());
+	Core::LuaTableLoader* luaLoader = new Core::LuaTableLoader(m_sMapManifestPath);
 
-    rapidxml::xml_node<>* mapsNode = doc.first_node("Maps");
-    for (rapidxml::xml_node<>* child = mapsNode->first_node(); child; child = child->next_sibling())
-    {
+	// Load Textures table.
+	luaLoader->LoadTableByID("Maps");
+
+	const uint8_t uiMapsTableSize = luaLoader->GetCurrentTableSize();
+	for (uint8_t x = 0; x < uiMapsTableSize; ++x)
+	{
+		int indexOffset = x + 1;
+
+		if (luaLoader->PushIntegerAndGetTable(indexOffset))
+		{
+			break;
+		}
+
         std::string sMapID = m_sMapDirectoryPath;
-        sMapID.append(child->first_attribute("Path")->value());
+        sMapID.append(luaLoader->GetStringByID("Path"));
         LoadMapData(sMapID);
+
+		luaLoader->PopTopTableElement();
     }
+
+    delete luaLoader;
+
 
     Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Map data Load Complete!");
 }
@@ -73,86 +85,117 @@ void MapManager::InitialLoad()
 // -------------------------------------------------------
 void MapManager::LoadMapData(std::string sMapPath)
 {
-    rapidxml::file<> xmlFile(sMapPath.c_str());
-    rapidxml::xml_document<> doc;
-    doc.parse<0>(xmlFile.data());
+    LuaTableLoader* luaLoader = new LuaTableLoader(sMapPath);
 
-    rapidxml::xml_node<>* mapNode = doc.first_node("Map");
+    luaLoader->LoadTableByID("Settings");
+
 
     MapData newMapData;
-    newMapData.m_sID = mapNode->first_attribute("ID")->value();
-    newMapData.m_uiIDHash = Core::StringToHash32(newMapData.m_sID);
+    newMapData.m_uiID = Core::StringToHash32(luaLoader->GetStringByID("ID"));
 
-    newMapData.m_BackgroundColor.r = std::stoi(mapNode->first_attribute("BackgroundR")->value());
-    newMapData.m_BackgroundColor.g = std::stoi(mapNode->first_attribute("BackgroundG")->value());
-    newMapData.m_BackgroundColor.b = std::stoi(mapNode->first_attribute("BackgroundB")->value());
-    newMapData.m_BackgroundColor.a = std::stoi(mapNode->first_attribute("BackgroundA")->value());
+    newMapData.m_BackgroundColor.r = luaLoader->GetIntByID("BackgroundR");
+    newMapData.m_BackgroundColor.g = luaLoader->GetIntByID("BackgroundG");
+    newMapData.m_BackgroundColor.b = luaLoader->GetIntByID("BackgroundB");
+    newMapData.m_BackgroundColor.a = luaLoader->GetIntByID("BackgroundA");
 
     newMapData.m_BackgroundRectangle.x = 0;
     newMapData.m_BackgroundRectangle.y = 0;
     newMapData.m_BackgroundRectangle.w = Core::g_SettingsManager.GetScreenWidth();
     newMapData.m_BackgroundRectangle.h = Core::g_SettingsManager.GetScreenHeight();
 
-    newMapData.m_vPlayerStartPosition.m_X = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(mapNode->first_attribute("PlayerX")->value()));
-    newMapData.m_vPlayerStartPosition.m_Y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(mapNode->first_attribute("PlayerY")->value()));
+    newMapData.m_vPlayerStartPosition.m_X = Core::g_SettingsManager.GetRelativeScreenX(luaLoader->GetIntByID("PlayerX"));
+    newMapData.m_vPlayerStartPosition.m_Y = Core::g_SettingsManager.GetRelativeScreenY(luaLoader->GetIntByID("PlayerY"));
 
-    std::string sNightTextureID = mapNode->first_attribute("BackgroundTextureNight")->value();
+    std::string sNightTextureID = luaLoader->GetStringByID("BackgroundTextureNight");
     uint32_t uiNightTextureIDHash = Core::StringToHash32(sNightTextureID);
 
-    std::string sDayTextureID = mapNode->first_attribute("BackgroundTextureDay")->value();
+    std::string sDayTextureID = luaLoader->GetStringByID("BackgroundTextureDay");
     uint32_t uiDayTextureIDHash = Core::StringToHash32(sDayTextureID);
 
     newMapData.m_BackgroundTextureDay = g_AssetManager.m_TextureAssets[uiDayTextureIDHash].m_Texture;
     newMapData.m_BackgroundTextureNight = g_AssetManager.m_TextureAssets[uiNightTextureIDHash].m_Texture;
 
     // Load Navigations
-    rapidxml::xml_node<>* navigationsNode = doc.first_node()->first_node("Navigations");
-    for (rapidxml::xml_node<>* child = navigationsNode->first_node(); child; child = child->next_sibling())
+    luaLoader->LoadTableByID("Navigations");
+
+    const uint8_t uiNavigationsSize = luaLoader->GetCurrentTableSize();
+    for (uint8_t x=0; x < uiNavigationsSize; ++x)
     {
+        int indexOffset = x + 1;
+
+        if (luaLoader->PushIntegerAndGetTable(indexOffset))
+        {
+            break;
+        }
+
+
         NavigationData newNavigation;
-        newNavigation.m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
-        newNavigation.m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
+        newNavigation.m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(luaLoader->GetIntByID("x"));
+        newNavigation.m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(luaLoader->GetIntByID("y"));
 
-        newNavigation.m_Rectangle.w = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("w")->value()));
-        newNavigation.m_Rectangle.h = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("h")->value()));
+        newNavigation.m_Rectangle.w = Core::g_SettingsManager.GetRelativeScreenX(luaLoader->GetIntByID("w"));
+        newNavigation.m_Rectangle.h = Core::g_SettingsManager.GetRelativeScreenY(luaLoader->GetIntByID("h"));
 
-        newNavigation.m_uiPadding = std::stoi(child->first_attribute("Padding")->value());
+        newNavigation.m_uiPadding = luaLoader->GetIntByID("Padding");
 
-        newNavigation.m_vUpPosition.m_X = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("UpX")->value()));
-        newNavigation.m_vUpPosition.m_Y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("UpY")->value()));
+        newNavigation.m_vUpPosition.m_X = Core::g_SettingsManager.GetRelativeScreenX(luaLoader->GetIntByID("UpX"));
+        newNavigation.m_vUpPosition.m_Y = Core::g_SettingsManager.GetRelativeScreenY(luaLoader->GetIntByID("UpY"));
 
-        newNavigation.m_vDownPosition.m_X = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("DownX")->value()));
-        newNavigation.m_vDownPosition.m_Y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("DownY")->value()));
+        newNavigation.m_vDownPosition.m_X = Core::g_SettingsManager.GetRelativeScreenX(luaLoader->GetIntByID("DownX"));
+        newNavigation.m_vDownPosition.m_Y = Core::g_SettingsManager.GetRelativeScreenY(luaLoader->GetIntByID("DownY"));
 
         newMapData.m_Navigations.push_back(newNavigation);
+
+        luaLoader->PopTopTableElement();
     }
 
     // Load Collisions
-    rapidxml::xml_node<>* collisionsNode = doc.first_node()->first_node("Collisions");
-    for (rapidxml::xml_node<>* child = collisionsNode->first_node(); child; child = child->next_sibling())
-    {
+	luaLoader->LoadTableByID("Collisions");
+
+	const uint8_t uiCollisionsSize = luaLoader->GetCurrentTableSize();
+	for (uint8_t x = 0; x < uiCollisionsSize; ++x)
+	{
+		int indexOffset = x + 1;
+
+		if (luaLoader->PushIntegerAndGetTable(indexOffset))
+		{
+			break;
+		}
+
 
         CollisionData newCollision;
-        newCollision.m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
-        newCollision.m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
+        newCollision.m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(luaLoader->GetIntByID("x"));
+        newCollision.m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(luaLoader->GetIntByID("y"));
 
-        newCollision.m_Rectangle.w = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("w")->value()));
-        newCollision.m_Rectangle.h = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("h")->value()));
+        newCollision.m_Rectangle.w = Core::g_SettingsManager.GetRelativeScreenX(luaLoader->GetIntByID("w"));
+        newCollision.m_Rectangle.h = Core::g_SettingsManager.GetRelativeScreenY(luaLoader->GetIntByID("h"));
 
-        newCollision.m_uiPadding = std::stoi(child->first_attribute("Padding")->value());
+        newCollision.m_uiPadding = luaLoader->GetIntByID("Padding");
 
         newMapData.m_Collisions.push_back(newCollision);
+
+		luaLoader->PopTopTableElement();
     }
 
     // Load Enemies
-    rapidxml::xml_node<>* enemiesNode = doc.first_node()->first_node("EnemySpawners");
-    for (rapidxml::xml_node<>* child = enemiesNode->first_node(); child; child = child->next_sibling())
-    {
-        EnemySpawnerData newEnemy;
-        newEnemy.m_uiMapIDHash = newMapData.m_uiIDHash;
+	luaLoader->LoadTableByID("EnemySpawners");
 
-        newEnemy.m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
-        newEnemy.m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
+	const uint8_t uiSpawnerSize = luaLoader->GetCurrentTableSize();
+	for (uint8_t x = 0; x < uiSpawnerSize; ++x)
+	{
+		int indexOffset = x + 1;
+
+		if (luaLoader->PushIntegerAndGetTable(indexOffset))
+		{
+			break;
+		}
+
+
+        EnemySpawnerData newEnemy;
+        newEnemy.m_uiMapIDHash = newMapData.m_uiID;
+
+        newEnemy.m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(luaLoader->GetIntByID("x"));
+        newEnemy.m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(luaLoader->GetIntByID("y"));
         newEnemy.m_Rectangle.w = 25;
         newEnemy.m_Rectangle.h = 50;
 
@@ -162,13 +205,25 @@ void MapManager::LoadMapData(std::string sMapPath)
         g_EnemyManager.m_EnemySpawnerMap.insert({ newEnemy.m_uiMapIDHash, uiEnemiesVectorSize });
 
         newMapData.m_EnemySpawners.push_back(uiEnemiesVectorSize);
+
+		luaLoader->PopTopTableElement();
     }
 
     // Load Interactions
-    rapidxml::xml_node<>* interactionsNode = doc.first_node()->first_node("Interactions");
-    for (rapidxml::xml_node<>* child = interactionsNode->first_node(); child; child = child->next_sibling())
-    {
-        const InteractionType currInteractionType = StringToInteractionType(child->first_attribute("Type")->value());
+	luaLoader->LoadTableByID("Interactions");
+
+	const uint8_t uiInteractionsSize = luaLoader->GetCurrentTableSize();
+	for (uint8_t x = 0; x < uiInteractionsSize; ++x)
+	{
+		int indexOffset = x + 1;
+
+		if (luaLoader->PushIntegerAndGetTable(indexOffset))
+		{
+			break;
+		}
+
+
+        const InteractionType currInteractionType = StringToInteractionType(luaLoader->GetStringByID("Type"));
         if (currInteractionType != InteractionType::eNONE)
         {
             switch (currInteractionType)
@@ -178,18 +233,18 @@ void MapManager::LoadMapData(std::string sMapPath)
                 PickupData* newPickupInteraction = new PickupData;
                 newPickupInteraction->m_Type = currInteractionType;
 
-                newPickupInteraction->m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
-                newPickupInteraction->m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
-                newPickupInteraction->m_Rectangle.w = std::stoi(child->first_attribute("w")->value());
-                newPickupInteraction->m_Rectangle.h = std::stoi(child->first_attribute("h")->value());
-                newPickupInteraction->m_uiPadding = std::stoi(child->first_attribute("Padding")->value());
+                newPickupInteraction->m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(luaLoader->GetIntByID("x"));
+                newPickupInteraction->m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(luaLoader->GetIntByID("y"));
+                newPickupInteraction->m_Rectangle.w = luaLoader->GetIntByID("w");
+                newPickupInteraction->m_Rectangle.h = luaLoader->GetIntByID("h");
+                newPickupInteraction->m_uiPadding = luaLoader->GetIntByID("Padding");
 
-                newPickupInteraction->m_uiPickupTime = std::stoi(child->first_attribute("PickupTime")->value());
+                newPickupInteraction->m_uiPickupTime = luaLoader->GetIntByID("PickupTime");
 
-                newPickupInteraction->m_uiItem = Core::StringToHash32(std::string(child->first_attribute("Item")->value()));
-                newPickupInteraction->m_uiAmount = std::stoi(child->first_attribute("Amount")->value());
+                newPickupInteraction->m_uiItem = Core::StringToHash32(luaLoader->GetStringByID("Item"));
+                newPickupInteraction->m_uiAmount = luaLoader->GetIntByID("Amount");
 
-                newPickupInteraction->m_Sprite = new Sprite(Core::StringToHash32(std::string(child->first_attribute("Texture")->value())), g_GameGlobals.ITEM_ANIMATION_SPEED);
+                newPickupInteraction->m_Sprite = new Sprite(Core::StringToHash32(luaLoader->GetStringByID("Texture")), g_GameGlobals.ITEM_ANIMATION_SPEED);
 
                 newMapData.m_PickupVector.push_back(newPickupInteraction);
 
@@ -199,25 +254,25 @@ void MapManager::LoadMapData(std::string sMapPath)
             {
                 RefreshData* newRefreshInteraction = new RefreshData;
                 newRefreshInteraction->m_Type = currInteractionType;
-                newRefreshInteraction->m_uiMapIDHash = newMapData.m_uiIDHash;
+                newRefreshInteraction->m_uiMapIDHash = newMapData.m_uiID;
 
-                newRefreshInteraction->m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
-                newRefreshInteraction->m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
-                newRefreshInteraction->m_Rectangle.w = std::stoi(child->first_attribute("w")->value());
-                newRefreshInteraction->m_Rectangle.h = std::stoi(child->first_attribute("h")->value());
-                newRefreshInteraction->m_uiPadding = std::stoi(child->first_attribute("Padding")->value());
+                newRefreshInteraction->m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(luaLoader->GetIntByID("x"));
+                newRefreshInteraction->m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(luaLoader->GetIntByID("y"));
+                newRefreshInteraction->m_Rectangle.w = luaLoader->GetIntByID("w");
+                newRefreshInteraction->m_Rectangle.h = luaLoader->GetIntByID("h");
+                newRefreshInteraction->m_uiPadding = luaLoader->GetIntByID("Padding");
 
-                newRefreshInteraction->m_uiPickupTime = std::stoi(child->first_attribute("PickupTime")->value());
-                newRefreshInteraction->m_uiRefreshTime = std::stoi(child->first_attribute("RefreshTime")->value());
+                newRefreshInteraction->m_uiPickupTime = luaLoader->GetIntByID("PickupTime");
+                newRefreshInteraction->m_uiRefreshTime = luaLoader->GetIntByID("RefreshTime");
 
-                newRefreshInteraction->m_uiItem = Core::StringToHash32(std::string(child->first_attribute("Item")->value()));
-                newRefreshInteraction->m_uiAmount = std::stoi(child->first_attribute("Amount")->value());
+                newRefreshInteraction->m_uiItem = Core::StringToHash32(luaLoader->GetStringByID("Item"));
+                newRefreshInteraction->m_uiAmount = luaLoader->GetIntByID("Amount");
 
-                newRefreshInteraction->m_Sprite = new Sprite(Core::StringToHash32(std::string(child->first_attribute("Texture")->value())), g_GameGlobals.ITEM_ANIMATION_SPEED);
+                newRefreshInteraction->m_Sprite = new Sprite(Core::StringToHash32(luaLoader->GetStringByID("Texture")), g_GameGlobals.ITEM_ANIMATION_SPEED);
                 
                 newMapData.m_RefreshVector.push_back(newRefreshInteraction);
 
-                g_UIManager.AddNewRefreshUI(newMapData.m_uiIDHash, newRefreshInteraction->m_Rectangle.x, newRefreshInteraction->m_Rectangle.y);
+                g_UIManager.AddNewRefreshUI(newMapData.m_uiID, newRefreshInteraction->m_Rectangle.x, newRefreshInteraction->m_Rectangle.y);
 
                 break;
             }
@@ -226,11 +281,11 @@ void MapManager::LoadMapData(std::string sMapPath)
                 StoryData* newStoryInteraction = new StoryData;
                 newStoryInteraction->m_Type = currInteractionType;
 
-                newStoryInteraction->m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(std::stoi(child->first_attribute("y")->value()));
-                newStoryInteraction->m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(std::stoi(child->first_attribute("x")->value()));
-                newStoryInteraction->m_Rectangle.w = std::stoi(child->first_attribute("w")->value());
-                newStoryInteraction->m_Rectangle.h = std::stoi(child->first_attribute("h")->value());
-                newStoryInteraction->m_uiPadding = std::stoi(child->first_attribute("Padding")->value());
+                newStoryInteraction->m_Rectangle.y = Core::g_SettingsManager.GetRelativeScreenY(luaLoader->GetIntByID("y"));
+                newStoryInteraction->m_Rectangle.x = Core::g_SettingsManager.GetRelativeScreenX(luaLoader->GetIntByID("x"));
+                newStoryInteraction->m_Rectangle.w = luaLoader->GetIntByID("w");
+                newStoryInteraction->m_Rectangle.h = luaLoader->GetIntByID("h");
+                newStoryInteraction->m_uiPadding = luaLoader->GetIntByID("Padding");
 
                 newMapData.m_StoryVector.push_back(newStoryInteraction);
 
@@ -242,12 +297,16 @@ void MapManager::LoadMapData(std::string sMapPath)
             }
             }
         }
+
+		luaLoader->PopTopTableElement();
     }
+
+    delete luaLoader;
 
     m_MapDataVector.push_back(newMapData);
 
     const uint32_t uiMapDataVectorSize = static_cast<uint32_t>(m_MapDataVector.size()) - 1;
-    m_MapDataMap.insert({ newMapData.m_uiIDHash, uiMapDataVectorSize });
+    m_MapDataMap.insert({ newMapData.m_uiID, uiMapDataVectorSize });
 }
 
 

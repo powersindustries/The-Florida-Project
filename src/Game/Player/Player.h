@@ -74,8 +74,6 @@ private:
     InteractState m_InteractState;
 
     std::string m_sPlayerFilepath;
-    std::string m_sInventoryFilepath;
-    std::string m_sInventoryFilepath2;
 
     SDL_Rect m_PlayerRectangle;
 

@@ -40,7 +40,7 @@ void GameOverlayScreen::Draw(SDL_Renderer* renderer)
         m_PickupCooldownText.Draw(renderer);
     }
 
-    std::vector<RefreshUI> refreshUIVector = m_RefreshTextMap[g_MapManager.m_ActiveMap->m_uiIDHash];
+    std::vector<RefreshUI> refreshUIVector = m_RefreshTextMap[g_MapManager.m_ActiveMap->m_uiID];
     const uint16_t uiRefreshSize = static_cast<uint16_t>(refreshUIVector.size());
     for (uint16_t x=0; x < uiRefreshSize; ++x)
     {

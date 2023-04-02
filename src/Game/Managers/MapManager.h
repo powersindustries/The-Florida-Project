@@ -94,8 +94,7 @@ struct NavigationData
 
 struct MapData
 {
-    std::string m_sID;
-    uint32_t m_uiIDHash;
+    uint32_t m_uiID;
 
     Core::Vec2i m_vPlayerStartPosition;
 

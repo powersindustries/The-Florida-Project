@@ -49,7 +49,7 @@ public:
 
 private:
 
-    SDL_Color ColorStringToSDLColor(const char* string );
+    SDL_Color ColorStringToSDLColor(std::string string);
 
 
 private:

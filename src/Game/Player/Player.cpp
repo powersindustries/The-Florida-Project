@@ -1,10 +1,8 @@
 #include "Player.h"
-#include <rapidxml.hpp>
-#include <rapidxml_utils.hpp>
-#include <rapidxml_print.hpp>
 
 #include "Core/Systems/Systems.h"
 #include "Core/Managers/InputManager.h"
+#include "Core/Types/LuaTableLoader.h"
 #include "../Managers/EventManager.h"
 #include "../Managers/GameManager.h"
 #include "../Managers/ItemManager.h"
@@ -33,13 +31,7 @@ Player::Player()
     m_PlayerRectangle.h = PLAYER_WIDTHHEIGHT;
 
     m_sPlayerFilepath.append(__PROJECT_DIRECTORY__);
-    m_sPlayerFilepath.append("/src/Data/Player.xml");
-
-    m_sInventoryFilepath.append(__PROJECT_DIRECTORY__);
-    m_sInventoryFilepath.append("/src/Data/Inventory.xml");
-
-    m_sInventoryFilepath2.append(__PROJECT_DIRECTORY__);
-    m_sInventoryFilepath2.append("/src/Data/Inventory2.xml");
+    m_sPlayerFilepath.append("/src/Data/Player.lua");
 }
 
 
@@ -176,18 +168,18 @@ void Player::ResetPlayer()
 // -------------------------------------------------------
 void Player::InitializePlayerSprite()
 {
-    rapidxml::file<> xmlFile(m_sPlayerFilepath.c_str());
-    rapidxml::xml_document<> doc;
-    doc.parse<0>(xmlFile.data());
+	LuaTableLoader* luaLoader = new LuaTableLoader(m_sPlayerFilepath);
+
+	luaLoader->LoadTableByID("Player");
 
 
     // Initialize/Load Player Sprite
-    rapidxml::xml_node<>* playerNode = doc.first_node("Player");
-    std::string sTextureId = playerNode->first_attribute("Texture")->value();
-    int iSpeed = std::atoi(playerNode->first_attribute("Speed")->value());
+    std::string sTextureId = luaLoader->GetStringByID("Texture");
+    int iSpeed = luaLoader->GetIntByID("Speed");
 
     m_PlayerSprite = new Sprite(Core::StringToHash32(sTextureId), iSpeed);
 
+    delete luaLoader;
 
     Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Player Sprite Initialization Complete!");
 }

@@ -255,7 +255,7 @@ void UIManager::UpdatePickupUI(bool bShow, uint16_t uiCount, int x, int y)
 // -------------------------------------------------------
 void UIManager::UpdateRefreshUI(bool bShow, uint16_t uiIndex, uint16_t uiCount)
 {
-    std::vector<RefreshUI>& refreshUIVector = m_GameOverlayScreen.m_RefreshTextMap[g_MapManager.m_ActiveMap->m_uiIDHash];
+    std::vector<RefreshUI>& refreshUIVector = m_GameOverlayScreen.m_RefreshTextMap[g_MapManager.m_ActiveMap->m_uiID];
     if (uiIndex < refreshUIVector.size())
     {
         RefreshUI& currRefresh = refreshUIVector[uiIndex];

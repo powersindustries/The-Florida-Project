@@ -56,8 +56,8 @@ public:
 
 private:
 
-    const ItemType StringToItemType(const char* string);
-    const ActionType StringToActionItemType(const char* string);
+    const ItemType StringToItemType(std::string string);
+    const ActionType StringToActionItemType(std::string string);
 
 
 private:

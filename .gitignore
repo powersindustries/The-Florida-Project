@@ -173,9 +173,4 @@ MigrationBackup/
 
 # CMake
 Debug/
-
-# SDL2 external libraries
-External/SDL2
-External/SDL2_image
-External/SDL2_ttf
-External/SDL2_mixer
+External/

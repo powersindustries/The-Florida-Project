@@ -1,13 +1,12 @@
 #include "ItemManager.h"
-#include <rapidxml.hpp>
-#include <rapidxml_utils.hpp>
 
 #include "Core/Systems/Hash.h"
 #include "Core/Systems/Logging.h"
+#include "Core/Utility/Utility.h"
+#include "Core/Types/LuaTableLoader.h"
 #include "GameManager.h"
 #include "EventManager.h"
 #include "SoundManager.h"
-#include "Core/Utility/Utility.h"
 
 #define ITEM_ADDED_SOUND "snd_ItemAdded"
 #define HAMMER_ID "itm_Hammer"
@@ -27,7 +26,7 @@ ItemManager g_ItemManager;
 ItemManager::ItemManager()
 {
     m_sItemsFilepath.append(__PROJECT_DIRECTORY__);
-    m_sItemsFilepath.append("/src/Data/Items.xml");
+    m_sItemsFilepath.append("/src/Data/Items.lua");
 }
 
 
@@ -42,28 +41,39 @@ ItemManager::~ItemManager()
 // -------------------------------------------------------
 void ItemManager::InitializeItemManager()
 {
-    rapidxml::file<> xmlFile(m_sItemsFilepath.c_str());
-    rapidxml::xml_document<> doc;
-    doc.parse<0>(xmlFile.data());
+	Core::LuaTableLoader* luaLoader = new Core::LuaTableLoader(m_sItemsFilepath);
 
-    rapidxml::xml_node<>* texturesNode = doc.first_node("Items");
-    for (rapidxml::xml_node<>* child = texturesNode->first_node(); child; child = child->next_sibling())
-    {
+	// Load Textures table.
+	luaLoader->LoadTableByID("Items");
+
+	const uint8_t uiItemTableSize = luaLoader->GetCurrentTableSize();
+	for (uint8_t x = 0; x < uiItemTableSize; ++x)
+	{
+		int indexOffset = x + 1;
+
+		if (luaLoader->PushIntegerAndGetTable(indexOffset))
+		{
+			break;
+		}
+
         ItemData itemData;
-        itemData.m_uiID = Core::StringToHash32(std::string(child->first_attribute("ID")->value()));
-        itemData.m_sName = child->first_attribute("Name")->value();
-        itemData.m_sDescription = child->first_attribute("Description")->value();
-        itemData.m_Type = StringToItemType(child->first_attribute("Type")->value());
-        itemData.m_ActionType = StringToActionItemType(child->first_attribute("ActionType")->value());
-        itemData.m_bDiscovered = Core::Utility::StringToBool(std::string(child->first_attribute("Discovered")->value()));
-        itemData.m_uiAmount = static_cast<uint8_t>(std::stoi(child->first_attribute("Amount")->value()));
+        itemData.m_uiID = Core::StringToHash32(luaLoader->GetStringByID("ID"));
+        itemData.m_sName = luaLoader->GetStringByID("Name");
+        itemData.m_sDescription = luaLoader->GetStringByID("Description");
+        itemData.m_Type = StringToItemType(luaLoader->GetStringByID("Type"));
+        itemData.m_ActionType = StringToActionItemType(luaLoader->GetStringByID("ActionType"));
+        itemData.m_bDiscovered = Core::Utility::StringToBool(luaLoader->GetStringByID("Discovered"));
+        itemData.m_uiAmount = static_cast<uint8_t>(luaLoader->GetIntByID("Amount"));
 
         m_ItemData.push_back(itemData);
 
         const uint32_t uiItemDataSize = static_cast<uint32_t>(m_ItemData.size()) - 1;
         m_ItemDataMap.insert({ itemData.m_uiID, uiItemDataSize });
 
+		luaLoader->PopTopTableElement();
     }
+
+    delete luaLoader;
 
     m_MasterItemData = m_ItemData;
 
@@ -165,21 +175,21 @@ bool ItemManager::RemoveItem(const uint32_t uiID, const uint32_t uiAmount)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-const ItemType ItemManager::StringToItemType(const char* string)
+const ItemType ItemManager::StringToItemType(std::string string)
 {
-    if (strcmp(string, "resource") == 0)
+    if (string == "resource")
     {
         return ItemType::eResource;
     }
-    else if (strcmp(string, "tool") == 0)
+    else if (string == "tool")
     {
         return ItemType::eTool;
     }
-    else if (strcmp(string, "weapon") == 0)
+    else if (string == "weapon")
     {
         return ItemType::eWeapon;
     }
-    else if (strcmp(string, "disposable") == 0)
+    else if (string == "disposable")
     {
         return ItemType::eDisposable;
     }
@@ -192,13 +202,13 @@ const ItemType ItemManager::StringToItemType(const char* string)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-const Florida::ActionType ItemManager::StringToActionItemType(const char* string)
+const Florida::ActionType ItemManager::StringToActionItemType(std::string string)
 {
-    if (strcmp(string, "melee") == 0)
+    if (string == "melee")
     {
         return ActionType::eMelee;
     }
-    else if (strcmp(string, "bullet") == 0)
+    else if (string == "bullet")
     {
         return ActionType::eBullet;
     }

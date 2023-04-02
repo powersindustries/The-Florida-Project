@@ -42,18 +42,22 @@ set( SDL2_MIXER_LIBRARIES  "${CMAKE_CURRENT_LIST_DIR}/External/SDL2_mixer/lib/x8
 endif ()
 
 
+# Setup Lua include directories and libraries.
+set( LUA_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/External/lua/include" )
+set( LUA_LIBRARIES   "${CMAKE_CURRENT_LIST_DIR}/External/lua/liblua54.a" )
+
+
 # Add Resource paths to includes
 set(RESOURCE_FILES
 
-src/Data/AssetManifest.xml
-src/Data/Items.xml
-src/Data/MapsManifest.xml
-src/Data/Player.xml
+src/Data/AssetManifest.lua
+src/Data/Items.lua
+src/Data/MapsManifest.lua
+src/Data/Player.lua
+src/Data/Styles.lua
+src/Data/Settings.lua
 
-src/Data/Styles.xml
-src/Data/Settings.xml
-
-src/Data/Maps/mp_Main.xml
+src/Data/Maps/mp_Main.lua
 
 )
 
@@ -73,6 +77,8 @@ src/Core/Types/Transform.h
 src/Core/Types/Transform.cpp
 src/Core/Types/String.h
 src/Core/Types/String.cpp
+src/Core/Types/LuaTableLoader.h
+src/Core/Types/LuaTableLoader.cpp
 
 src/Core/Systems/Systems.h
 src/Core/Systems/Assert.h
@@ -177,13 +183,12 @@ ${RESOURCE_FILES}
 
 
 include_directories(src)
-include_directories( ${CMAKE_SOURCE_DIR}/External/rapidxml/ )
-include_directories( ${CMAKE_SOURCE_DIR}/External/glm/ )
 include_directories( ${SDL2_INCLUDE_DIRS} ) 
 include_directories( ${SDL2_IMAGE_INCLUDE_DIRS} ) 
 include_directories( ${SDL2_TTF_INCLUDE_DIRS} ) 
 include_directories( ${SDL2_MIXER_INCLUDE_DIRS} ) 
+include_directories( ${LUA_INCLUDE_DIRS} )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${LUA_LIBRARIES})
