@@ -26,7 +26,7 @@ public:
     SettingsManager();
     ~SettingsManager();
 
-    void InitializeSettings();
+    void Initialize();
 
     std::string GetTitle() { return m_SettingsData.m_sTitle; }
 

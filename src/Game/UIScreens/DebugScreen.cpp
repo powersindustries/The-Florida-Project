@@ -1,13 +1,16 @@
 #include "DebugScreen.h"
 #include "GameGlobals.h"
+
 #include "Core/Systems/Systems.h"
-#include "../Player/Player.h"
-#include "../Managers/EventManager.h"
 #include "Core/Systems/Hash.h"
 #include "Core/Managers/SettingsManager.h"
 #include "Core/Managers/InputManager.h"
+
+#include "../Player/Player.h"
+#include "../Managers/EventManager.h"
 #include "../Managers/GameplayManager.h"
 #include "../Managers/ItemManager.h"
+#include "../Managers/UIManager.h"
 
 namespace Florida
 {
@@ -24,6 +27,51 @@ DebugScreen::DebugScreen()
 // -------------------------------------------------------
 DebugScreen::~DebugScreen()
 {
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+void DebugScreen::Initialize()
+{
+	m_BackgroundBox.SetAnchor(Anchor::eTopRight);
+	m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
+	m_BackgroundBox.SetSize(400, Core::g_SettingsManager.GetScreenHeight() - 50);
+	m_BackgroundBox.SetOffset(
+		-10,
+		10
+	);
+
+	m_DamageButton.SetText("Damage Player");
+	m_DamageButton.SetSize(300, 50);
+
+	m_HealButton.SetText("Heal Player");
+	m_HealButton.SetSize(300, 50);
+
+	m_ScrapButton.SetText("Increase Scrap");
+	m_ScrapButton.SetSize(300, 50);
+
+	m_WoodButton.SetText("Increase Wood");
+	m_WoodButton.SetSize(300, 50);
+
+	m_WaterButton.SetText("Increase Water");
+	m_WaterButton.SetSize(300, 50);
+
+	m_IncreaseTimeButton.SetText("Increase Time");
+	m_IncreaseTimeButton.SetSize(300, 50);
+
+	m_MainStack.SetAnchor(Anchor::eCenterRight);
+	m_MainStack.SetPadding(10);
+	m_MainStack.AddChild(&m_DamageButton);
+	m_MainStack.AddChild(&m_HealButton);
+	m_MainStack.AddChild(&m_ScrapButton);
+	m_MainStack.AddChild(&m_WoodButton);
+	m_MainStack.AddChild(&m_WaterButton);
+	m_MainStack.AddChild(&m_IncreaseTimeButton);
+	m_MainStack.SetOffset(
+		-50,
+		((m_MainStack.GetHeight() / 2) * -1)
+	);
 }
 
 
@@ -80,58 +128,18 @@ void DebugScreen::Draw(SDL_Renderer* renderer)
 }
 
 
-// -------------------------------------------------------
-// -------------------------------------------------------
-void DebugScreen::Initialize()
-{
-    m_BackgroundBox.SetAnchor(Anchor::eTopRight);
-    m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
-    m_BackgroundBox.SetSize(400, Core::g_SettingsManager.GetScreenHeight() - 50);
-    m_BackgroundBox.SetOffset(
-        -10, 
-        10 
-    );
-
-    m_DamageButton.SetText("Damage Player");
-    m_DamageButton.SetSize(300, 50);
-
-    m_HealButton.SetText("Heal Player");
-    m_HealButton.SetSize(300, 50);
-
-    m_ScrapButton.SetText("Increase Scrap");
-    m_ScrapButton.SetSize(300, 50);
-
-    m_WoodButton.SetText("Increase Wood");
-    m_WoodButton.SetSize(300, 50);
-
-    m_WaterButton.SetText("Increase Water");
-    m_WaterButton.SetSize(300, 50);
-
-    m_IncreaseTimeButton.SetText("Increase Time");
-    m_IncreaseTimeButton.SetSize(300, 50);
-
-    m_MainStack.SetAnchor(Anchor::eCenterRight);
-    m_MainStack.SetPadding(10);
-    m_MainStack.AddChild(&m_DamageButton);
-    m_MainStack.AddChild(&m_HealButton);
-    m_MainStack.AddChild(&m_ScrapButton);
-    m_MainStack.AddChild(&m_WoodButton);
-    m_MainStack.AddChild(&m_WaterButton);
-    m_MainStack.AddChild(&m_IncreaseTimeButton);
-    m_MainStack.SetOffset(
-        -50,
-        ( (m_MainStack.GetHeight() / 2) * -1)
-        
-    );
-
-}
-
 
 // -------------------------------------------------------
 // -------------------------------------------------------
 void DebugScreen::OnShow()
 {
+}
 
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+void DebugScreen::RemoveSelf()
+{
 }
 
 

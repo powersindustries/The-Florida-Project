@@ -39,16 +39,16 @@ GameManager::~GameManager()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void GameManager::InitializeGameManager(SDL_Renderer* renderer)
+void GameManager::Initialize(SDL_Renderer* renderer)
 {
-    g_AssetManager.InitialializeAssetManager(renderer);
+    g_AssetManager.Initialialize(renderer);
 
-    g_ItemManager.InitializeItemManager();
+    g_ItemManager.Initialize();
     g_MapManager.InitialLoad();
-    g_CraftingManager.InitializeCraftingManager();
-    g_Player.InitializePlayer();
-    g_UIManager.InitializeUIScreens();
-    g_EnemyManager.InitializeEnemyManager();
+    g_CraftingManager.Initialize();
+    g_Player.Initialize();
+    g_UIManager.Initialize();
+    g_EnemyManager.Initialize();
 
     m_GameStateData.m_bApplicationRunning = true;
 
@@ -72,14 +72,26 @@ void GameManager::Update(float deltaTime)
 
     if (Core::g_InputManager.GetActionPressed(Core::InputMappings::eESCMenu) && IntroSeen())
     {
-        m_GameStateData.m_bGamePaused = !m_GameStateData.m_bGamePaused;
-        g_UIManager.ActivatePauseMenu();
+        if (g_UIManager.GetActiveScreenID() == UIScreenID::ePause)
+        {
+            g_UIManager.RemoveScreen(UIScreenID::ePause);
+        }
+        else
+        {
+            g_UIManager.ActivateScreen(UIScreenID::ePause);
+        }
     }
 
     if (!m_GameStateData.m_bGameOver && Core::g_InputManager.GetActionPressed(Core::InputMappings::eTabMenu) && IntroSeen())
     {
-        m_GameStateData.m_bGamePaused = true;
-        g_UIManager.ActivateInventoryMenu();
+        if (g_UIManager.GetActiveScreenID() == UIScreenID::eInventory)
+        {
+            g_UIManager.RemoveScreen(UIScreenID::eInventory);
+        }
+        else
+        {
+            g_UIManager.ActivateScreen(UIScreenID::eInventory);
+        }
     }
 
     if (!m_GameStateData.m_bGameOver && Core::g_InputManager.GetActionPressed(Core::InputMappings::eDebug1))

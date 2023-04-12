@@ -26,7 +26,7 @@ public:
     GameManager();
     ~GameManager();
 
-    void InitializeGameManager(SDL_Renderer* renderer);
+    void Initialize(SDL_Renderer* renderer);
     void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 

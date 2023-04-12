@@ -29,7 +29,7 @@ CraftingManager::~CraftingManager()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void CraftingManager::InitializeCraftingManager()
+void CraftingManager::Initialize()
 {
     IngredientData scrapData;
     scrapData.m_uiItemID = Core::StringToHash32(std::string("itm_Scrap"));

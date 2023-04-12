@@ -33,7 +33,7 @@ StyleManager::~StyleManager()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void StyleManager::InitializeStyleManager()
+void StyleManager::Initialize()
 {
 	LuaTableLoader* luaLoader = new LuaTableLoader(m_sStyleFilepath);
 

@@ -12,6 +12,7 @@ namespace Florida
 // -------------------------------------------------------
 PauseScreen::PauseScreen()
 {
+    m_ScreenID = UIScreenID::ePause;
 }
 
 
@@ -32,8 +33,8 @@ void PauseScreen::Update()
 
     if (m_ReturnToGameButton.LeftClickPressed())
     {
-        g_GameManager.SetGameIsPaused(false);
-        g_UIManager.ActivatePauseMenu();
+        //g_GameManager.SetGameIsPaused(false);
+        RemoveSelf();
     }
 
     if (m_QuitGameButton.LeftClickPressed())
@@ -43,7 +44,7 @@ void PauseScreen::Update()
 
     if (m_ControlsButton.LeftClickPressed())
     {
-        g_UIManager.ActivateControlsScreen();
+        g_UIManager.ActivateScreen(UIScreenID::eControls);
     }
 }
 
@@ -113,6 +114,14 @@ void PauseScreen::Initialize()
 // -------------------------------------------------------
 void PauseScreen::OnShow()
 {
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+void PauseScreen::RemoveSelf()
+{
+    g_UIManager.RemoveScreen(m_ScreenID);
 }
 
 }

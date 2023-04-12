@@ -37,7 +37,7 @@ public:
     ItemManager();
     ~ItemManager();
 
-    void InitializeItemManager();
+    void Initialize();
     void ResetItemManager();
 
     const ItemData& GetItemDataByID(const uint32_t ItemID);

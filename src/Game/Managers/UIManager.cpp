@@ -19,7 +19,7 @@ UIManager g_UIManager;
 // -------------------------------------------------------
 UIManager::UIManager()
 {
-    m_ActiveScreen = ActiveScreen::eIntro;
+    m_ScreenStack.push(UIScreenID::eIntro);
 }
 
 
@@ -32,7 +32,7 @@ UIManager::~UIManager()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void UIManager::InitializeUIScreens()
+void UIManager::Initialize()
 {
     m_HUDScreen.Initialize();
     m_PauseScreen.Initialize();
@@ -52,36 +52,36 @@ void UIManager::InitializeUIScreens()
 // -------------------------------------------------------
 void UIManager::Update(float deltaTime)
 {
-    switch (m_ActiveScreen)
+    switch (GetActiveScreenID())
     {
-    case ActiveScreen::eHud:
+    case UIScreenID::eHud:
     {
         m_GameOverlayScreen.Update();
         m_HUDScreen.Update();
         break;
     }
-    case ActiveScreen::eInventory:
+    case UIScreenID::eInventory:
     {
         m_CraftingScreen.Update();
         m_HUDScreen.Update();
         break;
     }
-    case ActiveScreen::ePause:
+    case UIScreenID::ePause:
     {
         m_PauseScreen.Update();
         break;
     }
-    case ActiveScreen::eGameOver:
+    case UIScreenID::eGameOver:
     {
         m_GameOverScreen.Update();
         break;
     }
-    case ActiveScreen::eIntro:
+    case UIScreenID::eIntro:
     {
         m_IntroScreen.Update();
         break;
     }
-    case ActiveScreen::eControls:
+    case UIScreenID::eControls:
     {
         m_ControlsScreen.Update();
         break;
@@ -106,35 +106,35 @@ void UIManager::Update(float deltaTime)
 // -------------------------------------------------------
 void UIManager::Draw(SDL_Renderer* renderer)
 {
-    switch (m_ActiveScreen)
+    switch (GetActiveScreenID())
     {
-    case ActiveScreen::eHud:
+    case UIScreenID::eHud:
     {
         m_GameOverlayScreen.Draw(renderer);
         m_HUDScreen.Draw(renderer);
         break;
     }
-    case ActiveScreen::eInventory:
+    case UIScreenID::eInventory:
     {
         m_CraftingScreen.Draw(renderer);
         break;
     }
-    case ActiveScreen::ePause:
+    case UIScreenID::ePause:
     {
         m_PauseScreen.Draw(renderer);
         break;
     }
-    case ActiveScreen::eGameOver:
+    case UIScreenID::eGameOver:
     {
         m_GameOverScreen.Draw(renderer);
         break;
     }
-    case ActiveScreen::eIntro:
+    case UIScreenID::eIntro:
     {
         m_IntroScreen.Draw(renderer);
         break;
     }
-    case ActiveScreen::eControls:
+    case UIScreenID::eControls:
     {
         m_ControlsScreen.Draw(renderer);
         break;
@@ -157,55 +157,52 @@ void UIManager::Draw(SDL_Renderer* renderer)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void UIManager::ActivatePauseMenu()
+const UI::UIScreenID UIManager::GetActiveScreenID()
 {
-    if (m_ActiveScreen == ActiveScreen::ePause)
-    {
-        m_ActiveScreen = ActiveScreen::eHud;
-        g_GameManager.SetGameIsPaused(false);
-        return;
-    }
-
-    m_ActiveScreen = ActiveScreen::ePause;
+    return m_ScreenStack.top();
 }
 
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void UIManager::ActivateInventoryMenu()
+void UIManager::ActivateScreen(UIScreenID screenID)
 {
-    if (m_ActiveScreen == ActiveScreen::eInventory)
-    {
-        m_ActiveScreen = ActiveScreen::eHud;
-        g_GameManager.SetGameIsPaused(false);
-    }
-    else
-    {
-        m_ActiveScreen = ActiveScreen::eInventory;
-        m_CraftingScreen.OnShow();
-    }
+	if (GetActiveScreenID() != screenID)
+	{
+		m_ScreenStack.push(screenID);
+		CallOnShow();
+
+        g_GameManager.SetGameIsPaused(GetActiveScreenID() != UIScreenID::eHud);
+	}
+	else
+	{
+		std::string errorMessage = "Youre attempting to activate a screen that is already active. Current active ScreenID: ";
+		errorMessage.append(std::to_string(static_cast<int>(GetActiveScreenID())));
+
+		Core::SYSTEMS_LOG(Core::LoggingLevel::eError, errorMessage);
+	}
 }
 
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void UIManager::ActivateControlsScreen()
+void UIManager::RemoveScreen(UIScreenID screenID)
 {
-    if (m_ActiveScreen == ActiveScreen::eControls)
-    {
-        if (!g_GameManager.IntroSeen())
-        {
-            m_ActiveScreen = ActiveScreen::eIntro;
-        }
-        else
-        {
-            m_ActiveScreen = ActiveScreen::ePause;
-        }
-    }
-    else
-    {
-        m_ActiveScreen = ActiveScreen::eControls;
-    }
+	if (GetActiveScreenID() == screenID)
+	{
+		m_ScreenStack.pop();
+
+        g_GameManager.SetGameIsPaused(GetActiveScreenID() != UIScreenID::eHud);
+	}
+	else
+	{
+		std::string errorMessage = "Screen youre removing is not current active screen. Current active ScreenID: ";
+		errorMessage.append(std::to_string(static_cast<int>(GetActiveScreenID())));
+		errorMessage.append(", input screenID: ");
+		errorMessage.append(std::to_string(static_cast<int>(screenID)));
+
+		Core::SYSTEMS_LOG(Core::LoggingLevel::eError, errorMessage);
+	}
 }
 
 
@@ -273,16 +270,69 @@ void UIManager::ResetUIManager()
 {
     m_Notification.ResetToastNotification();
 
+    // Clear Stack.
+    const uint8_t uiStackSize = static_cast<uint8_t>(m_ScreenStack.size());
+    for (uint8_t x=0; x < uiStackSize; ++x)
+    {
+        m_ScreenStack.pop();
+    }
+
     if (!g_GameManager.IntroSeen())
     {
-        m_ActiveScreen = ActiveScreen::eIntro;
+        m_ScreenStack.push(UIScreenID::eIntro);
     }
     else
     {
-        m_ActiveScreen = ActiveScreen::eHud;
+        m_ScreenStack.push(UIScreenID::eHud);
     }
 
     g_EventManager.Broadcast(Events::ePlayerHealthChanged);
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+void UIManager::CallOnShow()
+{
+	switch (GetActiveScreenID())
+	{
+	case UIScreenID::eHud:
+	{
+		m_HUDScreen.OnShow();
+		break;
+	}
+	case UIScreenID::eInventory:
+	{
+		m_CraftingScreen.OnShow();
+		break;
+	}
+	case UIScreenID::ePause:
+	{
+		m_PauseScreen.OnShow();
+		break;
+	}
+	case UIScreenID::eGameOver:
+	{
+		m_GameOverScreen.OnShow();
+		break;
+	}
+	case UIScreenID::eIntro:
+	{
+		m_IntroScreen.OnShow();
+		break;
+	}
+	case UIScreenID::eControls:
+	{
+		m_ControlsScreen.OnShow();
+		break;
+	}
+	default:
+	{
+		Core::SYSTEMS_LOG(Core::LoggingLevel::eError, "UI Draw corrupted.");
+		break;
+	}
+	}
+
 }
 
 
@@ -292,7 +342,8 @@ void UIManager::OnGameOverChanged()
 {
     if (g_GameManager.IsGameOver())
     {
-        m_ActiveScreen = ActiveScreen::eGameOver;
+        //m_ActiveScreen = ActiveScreen::eGameOver;
+        ActivateScreen(UIScreenID::eGameOver);
         m_GameOverScreen.SetGameOverMessage(g_GameManager.GetEndGameOverMessageText());
     }
 }

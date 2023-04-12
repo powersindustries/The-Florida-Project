@@ -42,7 +42,7 @@ public:
     StyleManager();
     ~StyleManager();
 
-    void InitializeStyleManager();
+    void Initialize();
 
     inline const TextBlockStyle& GetTextBlockStyle(uint32_t uiStyleID) { return m_TextBlockStyles[uiStyleID]; }
     inline const ButtonStyle& GetButtonStyle(uint32_t uiStyleID) { return m_ButtonStyles[uiStyleID]; }

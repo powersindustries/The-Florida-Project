@@ -67,7 +67,7 @@ public:
     AssetManager();
     ~AssetManager();
 
-    void InitialializeAssetManager(SDL_Renderer* renderer);
+    void Initialialize(SDL_Renderer* renderer);
 
     SDL_Surface* GetAssetSurfaceByID(std::string AssetID);
 

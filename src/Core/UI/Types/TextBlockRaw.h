@@ -4,7 +4,7 @@
 #include <SDL_image.h> // SDL Image
 #include <string>
 
-#include "../UICoreTypes.h"
+#include "../UICore.h"
 
 namespace UI
 {

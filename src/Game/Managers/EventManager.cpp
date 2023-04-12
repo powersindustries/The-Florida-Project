@@ -27,7 +27,7 @@ EventManager::~EventManager()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void EventManager::InitializeEvents()
+void EventManager::Initialize()
 {
     const uint16_t uiEventsCount = static_cast<uint16_t>(Events::eCount);
     m_EventsVector.reserve(uiEventsCount);

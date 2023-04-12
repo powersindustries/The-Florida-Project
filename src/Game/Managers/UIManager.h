@@ -2,6 +2,9 @@
 #include <SDL.h> // SDL Main
 #include <SDL_ttf.h> // SDL Fonts or Text
 #include <SDL_image.h> // SDL Image
+#include <stack>
+
+#include "Core/UI/UIScreenBase.h"
 
 #include "../UIScreens/HUDScreen.h"
 #include "../UIScreens/PauseScreen.h"
@@ -13,20 +16,10 @@
 #include "../UIScreens/IntroScreen.h"
 #include "../UIScreens/ControlsScreen.h"
 
+using namespace UI;
+
 namespace Florida
 {
-
-
-enum class ActiveScreen
-{
-    eHud,
-    eInventory,
-    ePause,
-    eGameOver,
-    eIntro,
-    eControls
-};
-
 
 class UIManager
 {
@@ -34,14 +27,15 @@ public:
     UIManager();
     ~UIManager();
 
-    void InitializeUIScreens();
+    void Initialize();
 
     void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 
-    void ActivatePauseMenu();
-    void ActivateInventoryMenu();
-    void ActivateControlsScreen();
+	const UIScreenID GetActiveScreenID();
+	void ActivateScreen(UIScreenID screenID);
+
+	void RemoveScreen(UIScreenID screenID);
 
     void AddNewRefreshUI(uint32_t uiMapIDHash, int iPositionX, int iPositionY);
 
@@ -53,12 +47,13 @@ public:
 
 private:
 
+	void CallOnShow();
     void OnGameOverChanged();
 
 
 private:
 
-    ActiveScreen m_ActiveScreen;
+    std::stack<UIScreenID> m_ScreenStack;
 
     HUDScreen m_HUDScreen;
     PauseScreen m_PauseScreen;

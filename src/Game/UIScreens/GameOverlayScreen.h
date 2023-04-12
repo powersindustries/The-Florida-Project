@@ -4,6 +4,7 @@
 #include <SDL_image.h> // SDL Image
 #include <unordered_map>
 
+#include "Core/UI/UIScreenBase.h"
 #include "Core/UI/Types/TextBlockRaw.h"
 
 using namespace UI;
@@ -26,10 +27,13 @@ public:
     GameOverlayScreen();
     ~GameOverlayScreen();
 
+    void Initialize();
+
     void Update();
     void Draw(SDL_Renderer* renderer);
-    void Initialize();
+
     void OnShow();
+    void RemoveSelf();
 
 
 public:

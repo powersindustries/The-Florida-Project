@@ -39,7 +39,7 @@ ItemManager::~ItemManager()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void ItemManager::InitializeItemManager()
+void ItemManager::Initialize()
 {
 	Core::LuaTableLoader* luaLoader = new Core::LuaTableLoader(m_sItemsFilepath);
 

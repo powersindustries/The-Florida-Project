@@ -1,8 +1,12 @@
 #include "CraftingScreen.h"
+
 #include "Core/Systems/Hash.h"
 #include "Core/Managers/SettingsManager.h"
 #include "Core/UI/Types/Button.h"
+
 #include "../Player/Player.h"
+
+#include "../Managers/UIManager.h"
 #include "../Managers/ItemManager.h"
 #include "../Managers/EventManager.h"
 #include "../Managers/CraftingManager.h"
@@ -30,6 +34,7 @@ namespace Florida
 // -------------------------------------------------------
 CraftingScreen::CraftingScreen()
 {
+    m_ScreenID = UIScreenID::eInventory;
 }
 
 
@@ -37,6 +42,129 @@ CraftingScreen::CraftingScreen()
 // -------------------------------------------------------
 CraftingScreen::~CraftingScreen()
 {
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+void CraftingScreen::Initialize()
+{
+	// Backgrounds. 
+	m_OpacityBox.SetAnchor(Anchor::eTopLeft);
+	m_OpacityBox.SetSize(Core::g_SettingsManager.GetScreenWidth(), Core::g_SettingsManager.GetScreenHeight());
+	m_OpacityBox.SetColor(g_GameGlobals.COLOR_BLACK);
+	m_OpacityBox.SetVisibility(UIVisibility::eDisabled);
+
+	m_BackgroundBox.SetAnchor(Anchor::eCenter);
+	m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
+	m_BackgroundBox.SetSize(
+		Core::g_SettingsManager.GetScreenWidth() / 2,
+		Core::g_SettingsManager.GetScreenHeight() - Core::g_SettingsManager.GetRelativeScreenY(50)
+	);
+	m_BackgroundBox.SetOffset(
+		((m_BackgroundBox.GetWidth() / 2) * -1),
+		((m_BackgroundBox.GetHeight() / 2) * -1)
+	);
+
+	// Title Text.
+	m_MenuTitleText.SetAnchor(Anchor::eTopCenter);
+	m_MenuTitleText.SetColor(g_GameGlobals.COLOR_BLACK);
+	m_MenuTitleText.SetText("Crafting Menu");
+	m_MenuTitleText.SetOffset(
+		((m_MenuTitleText.GetWidth() / 2) * -1),
+		Core::g_SettingsManager.GetRelativeScreenY(50)
+	);
+
+	// Current Resources.
+	m_ScrapIcon.SetTexture(Core::StringToHash32(std::string(SCRAP_ICON)));
+	m_ScrapIcon.SetSize(25, 25);
+
+	m_WoodIcon.SetTexture(Core::StringToHash32(std::string(WOOD_ICON)));
+	m_WoodIcon.SetSize(25, 25);
+
+	m_WaterIcon.SetTexture(Core::StringToHash32(std::string(WATER_ICON)));
+	m_WaterIcon.SetSize(25, 25);
+
+	m_ScrapAmountText.SetText("scrap");
+	m_ScrapAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
+
+	m_WoodAmountText.SetText("wood");
+	m_WoodAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
+
+	m_WaterAmountText.SetText("water");
+	m_WaterAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
+
+	m_ResourceStack.SetAnchor(Anchor::eTopCenter);
+	m_ResourceStack.SetPadding(10);
+	m_ResourceStack.AddChild(&m_ScrapIcon);
+	m_ResourceStack.AddChild(&m_ScrapAmountText);
+	m_ResourceStack.AddChild(&m_WoodIcon);
+	m_ResourceStack.AddChild(&m_WoodAmountText);
+	m_ResourceStack.AddChild(&m_WaterIcon);
+	m_ResourceStack.AddChild(&m_WaterAmountText);
+	m_ResourceStack.SetOffset(
+		((m_ResourceStack.GetWidth() / 2) * -1),
+		Core::g_SettingsManager.GetRelativeScreenY(100)
+	);
+
+	UpdateResourcesText();
+
+	// Crafting Options.
+	m_AmmoCraftButton.SetText("Craft Ammo");
+	m_AmmoCraftButton.SetSize(200, 35);
+
+	m_AmmoCraftText.SetColor(g_GameGlobals.COLOR_BLACK);
+	m_AmmoCraftText.SetText("Ammo Text");
+
+	m_AmmoCraftingStack.SetAnchor(Anchor::eTopCenter);
+	m_AmmoCraftingStack.SetPadding(10);
+	m_AmmoCraftingStack.AddChild(&m_AmmoCraftButton);
+	m_AmmoCraftingStack.AddChild(&m_AmmoCraftText);
+
+	m_StaminaCraftButton.SetText("Craft Stamina Potion");
+	m_StaminaCraftButton.SetSize(200, 35);
+
+	m_StaminaCraftText.SetColor(g_GameGlobals.COLOR_BLACK);
+	m_StaminaCraftText.SetText("Stamina Text");
+
+	m_StaminaCraftingStack.SetAnchor(Anchor::eTopCenter);
+	m_StaminaCraftingStack.SetPadding(10);
+	m_StaminaCraftingStack.AddChild(&m_StaminaCraftButton);
+	m_StaminaCraftingStack.AddChild(&m_StaminaCraftText);
+
+	// Inventory Disposable Info.
+	m_InventoryTitleText.SetAnchor(Anchor::eCenter);
+	m_InventoryTitleText.SetColor(g_GameGlobals.COLOR_BLACK);
+	m_InventoryTitleText.SetText(std::string("Disposable Items"));
+	m_InventoryTitleText.SetOffset(
+		((m_InventoryTitleText.GetWidth() / 2) * -1),
+		-100
+	);
+
+	Icon* ammoIcon = new Icon;
+	ammoIcon->SetSize(25, 25);
+	ammoIcon->SetTexture(Core::StringToHash32(std::string(ARROW_ICON)));
+
+	Icon* staminaPotionIcon = new Icon;
+	staminaPotionIcon->SetSize(25, 25);
+	staminaPotionIcon->SetTexture(Core::StringToHash32(std::string(STAMINA_ICON)));
+
+	m_AmmoAmountText.SetText("NUMBER");
+	m_AmmoAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
+
+	m_StaminaPotionAmountText.SetText("NUMBER");
+	m_StaminaPotionAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
+
+	m_InventoryStack.SetAnchor(Anchor::eCenter);
+	m_InventoryStack.SetPadding(50);
+	m_InventoryStack.AddChild(ammoIcon);
+	m_InventoryStack.AddChild(&m_AmmoAmountText);
+	m_InventoryStack.AddChild(staminaPotionIcon);
+	m_InventoryStack.AddChild(&m_StaminaPotionAmountText);
+
+
+	g_EventManager.Subscribe(Events::eInventoryChanged, [this]() { CraftingScreen::OnInventoryChangedEvent(); });
+	g_EventManager.Subscribe(Events::eAmmoChanged, [this]() { CraftingScreen::OnAmmoCountChangedEvent(); });
 }
 
 
@@ -78,134 +206,19 @@ void CraftingScreen::Draw(SDL_Renderer* renderer)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void CraftingScreen::Initialize()
-{
-    // Backgrounds. 
-    m_OpacityBox.SetAnchor(Anchor::eTopLeft);
-    m_OpacityBox.SetSize(Core::g_SettingsManager.GetScreenWidth(), Core::g_SettingsManager.GetScreenHeight());
-    m_OpacityBox.SetColor(g_GameGlobals.COLOR_BLACK);
-    m_OpacityBox.SetVisibility(UIVisibility::eDisabled);
-
-    m_BackgroundBox.SetAnchor(Anchor::eCenter);
-    m_BackgroundBox.SetColor(g_GameGlobals.COLOR_SILVER);
-    m_BackgroundBox.SetSize(
-        Core::g_SettingsManager.GetScreenWidth() / 2, 
-        Core::g_SettingsManager.GetScreenHeight() - Core::g_SettingsManager.GetRelativeScreenY(50)
-    );
-    m_BackgroundBox.SetOffset(
-        ( (m_BackgroundBox.GetWidth() / 2) * -1),
-        ( (m_BackgroundBox.GetHeight() / 2) * -1)
-    );
-
-    // Title Text.
-    m_MenuTitleText.SetAnchor(Anchor::eTopCenter);
-    m_MenuTitleText.SetColor(g_GameGlobals.COLOR_BLACK);
-    m_MenuTitleText.SetText("Crafting Menu");
-    m_MenuTitleText.SetOffset(
-        ( (m_MenuTitleText.GetWidth() / 2) * -1),
-        Core::g_SettingsManager.GetRelativeScreenY(50)
-    );
-
-    // Current Resources.
-    m_ScrapIcon.SetTexture(Core::StringToHash32(std::string(SCRAP_ICON)));
-    m_ScrapIcon.SetSize(25, 25);
-
-    m_WoodIcon.SetTexture(Core::StringToHash32(std::string(WOOD_ICON)));
-    m_WoodIcon.SetSize(25, 25);
-
-    m_WaterIcon.SetTexture(Core::StringToHash32(std::string(WATER_ICON)));
-    m_WaterIcon.SetSize(25, 25);
-
-    m_ScrapAmountText.SetText("scrap");
-    m_ScrapAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
-
-    m_WoodAmountText.SetText("wood");
-    m_WoodAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
-
-    m_WaterAmountText.SetText("water");
-    m_WaterAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
-
-    m_ResourceStack.SetAnchor(Anchor::eTopCenter);
-    m_ResourceStack.SetPadding(10);
-    m_ResourceStack.AddChild(&m_ScrapIcon);
-    m_ResourceStack.AddChild(&m_ScrapAmountText);
-    m_ResourceStack.AddChild(&m_WoodIcon);
-    m_ResourceStack.AddChild(&m_WoodAmountText);
-    m_ResourceStack.AddChild(&m_WaterIcon);
-    m_ResourceStack.AddChild(&m_WaterAmountText);
-    m_ResourceStack.SetOffset(
-        ( (m_ResourceStack.GetWidth() / 2) * -1),
-        Core::g_SettingsManager.GetRelativeScreenY(100)
-    );
-
-    UpdateResourcesText();
-
-    // Crafting Options.
-    m_AmmoCraftButton.SetText("Craft Ammo");
-    m_AmmoCraftButton.SetSize(200,35);
-
-    m_AmmoCraftText.SetColor(g_GameGlobals.COLOR_BLACK);
-    m_AmmoCraftText.SetText("Ammo Text");
-    
-    m_AmmoCraftingStack.SetAnchor(Anchor::eTopCenter);
-    m_AmmoCraftingStack.SetPadding(10);
-    m_AmmoCraftingStack.AddChild(&m_AmmoCraftButton);
-    m_AmmoCraftingStack.AddChild(&m_AmmoCraftText);
-
-    m_StaminaCraftButton.SetText("Craft Stamina Potion");
-    m_StaminaCraftButton.SetSize(200,35);
-
-    m_StaminaCraftText.SetColor(g_GameGlobals.COLOR_BLACK);
-    m_StaminaCraftText.SetText("Stamina Text");
-    
-    m_StaminaCraftingStack.SetAnchor(Anchor::eTopCenter);
-    m_StaminaCraftingStack.SetPadding(10);
-    m_StaminaCraftingStack.AddChild(&m_StaminaCraftButton);
-    m_StaminaCraftingStack.AddChild(&m_StaminaCraftText);
-
-    // Inventory Disposable Info.
-    m_InventoryTitleText.SetAnchor(Anchor::eCenter);
-    m_InventoryTitleText.SetColor(g_GameGlobals.COLOR_BLACK);
-    m_InventoryTitleText.SetText(std::string("Disposable Items"));
-    m_InventoryTitleText.SetOffset(
-        ( (m_InventoryTitleText.GetWidth() / 2) * -1 ),
-        -100
-    );
-
-    Icon* ammoIcon = new Icon;
-    ammoIcon->SetSize(25,25);
-    ammoIcon->SetTexture(Core::StringToHash32(std::string(ARROW_ICON)));
-
-    Icon* staminaPotionIcon = new Icon;
-    staminaPotionIcon->SetSize(25,25);
-    staminaPotionIcon->SetTexture(Core::StringToHash32(std::string(STAMINA_ICON)));
-
-    m_AmmoAmountText.SetText("NUMBER");
-    m_AmmoAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
-
-    m_StaminaPotionAmountText.SetText("NUMBER");
-    m_StaminaPotionAmountText.SetColor(g_GameGlobals.COLOR_BLACK);
-
-    m_InventoryStack.SetAnchor(Anchor::eCenter);
-    m_InventoryStack.SetPadding(50);
-    m_InventoryStack.AddChild(ammoIcon);
-    m_InventoryStack.AddChild(&m_AmmoAmountText);
-    m_InventoryStack.AddChild(staminaPotionIcon);
-    m_InventoryStack.AddChild(&m_StaminaPotionAmountText);
-
-
-    g_EventManager.Subscribe(Events::eInventoryChanged, [this]() { CraftingScreen::OnInventoryChangedEvent(); });
-    g_EventManager.Subscribe(Events::eAmmoChanged, [this]() { CraftingScreen::OnAmmoCountChangedEvent(); });
-}
-
-
-// -------------------------------------------------------
-// -------------------------------------------------------
 void CraftingScreen::OnShow()
 {
     UpdateResourcesText();
     UpdateCraftingText();
     UpdateDisposablesText();
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+void CraftingScreen::RemoveSelf()
+{
+    g_UIManager.RemoveScreen(m_ScreenID);
 }
 
 

@@ -40,15 +40,6 @@ enum MouseState
 };
 
 
-class UIScreenBase
-{
-    virtual void Update() = 0;
-    virtual void Draw(SDL_Renderer* renderer) = 0;
-    virtual void Initialize() = 0;
-    virtual void OnShow() = 0;
-};
-
-
 class UIBase
 {
 public:

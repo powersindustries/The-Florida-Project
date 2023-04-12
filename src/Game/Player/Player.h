@@ -28,7 +28,7 @@ public:
     Player();
     ~Player();
 
-    void InitializePlayer();
+    void Initialize();
 
     void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);

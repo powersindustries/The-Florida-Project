@@ -3,6 +3,7 @@
 #include <SDL_ttf.h> // SDL Fonts or Text
 #include <SDL_image.h> // SDL Image
 
+#include "Core/UI/UIScreenBase.h"
 #include "Core/UI/Types/TextBlock.h"
 #include "Core/UI/Types/Box.h"
 #include "Core/UI/Types/Button.h"
@@ -21,10 +22,13 @@ public:
     HUDScreen();
     ~HUDScreen();
 
+    void Initialize();
+
     void Update();
     void Draw(SDL_Renderer* renderer);
-    void Initialize();
+
     void OnShow();
+    void RemoveSelf();
 
     void UpdateHealthbarUI();
     void UpdateStaminabarUI();

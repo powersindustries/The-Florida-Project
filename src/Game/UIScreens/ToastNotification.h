@@ -3,6 +3,7 @@
 #include <SDL_ttf.h> // SDL Fonts or Text
 #include <SDL_image.h> // SDL Image
 
+#include "Core/UI/UIScreenBase.h"
 #include "Core/UI/Types/Box.h"
 #include "Core/UI/Types/TextBlock.h"
 
@@ -17,11 +18,15 @@ public:
     ToastNotification();
     ~ToastNotification();
 
+    void Initialize();
+
     void Update();
     void Update(float deltaTime);
+
     void Draw(SDL_Renderer* renderer);
-    void Initialize();
+
     void OnShow();
+    void RemoveSelf();
 
     void ResetToastNotification();
 

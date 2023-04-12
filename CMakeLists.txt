@@ -91,8 +91,10 @@ src/Core/Utility/VectorMethods.cpp
 src/Core/Utility/Utility.h
 src/Core/Utility/Utility.cpp
 
-src/Core/UI/UICoreTypes.h
-src/Core/UI/UICoreTypes.cpp
+src/Core/UI/UICore.h
+src/Core/UI/UICore.cpp
+src/Core/UI/UIScreenBase.h
+src/Core/UI/UIScreenBase.cpp
 src/Core/UI/Types/Box.h
 src/Core/UI/Types/Box.cpp
 src/Core/UI/Types/Button.h

@@ -28,6 +28,23 @@ ToastNotification::~ToastNotification()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
+void ToastNotification::Initialize()
+{
+	m_NotificationText.SetAnchor(Anchor::eTopRight);
+	m_NotificationText.SetColor(g_GameGlobals.COLOR_WHITE);
+	m_NotificationText.SetText("Notifaction Text.");
+	m_NotificationText.SetOffset(
+		Core::g_SettingsManager.GetRelativeScreenX(-25),
+		Core::g_SettingsManager.GetRelativeScreenY(50)
+	);
+
+
+	g_EventManager.Subscribe(Events::eInventoryChanged, [this]() { ToastNotification::OnInventoryChangedEvent(); });
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
 void ToastNotification::Update()
 {
     Core::SYSTEMS_LOG(Core::LoggingLevel::eInfo, "Wrong Update method was called in ToastNotification.");
@@ -52,6 +69,7 @@ void ToastNotification::Update(float deltaTime)
     }
 }
 
+
 // -------------------------------------------------------
 // -------------------------------------------------------
 void ToastNotification::Draw(SDL_Renderer* renderer)
@@ -65,24 +83,14 @@ void ToastNotification::Draw(SDL_Renderer* renderer)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void ToastNotification::Initialize()
+void ToastNotification::OnShow()
 {
-    m_NotificationText.SetAnchor(Anchor::eTopRight);
-    m_NotificationText.SetColor(g_GameGlobals.COLOR_WHITE);
-    m_NotificationText.SetText("Notifaction Text.");
-    m_NotificationText.SetOffset(
-        Core::g_SettingsManager.GetRelativeScreenX(-25), 
-        Core::g_SettingsManager.GetRelativeScreenY(50)
-    );
-
-
-    g_EventManager.Subscribe(Events::eInventoryChanged, [this]() { ToastNotification::OnInventoryChangedEvent(); });
 }
 
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void ToastNotification::OnShow()
+void ToastNotification::RemoveSelf()
 {
 }
 

@@ -45,7 +45,7 @@ Player::~Player()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void Player::InitializePlayer()
+void Player::Initialize()
 {
     InitializePlayerSprite();
     m_PlayerAction.InitializeActions();

@@ -74,9 +74,9 @@ void Game::InitializeSession()
     }
 
     // Initialize Core.
-    Core::g_SettingsManager.InitializeSettings();
-    g_EventManager.InitializeEvents();
-    Core::g_StyleManager.InitializeStyleManager();
+    Core::g_SettingsManager.Initialize();
+    g_EventManager.Initialize();
+    Core::g_StyleManager.Initialize();
 
     // Create Window.
     m_Window = SDL_CreateWindow(
@@ -102,7 +102,7 @@ void Game::InitializeSession()
         return;
     }
 
-    g_GameManager.InitializeGameManager(m_Renderer);
+    g_GameManager.Initialize(m_Renderer);
 
 
     // Set Window Icon.

@@ -1,10 +1,14 @@
 #include "HUDScreen.h"
+
 #include "Core/Managers/SettingsManager.h"
 #include "Core/Systems/Systems.h"
+
 #include "../Player/Player.h"
+
 #include "../Managers/ItemManager.h"
 #include "../Managers/EventManager.h"
 #include "../Managers/GameplayManager.h"
+#include "../Managers/UIManager.h"
 
 
 #define HAMMER_ID "itm_Hammer"
@@ -33,6 +37,7 @@ namespace Florida
 // -------------------------------------------------------
 HUDScreen::HUDScreen()
 {
+    m_ScreenID = UIScreenID::eHud;
 }
 
 
@@ -265,6 +270,15 @@ void HUDScreen::Initialize()
 void HUDScreen::OnShow()
 {
 }
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+void HUDScreen::RemoveSelf()
+{
+    g_UIManager.RemoveScreen(UIScreenID::eHud);
+}
+
 
 // -------------------------------------------------------
 // -------------------------------------------------------

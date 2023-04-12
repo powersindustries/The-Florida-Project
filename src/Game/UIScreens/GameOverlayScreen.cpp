@@ -26,6 +26,17 @@ GameOverlayScreen::~GameOverlayScreen()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
+void GameOverlayScreen::Initialize()
+{
+	m_PickupCooldownText.SetAnchor(Anchor::eTopLeft);
+	m_PickupCooldownText.SetText("Number");
+	m_PickupCooldownText.SetColor(g_GameGlobals.COLOR_WHITE);
+	m_PickupCooldownText.SetOffset(200, 200);
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
 void GameOverlayScreen::Update()
 {
 }
@@ -55,20 +66,15 @@ void GameOverlayScreen::Draw(SDL_Renderer* renderer)
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void GameOverlayScreen::Initialize()
+void GameOverlayScreen::OnShow()
 {
-    m_PickupCooldownText.SetAnchor(Anchor::eTopLeft);
-    m_PickupCooldownText.SetText("Number");
-    m_PickupCooldownText.SetColor(g_GameGlobals.COLOR_WHITE);
-    m_PickupCooldownText.SetOffset(200, 200);
 }
 
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void GameOverlayScreen::OnShow()
+void GameOverlayScreen::RemoveSelf()
 {
-
 }
 
 }

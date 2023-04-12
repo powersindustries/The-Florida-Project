@@ -1,7 +1,10 @@
 #include "GameOverScreen.h"
 #include "GameGlobals.h"
+
 #include "Core/Managers/SettingsManager.h"
+
 #include "../Managers/GameManager.h"
+#include "../Managers/UIManager.h"
 
 
 namespace Florida
@@ -12,6 +15,7 @@ namespace Florida
 // -------------------------------------------------------
 GameOverScreen::GameOverScreen()
 {
+    m_ScreenID = UIScreenID::eGameOver;
 }
 
 
@@ -101,6 +105,14 @@ void GameOverScreen::Initialize()
 // -------------------------------------------------------
 void GameOverScreen::OnShow()
 {
+}
+
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+void GameOverScreen::RemoveSelf()
+{
+    g_UIManager.RemoveScreen(m_ScreenID);
 }
 
 

@@ -37,7 +37,7 @@ EnemyManager::~EnemyManager()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void EnemyManager::InitializeEnemyManager()
+void EnemyManager::Initialize()
 {
     g_EventManager.Subscribe(Events::eDayNightChanged, [this]() { EnemyManager::OnDayNightChangedEvent(); });
     g_EventManager.Subscribe(Events::eEnemyDied, [this]() { EnemyManager::OnEnemyDiedEvent(); });

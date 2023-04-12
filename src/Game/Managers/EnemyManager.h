@@ -24,7 +24,7 @@ public:
     EnemyManager();
     ~EnemyManager();
 
-    void InitializeEnemyManager();
+    void Initialize();
     void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 

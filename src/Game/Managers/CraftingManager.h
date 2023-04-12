@@ -31,7 +31,7 @@ public:
     CraftingManager();
     ~CraftingManager();
 
-    void InitializeCraftingManager();
+    void Initialize();
 
     void CraftItemByIndex(uint32_t uiRecipeIndex);
 

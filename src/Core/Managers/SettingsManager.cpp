@@ -36,7 +36,7 @@ SettingsManager::~SettingsManager()
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-void SettingsManager::InitializeSettings()
+void SettingsManager::Initialize()
 {
 	LuaTableLoader* luaLoader = new LuaTableLoader(m_sSettingsFilepath);
 

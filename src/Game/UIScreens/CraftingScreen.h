@@ -3,6 +3,8 @@
 #include <SDL_ttf.h> // SDL Fonts or Text
 #include <SDL_image.h> // SDL Image
 
+#include "Core/UI/UIScreenBase.h"
+
 #include "Core/UI/Types/Box.h"
 #include "Core/UI/Types/TextBlock.h"
 #include "Core/UI/Types/Icon.h"
@@ -13,16 +15,20 @@ using namespace UI;
 
 namespace Florida
 {
+
 class CraftingScreen : public UIScreenBase
 {
 public:
     CraftingScreen();
     ~CraftingScreen();
 
+    void Initialize();
+
     void Update();
     void Draw(SDL_Renderer* renderer);
-    void Initialize();
+
     void OnShow();
+    void RemoveSelf();
 
 
 private:
@@ -64,4 +70,5 @@ private:
     TextBlock m_StaminaPotionAmountText;
 
 };
+
 }
