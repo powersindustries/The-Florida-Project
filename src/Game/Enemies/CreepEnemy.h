@@ -10,7 +10,6 @@ using namespace Core;
 namespace Florida
 {
 
-
 enum class CreepState
 {
     eMoving,        // Slowly move towards the player's position.
@@ -19,19 +18,18 @@ enum class CreepState
     ePostAttack     // Stop for a moment and get ready to move again.
 };
 
-
 class CreepEnemy : public EnemyBase
 {
 public:
     CreepEnemy();
     ~CreepEnemy();
 
-    void Update(float deltaTime);
-    void Draw(SDL_Renderer* renderer);
+    void Update(float deltaTime) override;
+    void Draw(SDL_Renderer* renderer) override;
 
-    void SetPosition(int x, int y);
+    void SetPosition(int x, int y) override;
 
-    void KillEnemy();
+    void KillEnemy() override;
 
 
 private:
@@ -59,5 +57,4 @@ private:
     float m_fPostAttackTimeStamp   = 0.0f;
 
 };
-
 }

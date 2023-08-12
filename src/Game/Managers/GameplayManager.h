@@ -8,22 +8,19 @@
 namespace Florida
 {
 
-
-enum class DayNightValues 
+enum class DayNightValues
 {
     eDay,
     eNight
 };
 
-
-struct TimeData 
+struct TimeData
 {
     DayNightValues m_DayNight;
     uint16_t m_uiMinutes;
 
     uint16_t m_uiDayCount;
 };
-
 
 class GameplayManager
 {
@@ -38,8 +35,8 @@ public:
     const std::string GetDisplayTime();
     const std::string GetDisplayDayNight();
 
-    inline const uint16_t GetDayCount() { return m_TimeData.m_uiDayCount; };
-    inline const DayNightValues GetDayNightValue() { return m_TimeData.m_DayNight; };
+    inline const uint16_t GetDayCount() const { return m_TimeData.m_uiDayCount; };
+    inline const DayNightValues GetDayNightValue() const { return m_TimeData.m_DayNight; };
 
     void SkipToNight();
     void GameOver();

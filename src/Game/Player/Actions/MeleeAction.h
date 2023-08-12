@@ -15,11 +15,11 @@ public:
     MeleeAction();
     ~MeleeAction();
 
-    void Update(float deltaTime);
-    void Draw(SDL_Renderer* renderer);
+    void Update(float deltaTime) override;
+    void Draw(SDL_Renderer* renderer) override;
 
-    void SetPosition(int x, int y) {};
-    void SetDirection(Direction direction);
+    void SetPosition(int x, int y) override {};
+    void SetDirection(Direction direction) override;
 
     void SetInitialTime(float fInitialTime);
 

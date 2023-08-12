@@ -13,7 +13,6 @@
 namespace Florida
 {
 
-
 enum class InteractionType
 {
     ePickup,
@@ -21,7 +20,6 @@ enum class InteractionType
     eStory,
     eNONE
 };
-
 
 struct PickupData
 {
@@ -40,7 +38,6 @@ struct PickupData
     Core::Sprite* m_Sprite = nullptr;
 
 };
-
 
 struct RefreshData
 {
@@ -64,7 +61,6 @@ struct RefreshData
     Core::Sprite* m_Sprite = nullptr;
 };
 
-
 struct StoryData
 {
     bool m_bActive = true;
@@ -75,13 +71,11 @@ struct StoryData
     InteractionType m_Type;
 };
 
-
 struct CollisionData
 {
     SDL_Rect m_Rectangle;
     uint8_t m_uiPadding = 5;
 };
-
 
 struct NavigationData
 {
@@ -90,7 +84,6 @@ struct NavigationData
     Core::Vec2i m_vUpPosition;
     Core::Vec2i m_vDownPosition;
 };
-
 
 struct MapData
 {
@@ -120,7 +113,6 @@ struct MapData
     std::vector<CollisionData> m_Collisions;
 
 };
-
 
 class MapManager
 {

@@ -18,15 +18,15 @@ public:
     ToastNotification();
     ~ToastNotification();
 
-    void Initialize();
+    void Initialize() override;
 
-    void Update();
+    void Update() override;
     void Update(float deltaTime);
 
-    void Draw(SDL_Renderer* renderer);
+    void Draw(SDL_Renderer* renderer) override;
 
-    void OnShow();
-    void RemoveSelf();
+    void OnShow() override;
+    void RemoveSelf() override;
 
     void ResetToastNotification();
 

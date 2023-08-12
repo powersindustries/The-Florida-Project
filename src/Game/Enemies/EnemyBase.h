@@ -14,7 +14,6 @@ enum class EnemyTypes
     eCreep
 };
 
-
 class EnemyBase
 {
 public:
@@ -39,5 +38,4 @@ public:
     bool m_bActive;
 
 };
-
 }

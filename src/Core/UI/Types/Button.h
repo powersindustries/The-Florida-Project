@@ -15,10 +15,10 @@ public:
     Button();
     ~Button();
 
-    void Draw(SDL_Renderer* renderer);
-    void SetStyle(uint32_t uiStyleID);
+    void Draw(SDL_Renderer* renderer) override;
+    void SetStyle(uint32_t uiStyleID) override;
 
-    void RefreshUI();
+    void RefreshUI() override;
 
     void SetOffset(const int x, const int y);
     void SetSize(const int x, const int y);

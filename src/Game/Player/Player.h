@@ -14,13 +14,11 @@ using namespace Core;
 namespace Florida
 {
 
-
 struct InteractState
 {
     bool m_bHeld = false;
     float m_fTime = 0.0f;
 };
-
 
 class Player
 {

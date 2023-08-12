@@ -29,5 +29,4 @@ public:
     int m_iScale;
 
 };
-
 }

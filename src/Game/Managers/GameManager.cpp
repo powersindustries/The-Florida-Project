@@ -41,7 +41,7 @@ GameManager::~GameManager()
 // -------------------------------------------------------
 void GameManager::Initialize(SDL_Renderer* renderer)
 {
-    g_AssetManager.Initialialize(renderer);
+    g_AssetManager.Initialize(renderer);
 
     g_ItemManager.Initialize();
     g_MapManager.InitialLoad();

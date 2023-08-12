@@ -3,7 +3,6 @@
 namespace Core
 {
 
-
 class Vec2f
 {
 public:
@@ -22,7 +21,6 @@ public:
 	float m_Y;
 };
 
-
 struct Vec2i
 {
 public:
@@ -40,7 +38,6 @@ public:
 	int m_X;
 	int m_Y;
 };
-
 
 struct Vec3f
 {
@@ -63,7 +60,6 @@ public:
 	float m_Z;
 };
 
-
 struct Vec3i
 {
 public:
@@ -84,7 +80,6 @@ public:
 	int m_Y;
 	int m_Z;
 };
-
 
 class VectorMethods
 {

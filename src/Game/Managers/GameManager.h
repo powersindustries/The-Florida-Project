@@ -8,7 +8,6 @@
 namespace Florida
 {
 
-
 struct GameStateData
 {
     bool m_bApplicationRunning = false;
@@ -18,7 +17,6 @@ struct GameStateData
     bool m_bGameOver = false;
     bool m_bIntroSeen = false;
 };
-
 
 class GameManager
 {
@@ -30,14 +28,14 @@ public:
     void Update(float deltaTime);
     void Draw(SDL_Renderer* renderer);
 
-    const inline bool ApplicationIsRunning() { return m_GameStateData.m_bApplicationRunning; }
-    const inline bool GameIsPaused()         { return m_GameStateData.m_bGamePaused; }
-    const inline bool GraphicsDebugModeOn()  { return m_GameStateData.m_bGraphicsDebugMode; }
-    const inline bool DebugScreenActive()    { return m_GameStateData.m_bDebugScreenActive; }
-    const inline bool IsGameOver()           { return m_GameStateData.m_bGameOver; }
-    const inline bool IntroSeen()            { return m_GameStateData.m_bIntroSeen; }
+    const bool ApplicationIsRunning() const { return m_GameStateData.m_bApplicationRunning; }
+    const bool GameIsPaused() const         { return m_GameStateData.m_bGamePaused; }
+    const bool GraphicsDebugModeOn() const  { return m_GameStateData.m_bGraphicsDebugMode; }
+    const bool DebugScreenActive() const    { return m_GameStateData.m_bDebugScreenActive; }
+    const bool IsGameOver() const           { return m_GameStateData.m_bGameOver; }
+    const bool IntroSeen() const            { return m_GameStateData.m_bIntroSeen; }
 
-    const inline std::string GetEndGameOverMessageText() { return m_sEndGameMessage; };
+    std::string GetEndGameOverMessageText() { return m_sEndGameMessage; };
 
     inline void SetIntroScreen(bool bHasBeenSeen) { m_GameStateData.m_bIntroSeen = bHasBeenSeen; };
 

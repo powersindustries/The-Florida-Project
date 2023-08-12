@@ -2,13 +2,11 @@
 #include <vector>
 #include <functional>
 #include <unordered_map>
-#include <stdint.h>
+#include <cstdint>
 #include "Core/Systems/Event.h"
-
 
 namespace Florida
 {
-
 
 enum class Events
 {
@@ -35,7 +33,6 @@ enum class Events
 
     eCount
 };
-
 
 class EventManager
 {

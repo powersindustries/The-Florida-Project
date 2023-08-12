@@ -7,7 +7,6 @@
 namespace Core
 {
 
-
 struct SettingsData
 {
     std::string m_sTitle;
@@ -18,7 +17,6 @@ struct SettingsData
     int m_iFXVolumePercentage;
 };
 
-
 class SettingsManager
 {
 public:
@@ -28,20 +26,20 @@ public:
 
     void Initialize();
 
-    std::string GetTitle() { return m_SettingsData.m_sTitle; }
+    std::string GetTitle() const { return m_SettingsData.m_sTitle; }
 
-    int GetScreenWidth() { return m_SettingsData.m_iWidth; }
+    int GetScreenWidth() const { return m_SettingsData.m_iWidth; }
     void SetScreenWidth(int width) { m_SettingsData.m_iWidth = width; }
 
-    int GetScreenHeight() { return m_SettingsData.m_iHeight; }
+    int GetScreenHeight() const { return m_SettingsData.m_iHeight; }
     void SetScreenHeight(int height) { m_SettingsData.m_iHeight = height; }
 
     // Get a screen position or length based on the screen's current size.
     int GetRelativeScreenX(int iX);
     int GetRelativeScreenY(int iY);
 
-    int GetMusicVolumePercentage() { return m_SettingsData.m_iMusicVolumePercentage; };
-    int GetFXVolumePercentage()    { return m_SettingsData.m_iFXVolumePercentage; };
+    int GetMusicVolumePercentage() const { return m_SettingsData.m_iMusicVolumePercentage; };
+    int GetFXVolumePercentage() const    { return m_SettingsData.m_iFXVolumePercentage; };
 
 
 private:

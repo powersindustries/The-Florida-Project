@@ -8,7 +8,6 @@
 namespace Florida
 {
 
-
 enum class MovementState
 {
     eIdle,      // Not moving, but can.
@@ -16,7 +15,6 @@ enum class MovementState
     eRunning,   // Running, stamina being used.
     eHault      // No moving or running is allowed.
 };
-
 
 class PlayerMovement
 {

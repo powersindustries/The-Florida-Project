@@ -9,14 +9,12 @@
 namespace Florida
 {
 
-
 enum class ActionType
 {
     eNone,
     eBullet,
     eMelee
 };
-
 
 class PlayerAction
 {
@@ -56,5 +54,4 @@ private:
 
     friend class Player;
 };
-
 }

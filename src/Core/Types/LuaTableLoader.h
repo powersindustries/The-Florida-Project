@@ -9,7 +9,6 @@ extern "C"
 #include "lualib.h"
 }
 
-
 namespace Core
 {
 

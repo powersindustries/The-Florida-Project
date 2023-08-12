@@ -10,13 +10,11 @@
 namespace Florida
 {
 
-
 struct EnemySpawnerData
 {
     uint32_t m_uiMapIDHash;
     SDL_Rect m_Rectangle;
 };
-
 
 class EnemyManager
 {
@@ -32,7 +30,7 @@ public:
 
     void ResetEnemyManager();
 
-    inline const uint16_t GetEnemiesKilledCount() { return m_uiEnemiesKilled; }
+    inline uint16_t GetEnemiesKilledCount() const { return m_uiEnemiesKilled; }
 
 
 private:
@@ -64,5 +62,4 @@ private:
 };
 
 extern EnemyManager g_EnemyManager;
-
 }

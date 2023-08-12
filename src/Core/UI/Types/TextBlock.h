@@ -15,20 +15,20 @@ public:
     TextBlock();
     ~TextBlock();
 
-    void Draw(SDL_Renderer* renderer);
-    void SetStyle(uint32_t uiStyleID);
+    void Draw(SDL_Renderer* renderer) override;
+    void SetStyle(uint32_t uiStyleID) override;
 
     void SetFont(uint32_t fontIDHash);
-    void SetColor(SDL_Color color);
+    void SetColor(SDL_Color color) override;
     void SetText(std::string text);
-    void SetVisibility(UIVisibility visibility);
+    void SetVisibility(UIVisibility visibility) override;
     void SetSize(const int x, const int y);
     void SetWordWrap(uint8_t uiWordWrap);
 
 
 private:
 
-    void SetPositionNoRefresh(const int x, const int y);
+    void SetPositionNoRefresh(const int x, const int y) override;
 
     void CreateWordTexture();
 

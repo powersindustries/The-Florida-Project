@@ -7,13 +7,11 @@
 namespace Florida
 {
 
-
 struct IngredientData
 {
     uint32_t m_uiItemID;
     uint32_t m_uiAmount;
 };
-
 
 struct RecipeData
 {
@@ -24,7 +22,6 @@ struct RecipeData
 
     std::vector<IngredientData> m_Ingredients;
 };
-
 
 class CraftingManager
 {
@@ -53,5 +50,4 @@ private:
 };
 
 extern CraftingManager g_CraftingManager;
-
 }

@@ -7,7 +7,6 @@
 namespace UI
 {
 
-
 enum class UIScreenID
 {
     eDEFAULT,
@@ -19,7 +18,6 @@ enum class UIScreenID
 	eIntro,
 	eControls
 };
-
 
 class UIScreenBase
 {

@@ -11,7 +11,6 @@
 namespace Florida
 {
 
-
 struct TextureAssetData
 {
     TextureAssetData() : m_Texture(nullptr), m_iHeight(0), m_iWidth(0), m_uiFrames(0) {}
@@ -27,7 +26,6 @@ struct TextureAssetData
     int m_iHeight;
 };
 
-
 struct FontAssetData
 {
     FontAssetData() : m_Font(nullptr) {}
@@ -37,7 +35,6 @@ struct FontAssetData
 
     TTF_Font* m_Font;
 };
-
 
 struct SoundAssetData
 {
@@ -49,7 +46,6 @@ struct SoundAssetData
     Mix_Chunk* m_SoundEffect;
 };
 
-
 struct MusicAssetData
 {
     MusicAssetData() : m_Music(nullptr) {}
@@ -60,14 +56,13 @@ struct MusicAssetData
     Mix_Music* m_Music;
 };
 
-
 class AssetManager
 {
 public:
     AssetManager();
     ~AssetManager();
 
-    void Initialialize(SDL_Renderer* renderer);
+    void Initialize(SDL_Renderer* renderer);
 
     SDL_Surface* GetAssetSurfaceByID(std::string AssetID);
 

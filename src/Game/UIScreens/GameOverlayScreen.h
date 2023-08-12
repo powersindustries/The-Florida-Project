@@ -13,7 +13,6 @@ using namespace UI;
 namespace Florida
 {
 
-
 struct RefreshUI
 {
     uint32_t m_uiMapIDHash;
@@ -21,20 +20,19 @@ struct RefreshUI
     bool m_bActive;
 };
 
-
 class GameOverlayScreen : public UIScreenBase
 {
 public:
     GameOverlayScreen();
     ~GameOverlayScreen();
 
-    void Initialize();
+    void Initialize() override;
 
-    void Update();
-    void Draw(SDL_Renderer* renderer);
+    void Update() override;
+    void Draw(SDL_Renderer* renderer) override;
 
-    void OnShow();
-    void RemoveSelf();
+    void OnShow() override;
+    void RemoveSelf() override;
 
 
 public:
@@ -46,5 +44,4 @@ public:
     std::unordered_map<uint32_t, std::vector<RefreshUI>> m_RefreshTextMap;
 
 };
-
 }

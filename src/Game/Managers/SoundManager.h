@@ -20,5 +20,4 @@ public:
 };
 
 extern SoundManager g_SoundManager;
-
 }

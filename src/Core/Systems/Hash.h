@@ -36,5 +36,4 @@ static uint32_t StringToHash32(const char* string, const uint32_t size)
     }
     return output;
 }
-
 }

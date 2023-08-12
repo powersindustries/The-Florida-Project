@@ -10,13 +10,11 @@
 namespace Core
 {
 
-
 enum class SpriteType
 {
     eAnimanted,
     eNonAnimated
 };
-
 
 class AnimationData
 {
@@ -35,7 +33,6 @@ public:
     unsigned int m_uiFrameCount;
     unsigned int m_uiAnimationSpeed;
 };
-
 
 class Sprite
 {
@@ -58,8 +55,8 @@ public:
 
     void SetPosition(SDL_Rect inRectangle);
 
-    inline const int GetWidth() { return m_Transform.m_iWidth; }
-    inline const int GetHeight() { return m_Transform.m_iHeight; }
+    inline const int GetWidth() const { return m_Transform.m_iWidth; }
+    inline const int GetHeight() const { return m_Transform.m_iHeight; }
 
 
 private:
@@ -79,5 +76,4 @@ private:
     double m_dRotation;
 
 };
-
 }

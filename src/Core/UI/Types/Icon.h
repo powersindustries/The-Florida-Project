@@ -13,8 +13,8 @@ public:
     Icon();
     ~Icon();
 
-    void Draw(SDL_Renderer* renderer);
-    void SetStyle(uint32_t uiStyleID);
+    void Draw(SDL_Renderer* renderer) override;
+    void SetStyle(uint32_t uiStyleID) override;
 
     void SetSize(int width, int height);
     void SetTexture(const uint32_t uiTextureID);
@@ -22,7 +22,7 @@ public:
 
 private:
 
-    void SetPositionNoRefresh(const int x, const int y);
+    void SetPositionNoRefresh(const int x, const int y) override;
 
 
 private:

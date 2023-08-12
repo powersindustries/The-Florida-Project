@@ -18,13 +18,13 @@ public:
     GameOverScreen();
     ~GameOverScreen();
 
-    void Initialize();
+    void Initialize() override;
 
-    void Update();
-    void Draw(SDL_Renderer* renderer);
+    void Update() override;
+    void Draw(SDL_Renderer* renderer) override;
 
-    void OnShow();
-    void RemoveSelf();
+    void OnShow() override;
+    void RemoveSelf() override;
 
     void SetGameOverMessage(std::string sMessage);
 

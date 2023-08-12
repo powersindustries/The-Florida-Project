@@ -9,7 +9,6 @@
 namespace UI
 {
 
-
 enum class Anchor
 {
     eTopLeft,
@@ -23,7 +22,6 @@ enum class Anchor
     eBottomRight
 };
 
-
 enum class UIVisibility
 {
     eVisible,
@@ -31,14 +29,12 @@ enum class UIVisibility
     eDisabled
 };
 
-
 enum MouseState
 {
     eHover  = 1 << 0, // Mouse Hover
     eLMouse = 1 << 1, // Left Mouse
     eRMouse = 1 << 2  // Right Mouse
 };
-
 
 class UIBase
 {
@@ -50,13 +46,15 @@ public:
     virtual void SetStyle(uint32_t uiStyleID) = 0;
 
     void Update();
-    void RefreshUI();
+
+    virtual void RefreshUI();
 
     void SetAnchor(Anchor anchor);
     void SetAlignment(Anchor alignment);
-    void SetOffset(const int x, const int y);
-    
-    inline void SetVisibility(UIVisibility displayType) { m_Visibility = displayType; }
+
+    virtual void SetOffset(const int x, const int y);
+
+    virtual inline void SetVisibility(UIVisibility displayType) { m_Visibility = displayType; }
     inline UIVisibility GetVisibility() { return m_Visibility; }
     inline bool IsVisible() { return m_Visibility != UIVisibility::eHidden; }
     inline bool IsDisabled() { return m_Visibility == UIVisibility::eDisabled; }
@@ -68,7 +66,7 @@ public:
     inline bool LeftClickPressed() const { return m_uiMouseState & MouseState::eLMouse; };
     inline bool RightClickPressed() const { return m_uiMouseState & MouseState::eRMouse; };
 
-    inline void SetColor(SDL_Color color) { m_Color = color; }
+    virtual inline void SetColor(SDL_Color color) { m_Color = color; }
 
     TTF_Font* GetDefaultFont();
 
@@ -124,5 +122,4 @@ protected:
     friend class HorizontalStack;
 
 };
-
 }

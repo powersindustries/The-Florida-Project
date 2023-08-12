@@ -6,7 +6,6 @@
 namespace Florida
 {
 
-
 enum class ItemType
 {
     eResource = 0,
@@ -15,7 +14,6 @@ enum class ItemType
     eDisposable = 3,
     eNONE = 4
 };
-
 
 struct ItemData
 {
@@ -29,7 +27,6 @@ struct ItemData
     bool m_bDiscovered;
     uint8_t m_uiAmount;
 };
-
 
 class ItemManager
 {
@@ -47,8 +44,8 @@ public:
 
     inline void GetPrimaryWeaponID(const uint32_t uiID) { m_PrimaryWeapon = uiID; }
     inline void GetSecondaryWeaponID(const uint32_t uiID) { m_SecondaryWeapon = uiID; }
-    inline uint32_t GetPrimaryWeaponID() { return m_PrimaryWeapon; }
-    inline uint32_t GetSecondaryWeaponID() { return m_SecondaryWeapon; }
+    inline uint32_t GetPrimaryWeaponID() const { return m_PrimaryWeapon; }
+    inline uint32_t GetSecondaryWeaponID() const { return m_SecondaryWeapon; }
 
     inline const ItemData& GetLastAddedItemData() { return m_LastAddedItemData; }
     inline const std::vector<ItemData>& GetAllItemData() const { return m_ItemData; };
