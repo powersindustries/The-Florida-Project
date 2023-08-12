@@ -55,7 +55,7 @@ void PlayerAction::Update(float deltaTime)
     if (deltaTime > (m_fBulletTimeStamp + m_fBulletTimer) && 
         Core::g_InputManager.GetActionPressed(Core::InputMappings::eAction) &&
         !g_GameManager.GameIsPaused() && 
-        !Core::g_InputManager.GetMouseClickObsorbedByUI())
+        !Core::g_InputManager.GetMouseClickAbsorbedByUI())
     {
         m_fBulletTimeStamp = deltaTime;
 

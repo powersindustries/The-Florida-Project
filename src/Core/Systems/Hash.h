@@ -11,7 +11,7 @@ namespace Core
 
 // -------------------------------------------------------
 // -------------------------------------------------------
-static uint32_t StringToHash32(std::string& string)
+static uint32_t StringToHash32(std::string string)
 {
     uint32_t output = 0;
     const uint32_t stringSize = static_cast<uint32_t>(string.size());

@@ -1,4 +1,6 @@
 #include "GameplayManager.h"
+#include <cmath>
+
 #include "EventManager.h"
 #include "GameManager.h"
 

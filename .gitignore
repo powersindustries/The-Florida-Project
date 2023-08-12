@@ -174,3 +174,7 @@ MigrationBackup/
 # CMake
 Debug/
 External/
+cmake-build-debug/
+
+# CLion/JetBrains
+.idea/

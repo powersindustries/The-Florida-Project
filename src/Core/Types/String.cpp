@@ -1,7 +1,7 @@
 #include "String.h"
 #include <cstring>
 #include <stdio.h>
-#include <corecrt_math.h>
+#include <cmath>
 
 #define NULL_TERMINATE_CHAR '\0'
 

@@ -3,6 +3,7 @@
 #include <SDL_ttf.h> // SDL Fonts or Text
 #include <SDL_image.h> // SDL Image
 #include <unordered_map>
+#include <vector>
 
 #include "Core/UI/UIScreenBase.h"
 #include "Core/UI/Types/TextBlockRaw.h"

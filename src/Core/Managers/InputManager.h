@@ -6,7 +6,6 @@
 namespace Core
 {
 
-
 enum class InputMappings
 {
     // Mouse Actions.
@@ -39,7 +38,6 @@ enum class InputMappings
     eDebug4,
 
 };
-
 
 struct InputMappingsData
 {
@@ -77,7 +75,6 @@ struct InputMappingsData
     bool m_Q = false;
     bool m_R = false;
 };
-
 
 struct HeldInputMappingsData
 {
@@ -117,13 +114,11 @@ struct HeldInputMappingsData
     int64_t m_RStamp = -1;
 };
 
-
 struct MouseMotionData
 {
     int8_t m_iMotionX = 0;
     int8_t m_iMotionY = 0;
 };
-
 
 class InputManager
 {
@@ -139,8 +134,8 @@ public:
 
     const MouseMotionData& GetMouseMotionData() const { return m_MouseMotionData; }
 
-    bool GetMouseClickObsorbedByUI() { return m_bMouseClickObsorbedByUI; };
-    void SetMouseClickObsorbedByUI(bool bObsorbed) { m_bMouseClickObsorbedByUI = bObsorbed; };
+    bool GetMouseClickAbsorbedByUI() const { return m_bMouseClickAbsorbedByUI; };
+    void SetMouseClickAbsorbedByUI(bool bAbsorbed) { m_bMouseClickAbsorbedByUI = bAbsorbed; };
 
 
 private:
@@ -161,9 +156,8 @@ private:
 
     MouseMotionData m_MouseMotionData;
 
-    bool m_bMouseClickObsorbedByUI;
+    bool m_bMouseClickAbsorbedByUI;
 };
 
 extern InputManager g_InputManager;
-
 }

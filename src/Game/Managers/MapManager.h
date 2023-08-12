@@ -4,11 +4,11 @@
 #include <SDL_image.h> // SDL Image
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "Core/Types/Sprite.h"
 #include "GameGlobals.h"
 #include "Core/Utility/VectorMethods.h"
-
 
 namespace Florida
 {

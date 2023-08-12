@@ -2,6 +2,7 @@
 #include <vector>
 #include <functional>
 #include <unordered_map>
+#include <stdint.h>
 #include "Core/Systems/Event.h"
 
 

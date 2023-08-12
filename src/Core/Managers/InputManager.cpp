@@ -19,7 +19,7 @@ InputManager::InputManager()
 {
     m_SDLEvent = new SDL_Event;
 
-    m_bMouseClickObsorbedByUI = false;
+    m_bMouseClickAbsorbedByUI = false;
 }
 
 
@@ -362,7 +362,7 @@ void InputManager::ResetAllPressedData()
     m_InputMappingPressedData.m_Q = false;
     m_InputMappingPressedData.m_R = false;
 
-    m_bMouseClickObsorbedByUI = false;
+    m_bMouseClickAbsorbedByUI = false;
 }
 
 
